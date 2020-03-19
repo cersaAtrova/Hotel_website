@@ -1,0 +1,31 @@
+### Code ###
+.vscode/*
+*.code-workspace
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+# End of https://www.gitignore.io/api/code,linux
+/.env.local   <-- local config
+/.env.*.local   <-- local config
+/var/   <-- cache and logs
+/vendor/   <-- dependencies installed through Composer
+
+# PHPUnit
+/phpunit.xml   <-- local PHPUnit config used for overriding the default phpunit.xml.dist
+.phpunit.result.cache   <-- PHPUnit cache files
+
+# PHPCS
+/phpcs.xml   <-- local PHPCS config used for overriding the default phpcs.xml.dist
+.php_cs.cache   <-- PHPCS cache file
