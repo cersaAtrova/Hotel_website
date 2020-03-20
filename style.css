@@ -1,0 +1,63 @@
+.navbar-brand {
+    background: url(http://disputebills.com/site/uploads/2015/10/dispute.png) center / contain no-repeat;
+    transform: translateX(-50%);
+    left: 50%;
+    position: absolute;
+    width: 200px; /* no height needed ... image will resize automagically */
+  }
+   /* Set the border color */ 
+          
+   .custom-toggler.navbar-toggler { 
+    border-color: rgb(255, 255, 255) !important; 
+} 
+/* Setting the stroke to green using rgb values (0, 128, 0) */ 
+  
+.custom-toggler .navbar-toggler-icon { 
+    color: rgb(255, 255, 255) !important; 
+} 
+
+.icon-bar {
+	width: 50px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+	margin: 10px
+}
+ 
+.navbar-toggler {
+  border: none;
+  background: transparent !important;
+}
+ 
+.navbar-toggler .top-bar {
+  transform: rotate(45deg);
+  transform-origin: 10% 10%;
+}
+ 
+.navbar-toggler .middle-bar {
+  opacity: 0;
+}
+ 
+.navbar-toggler .bottom-bar {
+  transform: rotate(-45deg);
+  transform-origin: 10% 90%;
+}
+ 
+.navbar-toggler.collapsed .top-bar {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .middle-bar {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bottom-bar {
+  transform: rotate(0);
+}
+
+
+/* change the size of the slideshow */
+.carousel-inner > .carousel-item {
+    height: 100vh;
+ }
