@@ -9,7 +9,7 @@
          It combines modern aesthetics, chic style and comfort for your beach holidays. 
          Enviably located on the golden sandy beach in the center of Protaras, makes it ideal for beach holidays in ...">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Bootstrap -->
@@ -63,46 +63,118 @@
 
     <div class="overview">
         <div class="mx-auto text-center w-50">
-            <h1 class="display-4">Welcome</h1>
-            <p class="text-lg-center">Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus. It combines modern aesthetics, chic style and comfort for your beach holidays. Enviably located on the golden sandy beach in the center of Protaras, makes it ideal for beach holidays in Cyprus. The 136 modern and spacious rooms and suites are equipped with the latest technology, facilities and amenities. The lobby is designed for very eclectic guests to enjoy their time in a relaxed and stylish environment. The C-view bar offers exotic cocktails, aromatic coffees and a breathtaking view of the Mediterranean Sea. The pool bar just by the beach is the perfect spot to have your refreshment while reading a book or even you can have a drink inside our outdoor Jacuzzi. The chef's expert meals are based on the Mediterranean cuisine that leaves you with an incredible after taste, which makes it an ideal choice for All Inclusive holidays in Cyprus.</p>
+            <h1 class="display-4 text-center">Welcome</h1>
+            <p style="font-size: 1.2rem">Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus. It combines modern aesthetics, chic style and comfort for your beach holidays. Enviably located on the golden sandy beach in the center of Protaras, makes it ideal for beach holidays in Cyprus. The 136 modern and spacious rooms and suites are equipped with the latest technology, facilities and amenities. The lobby is designed for very eclectic guests to enjoy their time in a relaxed and stylish environment. The C-view bar offers exotic cocktails, aromatic coffees and a breathtaking view of the Mediterranean Sea. The pool bar just by the beach is the perfect spot to have your refreshment while reading a book or even you can have a drink inside our outdoor Jacuzzi. The chef's expert meals are based on the Mediterranean cuisine that leaves you with an incredible after taste, which makes it an ideal choice for All Inclusive holidays in Cyprus.</p>
         </div>
     </div>
-    <div style="padding: 50px 0" class="box-container">
-        <div class="container-fluid ">
+    <div class="box-container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-6 col-7">
-                    <img src="images/Princess Suite1.jpg" height="100%" width="100%" alt="" srcset="">
+                <div class="col-md-8" style="max-height: 60%">
+                    <img src="images/Princess Suite1.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
-                <div class="col align-self-center ">
-                    <div class="col box-content-image pad-25 text-white">
+                <div class="col align-self-center">
+                    <div class="col box-content-image-right pad-25 text-white">
                         <h5 class="pad-25">4&star; Beach Hotel Protaras</h5>
-                        <h2 class="pad-25">EXQUISITE ACCOMMODATION PROPOSAL</h2>
-                        <p class="pad-25">When designing Vrissiana Beach Hotel, we kept one thing in mind; the need to create an exquisite accommodation proposal by the beach of Analipsi, an experience that puts the comfort and indulgence of each guest first</p>
-                        <P class="pad-25">
-                            Our spacious and bright guest rooms now offer the best of traditional comfort with contemporary style and modern smart room technology designed to further enhance your stay with us.
-                        </P>
+                        <h2 class="pad-20">EXQUISITE ACCOMMODATION PROPOSAL</h2>
+                        <div class="text-justify pad-25" style="font-size: 1.2rem">
+                            <p class="pad-20">When designing Vrissiana Beach Hotel, we kept one thing in mind; the need to create an exquisite accommodation proposal by the sand beach, an experience that puts the comfort and indulgence of each guest first</p>
+                            <P class="pad-20">
+                                Our spacious and bright guest rooms now offer the best of traditional comfort with contemporary style and modern smart room technology designed to further enhance your stay with us.
+                            </P>
+                        </div>
+                        <a href="#" class="link btn-nav btn-primary">Discover more</a>
 
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="container-fluid ">
-            <div class="row">
-                <div class="col-md">
-                    One of three columns
+
+        <div class="container-fluid" style="padding-top:20px; ">
+            <div class="row" style="flex-direction: row-reverse;">
+                <div class="col-md-8" style="max-height: 60%; ">
+                    <img src="images/RESTAURANT.JPG" width="100%" height="100%" alt="" srcset="">
                 </div>
-                <div class="col-md-2">
-                    One of three columns
+                <div class="col align-self-center ">
+                    <div class="col box-content-image-left pad-25 text-white">
+                        <h5 class="pad-25">Gourmet's Delight</h5>
+                        <h2 class="pad-20 text-uppercase">Offering unique dining experiences</h2>
+                        <div class="text-justify pad-25" style="font-size: 1.2rem">
+                            <p class="pad-20">Our team knows what five-star guests require and they always look for new ways to fulfill expectations in our five restaurants. </p>
+
+                        </div>
+                        <a href="#" class="link btn-nav btn-primary float-right">Discover more</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <section class="overview">
+        <div class="mx-auto text-center" style="width: 30%">
+            <h3 class="text-center">MORE TO EXPLORE</h3>
+            <h1>RELAX REVITALIZE YOUR BODY AND MIND</h1>
+            <H3>Welcome to our exclusive Vrissiana</H3>
+                  </div>
+    </section>
+    <div class="box-container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8" style="max-height: 60%">
+                    <img src="images/VRIS19 - Sauna.JPG"  width="100%" height="100%" alt="" srcset="">
+                </div>
+                <div class="col align-self-center">
+                    <div class="col box-content-image-right pad-25 text-white">
+                        <h5 class="pad-25">Spa &amp; Wellness</h5>
+                        <h2 class="pad-20">SAFE AND NATURAL TREATMENT OF THE NATURE</h2>
+                        <div class="text-justify pad-25" style="font-size: 1.2rem">
+                            <p class="pad-20">We would like to introduce you to one of the best ways of safe and natural treatments the nature ever gave to the making – Sauna therapy. Also known as Halotherapy, is a Natural & Alternative treatment for people with a lot of discomforts</p>
+                          
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
 
+        <div class="container-fluid" style="padding-top:20px; ">
+            <div class="row" style="flex-direction: row-reverse;">
+                <div class="col-md-8" style="max-height: 60%; ">
+                    <img src="images/VRIS13 - Spa.JPG" width="100%" height="100%" alt="" srcset="">
+                </div>
+                <div class="col align-self-center ">
+                    <div class="col box-content-image-left pad-25 text-white">
+                        <h5 class="pad-25">Relaxing Room</h5>
+                        <h2 class="pad-20 text-uppercase">A WIDE RANGE OF WELLNESS TREATMENT</h2>
+                        <div class="text-justify pad-25" style="font-size: 1.2rem">
+                            <p class="pad-20">We complement our spa menu with a wide range of wellness treatments, including face and body care and massage therapies, relaxing room etc. </p>
+
+                        </div>
+                        <a href="#" class="link btn-nav btn-primary float-right">Discover more</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+    <section class="overview">
+        <div class="mx-auto text-center" style="width: 30%">
+            <h3 class="text-center">SOCIAL</h3>
+            <h1>IMERSE INTO LUXURY</h1>
+            <H3>See more on Instagram</H3>
+            <a style="font-size: 1.5rem" href="https://www.instagram.com/explore/locations/1032562090/vrissiana-beach-hotel/">@vrissiana beach hotel</a>
+                  </div>
+    </section>
+  
+   <!-- Footer -->
+<?php footer(); ?>
+<!-- Footer -->
 
 
-    <section style="height: 300vh;"></section>
+
 </body>
 
 </html>

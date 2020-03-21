@@ -38,13 +38,11 @@ function navigation_bar($str = 'HOME')
             break;
     
     }
-    var_dump($arr);
-
 $nav=<<<print
-<div class=" bg-white fixed-top" >
+<div class="font-roboto bg-light fixed-top">
 <a class="nav-link" href="#">MY ACCOUNT</a>
 </div>
-<nav class="navbar navbar-expand-xl navbar-dark bg-secondary fixed-top-30">
+<nav class="navbar navbar-expand-xl navbar-light bg-white fixed-top-30">
 
 <a class="navbar-brand text-center" href="index.php">
     <img src="images/logo.png" alt="logo" width="70%" height="60%">
@@ -84,13 +82,151 @@ $nav=<<<print
     </ul>
 </div>
 <form class="form-inline my-2 my-lg-0" action="reservation_calendar.php" method="GET">
-    <button class="btn btn-info btn-lg my-lg-3"
-        style="padding: 0.6rem 1.8rem; background-color: rgba(29, 29, 92, 0.918);" typ e="submit">BOOK</button>
+    <button class="btn-nav btn-lg my-lg-3 btn-primary" type="submit">BOOK</button>
 </form>
 </nav>
 
 
 print;
 echo $nav;
+}
+
+function footer(){
+    $footer=<<<print
+    <footer class="text-white bg-dark">
+
+    <div style="background-color: #6351ce;">
+      <div class="container">
+    
+        <!-- Grid row-->
+        <div class="row py-4 d-flex align-items-center">
+    
+          <!-- Grid column -->
+          <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+            <h6 class="mb-0">Get connected with us on social networks!</h6>
+          </div>
+          <!-- Grid column -->
+    
+          <!-- Grid column -->
+          <div class="col-md-6 col-lg-7 text-center text-lg-right">
+    
+            <!-- Facebook -->
+            <a class="fb-ic">
+              <i class="fab fa-facebook-f white-text mr-4" style="font-size: 1.5rem"> </i>
+            </a>
+            <!-- Twitter -->
+            <a class="tw-ic">
+              <i class="fab fa-twitter white-text mr-4" style="font-size: 1.5rem"> </i>
+            </a>
+            <!-- Google +-->
+            <a class="gplus-ic">
+              <i class="fab fa-google-plus-g white-text mr-4" style="font-size: 1.5rem"> </i>
+            </a>
+            <!--Linkedin -->
+            <a class="li-ic">
+              <i class="fab fa-linkedin-in white-text mr-4" style="font-size: 1.5rem"> </i>
+            </a>
+            <!--Instagram-->
+            <a class="link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
+              <i class="fab fa-instagram white-text" style="font-size: 1.5rem"> </i>
+            </a>
+    
+          </div>
+          <!-- Grid column -->
+    
+        </div>
+        <!-- Grid row-->
+    
+      </div>
+    </div>
+    
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left mt-5">
+    
+      <!-- Grid row -->
+      <div class="row mt-3">
+    
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+    
+          <!-- Content -->
+          <h6 class="text-uppercase font-weight-bold"><img src="images/logo-white.png" alt="" srcset=""></h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p class="text-info" style="font-size: 1.2rem">A <span style="font-size: 1.5rem"><em> MEMBER </em></span> of <span style="font-size: 1.8rem; display: inline-block"> Tsokkos Hotels</span>.</p>
+    
+        </div>
+        <!-- Grid column -->
+    
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+    
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">...</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#!">Policy</a>
+          </p>
+          <p>
+            <a href="#!">Term &amp; Condition</a>
+          </p>
+          <p>
+            <a href="#!">Cookies</a>
+          </p>
+          
+        </div>
+        <!-- Grid column -->
+    
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+    
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Useful links</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="guest_acount.php">Your Account</a>
+          </p>
+          <p>
+            <a href="contact_us.php">Contact Us</a>
+          </p>
+             <p>
+            <a href="faq.html">FAQ</a>
+          </p>
+    
+        </div>
+        <!-- Grid column -->
+    
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+    
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <i class="fas fa-home mr-3"></i> 33 Protaras Avenue, 5296 Protaras, Cyprus</p>
+          <p>
+            <i class="fas fa-envelope mr-3"></i> info@example.com</p>
+          <p>
+            <i class="fas fa-phone mr-3"></i> + 357 23 833 444</p>
+          <p>
+            <i class="fas fa-print mr-3"></i> + 357 23 831 221</p>
+    
+        </div>
+        <!-- Grid column -->
+    
+      </div>
+      <!-- Grid row -->
+    
+    </div>
+    <!-- Footer Links -->
+    
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright: All Right Reserved
+    </div>
+    <!-- Copyright -->
+    
+    </footer>
+
+print;
+echo $footer;
 }
 ?>

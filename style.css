@@ -1,20 +1,25 @@
-
-    /* font-family: 'Roboto', sans-serif;
+/* font-family: 'Roboto', sans-serif;
 
     font-family: 'Raleway', sans-serif;
 
     font-family: 'Open Sans Condensed', sans-serif */
 
-body{
-  font-family: 'Raleway', sans-serif !important;
+body {
+  font-family: 'Raleway', sans-serif;
 }
-.account{
+
+.account {
   position: fixed;
   top: 0px;
   right: 0;
   left: 0;
   z-index: 1030;
 }
+
+.font-roboto {
+  font-family: 'Roboto', sans-serif !important;
+}
+
 /* Set the border color */
 
 
@@ -22,6 +27,7 @@ body{
 .carousel-inner>.carousel-item {
   height: 100vh;
 }
+
 .fixed-top-30 {
   position: fixed;
   top: 35px;
@@ -29,23 +35,14 @@ body{
   left: 0;
   z-index: 1030;
 }
-.overview{
-  padding:  50px;
-  width: 100%;
-  
-}
-.box-container{
-  background-image: url('images/water.jpg');
-  background-repeat: repeat;
-}
 
-.btn {
+.btn-nav {
   display: inline-block;
-  padding: 13px 20px;
+  padding: 1rem 1.2rem;
   color: #fff;
   text-decoration: none;
   position: relative;
-  background: transparent;
+  background-color: rgba(29, 29, 92, 0.918);
   border: 1px solid #e1e1e1;
   font: 0.8em/1.2 'Quicksand', sans-serif;
   letter-spacing: 0.4em;
@@ -55,7 +52,7 @@ body{
   transition: color 0.1s linear 0.05s;
 }
 
-.btn::before {
+.btn-nav::before {
   content: "";
   display: block;
   position: absolute;
@@ -69,43 +66,110 @@ body{
   transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
 }
 
-.btn::after {
+.btn-nav::after {
   transition: border 0.1s linear 0.05s;
   color: #000000;
 }
 
 
 
-.btn:hover {
+.btn-nav:hover {
   color: #000000 !important;
   transition: color 0.1s linear 0s;
- 
+
 }
 
-.btn:hover::before {
+.btn-nav:hover::before {
   top: 0;
   height: 100%;
   opacity: 0.5;
   transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
 }
 
-.btn:hover::after {
+
+
+.btn-nav:hover::after {
   border-color: #000000 !important;
   transition: border 0.1s linear 0s;
 }
-.box-content-image{
+
+.overview {
+  padding: 50px;
+  width: 100%;
+
+}
+
+.box-container {
+  width: 100%;
+  position: relative;
+  padding: 50px 0;
+  background-image: url('images/SAND.jpg');
+  height: max-content;
+}
+
+
+.img-image {
+  width: 70;
+  height: 60%;
+}
+
+.box-content-image-right {
   box-sizing: border-box;
+  overflow: auto;
   margin-left: -20%;
   margin-right: 20%;
   background-color: rgba(29, 29, 92, 1);
+  border: 1px solid #ffffff;
 }
-.pad-25{
-  padding: 0.8em;
+
+.box-content-image-left {
+  box-sizing: border-box;
+  overflow: auto;
+  margin-left: 20%;
+  z-index: 5;
+  background-color: rgba(29, 29, 92, 1);
+  border: 1px solid #ffffff;
 }
-@media only screen and (max-width: 480px) {
-  .box-content-image {margin-left: 0;}
+
+.pad-25 {
+  padding: 1em;
 }
-@media only screen and (min-width: 480px) and (max-width: 950px) {
-  .box-content-image {margin-left: 0;}
-  .pad-25{padding: 0.6em;}
+
+.pad-20 {
+  padding: 0 1rem;
+}
+
+
+
+
+@media only screen and (max-width: 890px) {
+  .col-md-8 {
+    width: 100vh !important;
+    max-width: 100%;
+  }
+
+  .box-content-image-right {
+    margin: 0;
+  }
+
+  .box-content-image-left {
+    margin: 0;
+  }
+}
+
+
+@media only screen and (max-width: 1180px) {
+  .box-content-image-right {
+    margin: 0;
+  }
+
+  .box-content-image-left {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 1280px) {
+  .pad-25 {
+    padding: 0.6em;
+  }
 }
