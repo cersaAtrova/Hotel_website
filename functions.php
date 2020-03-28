@@ -64,8 +64,8 @@ $nav=<<<print
         <li class="nav-item {$arr[2]}">
             <a class="nav-link" href="#">DINING{$arr[12]}</a>
         </li>
-        <li class="nav-item{$arr[3]}">
-            <a class="nav-link" href="#">SPA{$arr[13]}</a>
+        <li class="nav-item {$arr[3]}">
+            <a class="nav-link" href="spa.php">SPA{$arr[13]}</a>
         </li>
         <li class="nav-item {$arr[4]}">
             <a class="nav-link" href="#">WEDDING{$arr[14]}</a>
@@ -229,4 +229,64 @@ function footer(){
 print;
 echo $footer;
 }
+
+function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
+  $image=<<<print
+  <div class="container-fluid" style="padding:10px 0; ">
+  <div class="row">
+      <div class="col-md-8" style="max-height: 60%">
+          <img src="$img"  width="100%" height="100%" alt="" srcset="">
+      </div>
+      <div class="col align-self-center">
+          <div class="col box-content-image-right pad-25 text-white">
+              <h5 class="pad-25">$h5_subtitle</h5>
+              <h2 class="pad-20">$h2_title</h2>
+              <div class="text-justify pad-25" style="font-size: 1.2rem">
+                  <p class="pad-20">$desc</p>
+                
+              </div>
+          </div>
+      </div>
+
+  </div>
+</div>
+print;
+echo $image;
+}
+function image_right_content_left(&$h2_title, &$h5_subtitle,&$img,&$desc){
+$image =<<<print
+<div class="container-fluid" style="padding:10px 0; ">
+<div class="row" style="flex-direction: row-reverse;">
+    <div class="col-md-8" style="max-height: 60%; ">
+        <img src="$img" width="100%" height="100%" alt="" srcset="">
+    </div>
+    <div class="col align-self-center ">
+        <div class="col box-content-image-left pad-25 text-white">
+            <h5 class="pad-25">$h5_subtitle</h5>
+            <h2 class="pad-20 text-uppercase">$h2_title</h2>
+            <div class="text-justify pad-25" style="font-size: 1.2rem">
+                <p class="pad-20">$desc</p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+print;
+echo $image;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
