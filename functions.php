@@ -235,7 +235,7 @@ function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
   <div class="container-fluid" style="padding:10px 0; ">
   <div class="row">
       <div class="col-md-8" style="max-height: 60%">
-          <img src="$img"  width="100%" height="100%" alt="" srcset="">
+          <img src="$img"  width="100%" height="100%" alt="background image">
       </div>
       <div class="col align-self-center">
           <div class="col box-content-image-right pad-25 text-white">
@@ -258,7 +258,7 @@ $image =<<<print
 <div class="container-fluid" style="padding:10px 0; ">
 <div class="row" style="flex-direction: row-reverse;">
     <div class="col-md-8" style="max-height: 60%; ">
-        <img src="$img" width="100%" height="100%" alt="" srcset="">
+        <img src="$img" width="100%" height="100%" alt="background image">
     </div>
     <div class="col align-self-center ">
         <div class="col box-content-image-left pad-25 text-white">

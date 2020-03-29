@@ -143,6 +143,10 @@ body {
 
 
 @media only screen and (max-width: 890px) {
+  .navbar-brand img{
+    width: 50%;
+    height: 40%;
+  }
   .col-md-8 {
     width: 100vh !important;
     max-width: 100%;

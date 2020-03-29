@@ -38,7 +38,7 @@ require_once 'functions.php';
         <div class="mx-auto text-center w-50">
             <h5>Revitalize your Body & Mind</h5>
             <h1 class="display-4 text-center">Spa &amp; Wellness</h1>
-            <p style="font-size: 1.2rem">Welcome to our exclusive The Spa, at the Vrissiana hotel in Protaras, Cyprus. From the moment you walk through our door as our honored guest our aim is to take you on a journey of tranquility whilst increasing the well-being of your body, soul and mind. </p>
+            <p style="font-size: 1.2rem">Welcome to our exclusive The Spa, at the Vrissiana hotel in Protaras, Cyprus offers a rich variety of spa treatments for guests wishing to discover the art of relaxation and peace. Embrace a true sanctuary of luxury a heaven of peace, a highly pleasurable area that blends the love of the aesthetics reaching well into the best beauty solutions.</p>
         </div>
     </div>
     </section>
@@ -59,16 +59,16 @@ require_once 'functions.php';
         image_right_content_left($img[1]['h2'],$img[1]['h5'],$img[1]['img'],$img[1]['desc']);
 
         $img=array();
-        $img[2]['h2']='SAFE AND NATURAL TREATMENT OF THE NATURE';
-        $img[2]['h5']='Spa &amp; Wellness';
+        $img[2]['h2']='UNFORGETTABLE SPA DAYS';
+        $img[2]['h5']='SPA RELAXING';
         $img[2]['img']='images/VRIS14 - Spa.JPG';
-        $img[2]['desc']='We would like to introduce you to one of the best ways of safe and natural treatments the nature ever gave to the making – Sauna therapy. Also known as Halotherapy, is a Natural & Alternative treatment for people with a lot of discomforts';
+        $img[2]['desc']='Treat yourself when needed most,The Spa offers a variety of spa days carefully selected to suit your every purpose. The Spa days are personalised for men and woman looking to experience relaxation, preserve the youth and enjoy the spa facilities.';
         image_left_content_right($img[2]['h2'],$img[2]['h5'],$img[2]['img'],$img[2]['desc']);
      
-        $img[3]['h2']='A WIDE RANGE OF WELLNESS TREATMENT';
-        $img[3]['h5']='Relaxing Room';
+        $img[3]['h2']='Manicure & Pedicure';
+        $img[3]['h5']='beauty Sallon';
         $img[3]['img']='images/VRIS18 - Spa.JPG';
-        $img[3]['desc']='We complement our spa menu with a wide range of wellness treatments, including face and body care and massage therapies, relaxing room etc. ';
+        $img[3]['desc']='A full manicure treatment including exfoliation, hand mask and a soothing hand massage, followed by an application of nail varnish of your choice.';
         image_right_content_left($img[3]['h2'],$img[3]['h5'],$img[3]['img'],$img[3]['desc']);
 
         ?>     
