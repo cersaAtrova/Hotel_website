@@ -38,17 +38,17 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="d-block w-100" src="images/lobby-1.jpg" alt="First slide">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>sdf</h5>
+                <img class="d-block w-100" src="images/vrissiana.jpg" alt="First slide">
+                <!-- <div class="carousel-caption d-none d-md-block">
+                    <h5>sdfdddddddddddddf</h5>
                     <p>sdf</p>
-                </div>
+                </div> -->
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="images/VRIS07B - Pool Area.JPG" alt="Second slide">
+                <img class="d-block w-100" src="images/vrissiana-boutique-beach-hotel-185606.jpg" alt="Second slide">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="images/VRIS05 - Pool Area.jpg" alt="Third slide">
+                <img class="d-block w-100" src="images/VRIS07B - Pool Area.JPG" alt="Third slide">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -64,14 +64,22 @@
     <div class="overview">
         <div class="mx-auto text-center w-50">
             <h1 class="display-4 text-center">Welcome</h1>
-            <p style="font-size: 1.2rem">Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus. It combines modern aesthetics, chic style and comfort for your beach holidays. Enviably located on the golden sandy beach in the center of Protaras, makes it ideal for beach holidays in Cyprus. The 136 modern and spacious rooms and suites are equipped with the latest technology, facilities and amenities. The lobby is designed for very eclectic guests to enjoy their time in a relaxed and stylish environment. The C-view bar offers exotic cocktails, aromatic coffees and a breathtaking view of the Mediterranean Sea. The pool bar just by the beach is the perfect spot to have your refreshment while reading a book or even you can have a drink inside our outdoor Jacuzzi. The chef's expert meals are based on the Mediterranean cuisine that leaves you with an incredible after taste, which makes it an ideal choice for All Inclusive holidays in Cyprus.</p>
+            <p style="font-size: 1.2rem">Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus.
+             It combines modern aesthetics, chic style and comfort for your beach holidays. Enviably located on the golden 
+             sandy beach in the center of Protaras, makes it ideal for beach holidays in Cyprus. 
+             The 136 modern and spacious rooms and suites are equipped with the latest technology, facilities and amenities.
+              The lobby is designed for very eclectic guests to enjoy their time in a relaxed and stylish environment.
+               The C-view bar offers exotic cocktails, aromatic coffees and a breathtaking view of the Mediterranean Sea. 
+               The pool bar just by the beach is the perfect spot to have your refreshment while reading a book or even you 
+               can have a drink inside our outdoor Jacuzzi. The chef's expert meals are based on the Mediterranean cuisine that 
+               leaves you with an incredible after taste, which makes it an ideal choice for All Inclusive holidays in Cyprus.</p>
         </div>
     </div>
     <div class="box-container">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8" style="max-height: 60%">
-                    <img src="images/Princess Suite1.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="images/housekeping.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center">
                     <div class="col box-content-image-right pad-25 text-white">
@@ -79,9 +87,7 @@
                         <h2 class="pad-20">EXQUISITE ACCOMMODATION PROPOSAL</h2>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">When designing Vrissiana Beach Hotel, we kept one thing in mind; the need to create an exquisite accommodation proposal by the sand beach, an experience that puts the comfort and indulgence of each guest first</p>
-                            <P class="pad-20">
-                                Our spacious and bright guest rooms now offer the best of traditional comfort with contemporary style and modern smart room technology designed to further enhance your stay with us.
-                            </P>
+                          
                         </div>
                         <a href="#" class="link btn-nav btn-primary">Discover more</a>
 
@@ -116,7 +122,7 @@
         <div class="mx-auto text-center" style="width: 30%">
             <h3 class="text-center">MORE TO EXPLORE</h3>
             <h1>RELAX REVITALIZE YOUR BODY AND MIND</h1>
-            <H3>Welcome to our exclusive Vrissiana</H3>
+            <H3>Welcome to our exclusive The Spa</H3>
                   </div>
     </section>
     <div class="box-container">

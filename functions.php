@@ -24,10 +24,6 @@ function navigation_bar($str = 'HOME')
             $arr[4] = 'active';
             $arr[14]='<span class="sr-only">(current)</span>';
             break;
-        case 'CONFERENCE':
-            $arr[5] = 'active';
-            $arr[15]='<span class="sr-only">(current)</span>';
-            break;
         case 'GALLERY':
             $arr[6] = 'active';
             $arr[16]='<span class="sr-only">(current)</span>';
@@ -42,10 +38,10 @@ $nav=<<<print
 <div class="font-roboto bg-light fixed-top">
 <a class="nav-link" href="#">MY ACCOUNT</a>
 </div>
-<nav class="navbar navbar-expand-xl navbar-light bg-white fixed-top-30">
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top-30">
 
 <a class="navbar-brand text-center" href="index.php">
-    <img src="images/logo.png" alt="logo" width="70%" height="60%">
+    <img src="images/logo-white.png" alt="logo" width="60%" height="500%">
 </a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,16 +58,13 @@ $nav=<<<print
             <a class="nav-link" href="#">ACCOMODATION{$arr[11]}</a>
         </li>
         <li class="nav-item {$arr[2]}">
-            <a class="nav-link" href="#">DINING{$arr[12]}</a>
+            <a class="nav-link" href="dine.php">DINING{$arr[12]}</a>
         </li>
         <li class="nav-item {$arr[3]}">
             <a class="nav-link" href="spa.php">SPA{$arr[13]}</a>
         </li>
         <li class="nav-item {$arr[4]}">
-            <a class="nav-link" href="#">WEDDING{$arr[14]}</a>
-        </li>
-        <li class="nav-item {$arr[5]}">
-            <a class="nav-link" href="#">CONFERENCE{$arr[15]}</a>
+            <a class="nav-link" href="wedding.php">WEDDING{$arr[14]}</a>
         </li>
         <li class="nav-item {$arr[6]}">
             <a class="nav-link" href="#">GALLERY{$arr[16]}</a>
@@ -82,11 +75,9 @@ $nav=<<<print
     </ul>
 </div>
 <form class="form-inline my-2 my-lg-0" action="reservation_calendar.php" method="GET">
-    <button class="btn-nav btn-lg my-lg-3 btn-primary" type="submit">BOOK</button>
+    <button class="btn-nav btn-lg my-md-2 btn-primary" type="submit">BOOK</button>
 </form>
 </nav>
-
-
 print;
 echo $nav;
 }
@@ -111,20 +102,16 @@ function footer(){
           <div class="col-md-6 col-lg-7 text-center text-lg-right">
     
             <!-- Facebook -->
-            <a class="fb-ic">
+            <a class="link" href="#">
               <i class="fab fa-facebook-f white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Twitter -->
-            <a class="tw-ic">
+            <a class="link" href="#">
               <i class="fab fa-twitter white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Google +-->
-            <a class="gplus-ic">
+            <a class="link">
               <i class="fab fa-google-plus-g white-text mr-4" style="font-size: 1.5rem"> </i>
-            </a>
-            <!--Linkedin -->
-            <a class="li-ic">
-              <i class="fab fa-linkedin-in white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!--Instagram-->
             <a class="link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
@@ -189,7 +176,7 @@ function footer(){
             <a href="contact_us.php">Contact Us</a>
           </p>
              <p>
-            <a href="faq.html">FAQ</a>
+            <a href="faq.php">FAQ</a>
           </p>
     
         </div>
@@ -232,7 +219,7 @@ echo $footer;
 
 function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
   $image=<<<print
-  <div class="container-fluid" style="padding:10px 0; ">
+<div class="container-fluid" style="padding:10px 0; ">
   <div class="row">
       <div class="col-md-8" style="max-height: 60%">
           <img src="$img"  width="100%" height="100%" alt="background image">
@@ -240,7 +227,7 @@ function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
       <div class="col align-self-center">
           <div class="col box-content-image-right pad-25 text-white">
               <h5 class="pad-25">$h5_subtitle</h5>
-              <h2 class="pad-20">$h2_title</h2>
+              <h2 class="pad-20 text-uppercase">$h2_title</h2>
               <div class="text-justify pad-25" style="font-size: 1.2rem">
                   <p class="pad-20">$desc</p>
                 
@@ -256,22 +243,23 @@ echo $image;
 function image_right_content_left(&$h2_title, &$h5_subtitle,&$img,&$desc){
 $image =<<<print
 <div class="container-fluid" style="padding:10px 0; ">
-<div class="row" style="flex-direction: row-reverse;">
-    <div class="col-md-8" style="max-height: 60%; ">
-        <img src="$img" width="100%" height="100%" alt="background image">
-    </div>
-    <div class="col align-self-center ">
+  <div class="row" style="flex-direction: row-reverse;">
+     <div class="col-md-8" style="max-height: 60%; ">
+          <img src="$img" width="100%" height="100%" alt="background image">
+      </div>
+      <div class="col align-self-center ">
         <div class="col box-content-image-left pad-25 text-white">
             <h5 class="pad-25">$h5_subtitle</h5>
             <h2 class="pad-20 text-uppercase">$h2_title</h2>
             <div class="text-justify pad-25" style="font-size: 1.2rem">
-                <p class="pad-20">$desc</p>
-
+                <p class="pad-20">
+                $desc
+                </p>
             </div>
         </div>
     </div>
 
-</div>
+  </div>
 </div>
 
 print;

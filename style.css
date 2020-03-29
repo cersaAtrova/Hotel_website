@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 /* font-family: 'Roboto', sans-serif;
 
     font-family: 'Raleway', sans-serif;
@@ -6,6 +10,17 @@
 
 body {
   font-family: 'Raleway', sans-serif;
+  box-sizing: inherit;
+  background-image: url('images/water.jpg');
+  background-repeat: repeat;
+}
+
+.link {
+  color: #fff !important;
+}
+
+.link:hover {
+  color: #343a40 !important;
 }
 
 .account {
@@ -34,6 +49,8 @@ body {
   right: 0;
   left: 0;
   z-index: 1030;
+  background-color: rgb(10, 5, 53) !important;
+
 }
 
 .btn-nav {
@@ -103,7 +120,7 @@ body {
   width: 100%;
   position: relative;
   padding: 50px 0;
-  background-image: url('images/SAND.jpg');
+  background-image: url('images/aqua.jpg');
   height: max-content;
 }
 
@@ -143,10 +160,11 @@ body {
 
 
 @media only screen and (max-width: 890px) {
-  .navbar-brand img{
+  .navbar-brand img {
     width: 50%;
     height: 40%;
   }
+
   .col-md-8 {
     width: 100vh !important;
     max-width: 100%;
@@ -178,21 +196,33 @@ body {
   }
 }
 
-/* ================= */
-/* Spa page*/
-/* ================= */
-#header {
+.header {
+  margin-top: 20px;
   width: 100%;
   height: 100%;
 }
 
 .box-header {
   width: 100%;
-  height: 100vh;
-  background-image: url('images/VRIS12 - Spa.JPG');
-  background-size: cover;
-  background-position: unset;
-  background-repeat: no-repeat;
-  background-clip: border-box;
+  height: 75vh;
+
 }
 
+.back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* ============== */
+/* FAQ */
+/* ============== */
+.box-container-faq{
+  width: 100%;
+}
+.container-faq{
+  width: 60%;
+  margin: auto;
+  font-size: 1.2rem;
+  color: #000000;
+}
