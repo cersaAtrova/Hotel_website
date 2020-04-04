@@ -2,7 +2,7 @@
 function navigation_bar($str = 'HOME')
 {
     $arr = array();
- 
+    
     switch ($str) {
         case 'HOME':
             $arr[0] = 'active';
@@ -151,13 +151,13 @@ function footer(){
           <h6 class="text-uppercase font-weight-bold">...</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="#!">Policy</a>
+            <a href="policy.php">Policy</a>
           </p>
           <p>
-            <a href="#!">Term &amp; Condition</a>
+            <a href="terms_and_condition.php">Term &amp; Condition</a>
           </p>
           <p>
-            <a href="#!">Cookies</a>
+            <a href="sitemap.php">Sitemap</a>
           </p>
           
         </div>

@@ -24,7 +24,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/slideShowStyle.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/CSS/style.css">
 </head>
 
 <body>
