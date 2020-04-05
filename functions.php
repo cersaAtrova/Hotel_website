@@ -1,40 +1,40 @@
 <?php
+
 function navigation_bar($str = 'HOME')
 {
-    $arr = array();
-    
-    switch ($str) {
-        case 'HOME':
-            $arr[0] = 'active';
-            $arr[10]='<span class="sr-only">(current)</span>';
-        break;
-        case 'ACCOMODATION':
-            $arr[1] = 'active';
-            $arr[11]='<span class="sr-only">(current)</span>';
-            break;
-        case 'DINING':
-            $arr[2] = 'active';
-            $arr[12]='<span class="sr-only">(current)</span>';
-            break;
-        case 'SPA':
-            $arr[3] = 'active';
-            $arr[13]='<span class="sr-only">(current)</span>';
-            break;
-        case 'WEDDING':
-            $arr[4] = 'active';
-            $arr[14]='<span class="sr-only">(current)</span>';
-            break;
-        case 'GALLERY':
-            $arr[6] = 'active';
-            $arr[16]='<span class="sr-only">(current)</span>';
-            break;
-        case 'OFFER':
-            $arr[7] = 'active';
-            $arr[17]='<span class="sr-only">(current)</span>';
-            break;
-    
-    }
-$nav=<<<print
+  $arr = array();
+
+  switch ($str) {
+    case 'HOME':
+      $arr[0] = 'active';
+      $arr[10] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'ACCOMODATION':
+      $arr[1] = 'active';
+      $arr[11] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'DINING':
+      $arr[2] = 'active';
+      $arr[12] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'SPA':
+      $arr[3] = 'active';
+      $arr[13] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'WEDDING':
+      $arr[4] = 'active';
+      $arr[14] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'GALLERY':
+      $arr[6] = 'active';
+      $arr[16] = '<span class="sr-only">(current)</span>';
+      break;
+    case 'OFFER':
+      $arr[7] = 'active';
+      $arr[17] = '<span class="sr-only">(current)</span>';
+      break;
+  }
+  $nav = <<<print
 <div class="font-roboto bg-light fixed-top">
 <a class="nav-link" href="#">MY ACCOUNT</a>
 </div>
@@ -50,7 +50,7 @@ $nav=<<<print
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-    <ul class="navbar-nav mr-auto font-weight-bold " style="line-height: 2rem; font-size: 1.2em;">
+    <ul class="navbar-nav mr-auto  " style="line-height: 2rem; font-size: 1.2em; font-weight=500">
         <li class="nav-item {$arr[0]}">
             <a class="nav-link" href="index.php">HOME {$arr[10]}</a>
         </li>
@@ -67,7 +67,7 @@ $nav=<<<print
             <a class="nav-link" href="wedding.php">WEDDING{$arr[14]}</a>
         </li>
         <li class="nav-item {$arr[6]}">
-            <a class="nav-link" href="#">GALLERY{$arr[16]}</a>
+            <a class="nav-link" href="gallery.php">GALLERY{$arr[16]}</a>
         </li>
         <li class="nav-item {$arr[7]}">
             <a class="nav-link" href="#">OFFER{$arr[17]}</a>
@@ -79,11 +79,12 @@ $nav=<<<print
 </form>
 </nav>
 print;
-echo $nav;
+  echo $nav;
 }
 
-function footer(){
-    $footer=<<<print
+function footer()
+{
+  $footer = <<<print
     <footer class="text-white bg-dark">
 
     <div style="background-color: #6351ce;">
@@ -214,11 +215,12 @@ function footer(){
     </footer>
 
 print;
-echo $footer;
+  echo $footer;
 }
 
-function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
-  $image=<<<print
+function image_left_content_right(&$h2_title, &$h5_subtitle, &$img, &$desc)
+{
+  $image = <<<print
 <div class="container-fluid" style="padding:10px 0; ">
   <div class="row">
       <div class="col-md-8" style="max-height: 60%">
@@ -238,10 +240,11 @@ function image_left_content_right(&$h2_title, &$h5_subtitle,&$img,&$desc){
   </div>
 </div>
 print;
-echo $image;
+  echo $image;
 }
-function image_right_content_left(&$h2_title, &$h5_subtitle,&$img,&$desc){
-$image =<<<print
+function image_right_content_left(&$h2_title, &$h5_subtitle, &$img, &$desc)
+{
+  $image = <<<print
 <div class="container-fluid" style="padding:10px 0; ">
   <div class="row" style="flex-direction: row-reverse;">
      <div class="col-md-8" style="max-height: 60%; ">
@@ -263,18 +266,70 @@ $image =<<<print
 </div>
 
 print;
-echo $image;
+  echo $image;
+}
+
+//get the ip address from user
+function getRealIpAddr()
+{
+  if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+  {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+  {
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+  } else {
+    $ip = $_SERVER['REMOTE_ADDR'];
+  }
+  return $ip;
 }
 
 
+//validation
+function test_input($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
 
+//check the name
+function is_valid_name($name)
+{
+  if (empty($name)) {
+    return false;
+  } else {
+   
+    // check if name only contains letters and whitespace
+    if (ctype_alpha($name)) {
+      return true; 
+    }
+    return false;
+    
+  }
+}
 
+//validate email
+function is_valid_email($email)
+{
+  if (empty($email)) {
+    return false;
+  } else {
+    $email = test_input($email);
+    // check if e-mail address is well-formed
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      return false;
+    }
+    return true;
+  }
+}
+function is_valid_comment($comment)
+{
+  if (empty($comment) || strlen($comment)<15 ||strlen($comment)>3000 ) {
+    return false;
+  } else {
+   return true;
+  }
+}
 
-
-
-
-
-
-
-
-?>

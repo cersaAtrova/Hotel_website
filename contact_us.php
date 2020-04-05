@@ -1,5 +1,95 @@
 <?php
 require_once 'functions.php';
+require_once 'countries.php';
+
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+
+
+// require 'PHPMailer/src/Exception.php';
+// require 'PHPMailer/src/SMTP.php';
+// require_once 'PHPMailer/src/PHPMailer.php';
+
+session_start();
+
+//get the country from user
+$xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . getRealIpAddr());
+echo $xml->geoplugin_countryName;
+$country_name_by_ip;
+foreach ($xml as $key => $value) {
+	if ($key == 'geoplugin_countryName') {
+		$country_name_by_ip = $value;
+	}
+}
+$confirm_message = "";
+//get name form the user if logged in
+if (isset($_COOKIE['user'])) {
+	$user_name = explode(' ', $_COOKIE['user']);
+	$user_f_name = $user_f_name[0];
+	$user_l_name = $user_name[1];
+}
+
+if (isset($_POST['submit'])) {
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+		if (is_valid_name($_POST['last_name']) == false || is_valid_name($_POST['last_name']) == false || is_valid_email($_POST['email']) == false || is_valid_comment($_POST['guest_message']) == false) {
+			$confirm_message = 'Please fill out all the require fields';
+		} else {
+			if (empty($_POST['guest_title']) || empty($_POST['country'])) {
+				//	$confirm_message = 'Please fill out all the require fields';
+
+			} else {
+				$to      = 'sotiris_k@aol.com';
+				$subject = 'Test';
+				$message = 'Email test from php';
+				$headers = array(
+					'From' => 'webmaster@example.com',
+					'Reply-To' => 'webmaster@example.com',
+					'X-Mailer' => 'PHP/' . phpversion()
+				);
+
+				mail($to, $subject, $message, $headers);
+
+
+
+				// $mail = new PHPMailer(true);
+
+				// //Send mail using gmail
+				// if ($send_using_gmail) {
+				// 	$mail->IsSMTP(); // telling the class to use SMTP
+				// 	$mail->SMTPAuth = true; // enable SMTP authentication
+				// 	$mail->SMTPSecure = "ssl"; // sets the prefix to the servier
+				// 	$mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
+				// 	$mail->Port = 465; // set the SMTP port for the GMAIL server
+				// 	$mail->Username = "noreply.info.testing@gmail.com"; // GMAIL username
+				// 	$mail->Password = "LKJPOI123!!"; // GMAIL password
+				// }
+
+				// //Typical mail data
+				// $email='soteris100@gmail.com';
+				// $name='sotiris';
+				// $email_from='sotirs_k@aol.com';
+				// $name_from='sotiris';
+				// $mail->AddAddress($email, $name);
+				// $mail->SetFrom($email_from, $name_from);
+				// $mail->Subject = "My Subject";
+				// $mail->Body = "Mail contents";
+
+				// try {
+				// 	$mail->Send();
+				// 	echo "Success!";
+				// } catch (Exception $e) {
+				// 	//Something went bad
+				// 	echo "Fail - " . $mail->ErrorInfo;
+				// }
+			}
+		}
+	}
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,26 +145,35 @@ require_once 'functions.php';
 			</div>
 		</section>
 		<div class="container-contact-form">
-			<form action="#" method="post">
+			<form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="contact_form">
 				<div class="flex-box-form">
-					<div class="col-2">
+					<div class="col-4">
 						<label for="guest_title"><span>&starf;</span> Title</label>
 						<!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
-						<select name="guest_title" class="dropdown-select" required id="guest_title">
-							<option default value="">Select Title</option>
-							<option value="">Mr.</option>
-							<option value="">Ms.</option>
+						<select name="guest_title" class="dropdown-select" required id="guest_title" aria-placeholder="Title">
+							<option value=""></option>
+							<option value="Mr">Mr</option>
+							<option value="Ms">Ms</option>
+							<option value="Sir">Sir</option>
+							<option value="Madam">Sir</option>
+							<option value="Dr">Dr</option>
+							<option value="Master">Master</option>
+							<option value="Don">Don</option>
+							<?php
+							//add all title
+							echo $select_user_title; ?>
 						</select>
-					</div>
-					<div class="col-5">
-						<label for="first-name"><span>&starf;</span> Firt Name</label>
-						<input type="text" class="form-control text-form-control" required placeholder="First name" name="first_name" id="first_name" pattern="^[A-Za-z]+$">
 
 					</div>
-					<div class="col-5">
+					<div class="col-4">
+						<label for="first-name"><span>&starf;</span> First Name</label>
+						<input type="text" class="form-control text-form-control" name="first_name" required placeholder="First name" value="<?php echo $user_f_name; ?>" id="first_name" pattern="^[A-Za-z]+$">
+
+					</div>
+					<div class="col-4">
 						<label for="last-name"><span>&starf;</span> Last Name</label>
 
-						<input type="text" class="form-control text-form-control" required placeholder="Last name" aria-describedby="basic-addon1" pattern="^[A-Za-z]+$">
+						<input type="text" class="form-control text-form-control" name="last_name" required placeholder="Last name" value="<?php echo $user_l_name; ?>" aria-describedby="basic-addon1" pattern="^[A-Za-z]+$">
 
 					</div>
 
@@ -83,17 +182,24 @@ require_once 'functions.php';
 
 					<div class="col-6">
 						<label for="first-name"><span>&starf;</span>Email</label>
-						<input type="email" class="form-control text-form-control" placeholder="Email" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
+						<input type="email" class="form-control text-form-control" name="email" placeholder="Email" value="<?php echo $user_email; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
 
 					</div>
 
 					<div class="col-6">
 						<label for="country"><span>&starf;</span> Country</label>
-						<!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
 						<select name="country" class="dropdown-select" id="country" required>
-							<option default value="">Select Country</option>
-							<option value="">cy</option>
-							<option value="">gr</option>
+							<?php
+							//add all country
+							asort($countries);
+							foreach ($countries as $key => $value) {
+								if ($country_name_by_ip == $value) {
+									echo "<option selected>$value</option>";
+								} else {
+									echo "<option>$value</option>";
+								}
+							}
+							?>
 						</select>
 					</div>
 				</div>
@@ -101,7 +207,6 @@ require_once 'functions.php';
 
 					<div class="col-12">
 						<label for="subject"><span>&starf;</span> Subject</label>
-						<!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
 						<select name="subject" class="dropdown-select" id="subject" required>
 							<option default value="">Select Subject</option>
 							<option value="">Reservation Enquiry</option>
@@ -114,7 +219,7 @@ require_once 'functions.php';
 				</div>
 				<div class="flex-box-form">
 					<div class="col-12">
-						<label for="gust_message"><span>&starf;</span> Message</label>
+						<label for="guest_message"><span>&starf;</span> Message</label>
 						<textarea class="form-control" name="guest_message" id="gust_message" cols="30" rows="10" maxlength="3000" minlength="15" required placeholder="Please enter your message (max length 15-3000)"></textarea>
 					</div>
 				</div>
@@ -133,25 +238,33 @@ require_once 'functions.php';
 					<div class="col-12">
 
 						<label class="chk_container">I acknowledge that I have read and agree to the <a href="policy.php">Privacy Policy</a>
-							<input type="checkbox" checked="checked">
+							<input type="checkbox" name="check_policy" required>
 							<span class="checkmark"></span>
 						</label>
 					</div>
 					<div class="col-12">
-						<button type="submit" class="btn-nav btn-primary">SEND</button>
+						<button type="submit" name="submit" class="btn-nav btn-primary">SEND</button>
 					</div>
 				</div>
 
 
-
 			</form>
+			<div class="flex-box-form">
+				<div class="col-12">
+					<p><?php
+						//display result on screen if the message has sended or not
+						echo $confirm_message; ?>
+					</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div style="height: 20vh"></div>
+
 	<!-- partial -->
 	<!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
 	<script src="./script.js"></script> -->
-	<?php footer(); ?>	
+	<?php footer(); ?>
 
 </body>
 
