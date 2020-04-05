@@ -38,7 +38,7 @@ require_once 'functions.php';
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="/html/homepage.php">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">FAQ</li>
         </ol>
     </nav>

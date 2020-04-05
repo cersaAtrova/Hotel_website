@@ -40,8 +40,8 @@ function navigation_bar($str = 'HOME')
 </div>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top-30">
 
-<a class="navbar-brand text-center" href="index.php">
-    <img src="images/logo-white.png" alt="logo" width="60%" height="500%">
+<a class="navbar-brand text-center" href="/html/homepage.php">
+    <img src="/images/logo-white.png" alt="logo" width="60%" height="500%">
 </a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,22 +52,22 @@ function navigation_bar($str = 'HOME')
 
     <ul class="navbar-nav mr-auto  " style="line-height: 2rem; font-size: 1.2em; font-weight=500">
         <li class="nav-item {$arr[0]}">
-            <a class="nav-link" href="index.php">HOME {$arr[10]}</a>
+            <a class="nav-link" href="/html/homepage.php">HOME {$arr[10]}</a>
         </li>
         <li class="nav-item {$arr[1]}">
             <a class="nav-link" href="#">ACCOMODATION{$arr[11]}</a>
         </li>
         <li class="nav-item {$arr[2]}">
-            <a class="nav-link" href="dine.php">DINING{$arr[12]}</a>
+            <a class="nav-link" href="/html/dine.php">DINING{$arr[12]}</a>
         </li>
         <li class="nav-item {$arr[3]}">
-            <a class="nav-link" href="spa.php">SPA{$arr[13]}</a>
+            <a class="nav-link" href="/html/spa.php">SPA{$arr[13]}</a>
         </li>
         <li class="nav-item {$arr[4]}">
-            <a class="nav-link" href="wedding.php">WEDDING{$arr[14]}</a>
+            <a class="nav-link" href="/html/wedding.php">WEDDING{$arr[14]}</a>
         </li>
         <li class="nav-item {$arr[6]}">
-            <a class="nav-link" href="gallery.php">GALLERY{$arr[16]}</a>
+            <a class="nav-link" href="/html/gallery.php">GALLERY{$arr[16]}</a>
         </li>
         <li class="nav-item {$arr[7]}">
             <a class="nav-link" href="#">OFFER{$arr[17]}</a>
@@ -152,13 +152,13 @@ function footer()
           <h6 class="text-uppercase font-weight-bold">...</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="policy.php">Policy</a>
+            <a href="/html/policy.php">Policy</a>
           </p>
           <p>
-            <a href="terms_and_condition.php">Term &amp; Condition</a>
+            <a href="/html/terms_and_condition.php">Term &amp; Condition</a>
           </p>
           <p>
-            <a href="sitemap.php">Sitemap</a>
+            <a href="/html/sitemap.php">Sitemap</a>
           </p>
           
         </div>
@@ -171,13 +171,13 @@ function footer()
           <h6 class="text-uppercase font-weight-bold">Useful links</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="guest_acount.php">Your Account</a>
+            <a href="/html/guest_acount.php">Your Account</a>
           </p>
           <p>
-            <a href="contact_us.php">Contact Us</a>
+            <a href="/html/contact_us.php">Contact Us</a>
           </p>
              <p>
-            <a href="faq.php">FAQ</a>
+            <a href="/html/faq.php">FAQ</a>
           </p>
     
         </div>

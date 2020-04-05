@@ -32,7 +32,7 @@ require_once 'functions.php';
     <!-- /BACKROUND IMAGE -->
     <section class="header">
         <div class="box-header">
-            <img src="images/weddings_img_3.jpg" alt="groom and bride at the sea" class="back-img">
+            <img src="/images/weddings_img_3.jpg" alt="groom and bride at the sea" class="back-img">
         </div>
     </section>
 
@@ -55,19 +55,19 @@ require_once 'functions.php';
         $img = array();
         $img[0]['h2'] = 'WEDDING CEREMONY';
         $img[0]['h5'] = 'Crystal Palm Veranda';
-        $img[0]['img'] = 'images/wedding.jpg';
+        $img[0]['img'] = '/images/wedding.jpg';
         $img[0]['desc'] = 'Wedding Blessings or Ceremonies may be held at our Crystal Palm veranda located by the Onyx Lobby bar with stunning panoramic view of the palm trees combined with the Mediterranean azure sea.';
         image_left_content_right($img[0]['h2'], $img[0]['h5'], $img[0]['img'], $img[0]['desc']);
 
         $img[1]['h2'] = 'Wedding Venues';
         $img[1]['h5'] = 'Reception & Dinner';
-        $img[1]['img'] = 'images/wed.jpg';
+        $img[1]['img'] = '/images/wed.jpg';
         $img[1]['desc'] = 'The civil wedding venue looks out across the clear Mediterranean Sea, bringing the inside and outside together. You will have breathtaking views while you exchange your vows, yet the coolness of the air conditioning within the hotel.';
         image_right_content_left($img[1]['h2'], $img[1]['h5'], $img[1]['img'], $img[1]['desc']);
 
         $img[2]['h2'] = 'RELAXING ATMOSPERE';
         $img[2]['h5'] = 'C-View cocktail';
-        $img[2]['img'] = 'images/VRIS37 - Weddings.JPG';
+        $img[2]['img'] = '/images/VRIS37 - Weddings.JPG';
         $img[2]['desc'] = 'The hotel has a C-View cocktail bar where the wedding party can enjoy cocktails before their wedding reception meal. With a relaxed atmosphere, the C-View bar is the perfect place for your wedding guests to relax, while the Bride & Groom have their personal photographs taken.';
         image_left_content_right($img[2]['h2'], $img[2]['h5'], $img[2]['img'], $img[2]['desc']);
 
