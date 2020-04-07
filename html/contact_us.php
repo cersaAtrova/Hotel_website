@@ -2,13 +2,7 @@
 require_once 'functions.php';
 require_once 'countries.php';
 
-// use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
 
-
-// require 'PHPMailer/src/Exception.php';
-// require 'PHPMailer/src/SMTP.php';
-// require_once 'PHPMailer/src/PHPMailer.php';
 
 session_start();
 
@@ -21,7 +15,7 @@ foreach ($xml as $key => $value) {
 		$country_name_by_ip = $value;
 	}
 }
-$confirm_message = "";
+
 //get name form the user if logged in
 if (isset($_COOKIE['user'])) {
 	$user_name = explode(' ', $_COOKIE['user']);
@@ -30,59 +24,24 @@ if (isset($_COOKIE['user'])) {
 }
 
 if (isset($_POST['submit'])) {
-
+	$confirm_message = "";
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 		if (is_valid_name($_POST['last_name']) == false || is_valid_name($_POST['last_name']) == false || is_valid_email($_POST['email']) == false || is_valid_comment($_POST['guest_message']) == false) {
 			$confirm_message = 'Please fill out all the require fields';
 		} else {
 			if (empty($_POST['guest_title']) || empty($_POST['country'])) {
-				//	$confirm_message = 'Please fill out all the require fields';
+						$confirm_message = 'Please fill out all the require fields';
 
 			} else {
-				$to      = 'sotiris_k@aol.com';
-				$subject = 'Test';
-				$message = 'Email test from php';
-				$headers = array(
-					'From' => 'webmaster@example.com',
-					'Reply-To' => 'webmaster@example.com',
-					'X-Mailer' => 'PHP/' . phpversion()
-				);
-
-				mail($to, $subject, $message, $headers);
-
-
-
-				// $mail = new PHPMailer(true);
-
-				// //Send mail using gmail
-				// if ($send_using_gmail) {
-				// 	$mail->IsSMTP(); // telling the class to use SMTP
-				// 	$mail->SMTPAuth = true; // enable SMTP authentication
-				// 	$mail->SMTPSecure = "ssl"; // sets the prefix to the servier
-				// 	$mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
-				// 	$mail->Port = 465; // set the SMTP port for the GMAIL server
-				// 	$mail->Username = "noreply.info.testing@gmail.com"; // GMAIL username
-				// 	$mail->Password = "LKJPOI123!!"; // GMAIL password
-				// }
-
-				// //Typical mail data
-				// $email='soteris100@gmail.com';
-				// $name='sotiris';
-				// $email_from='sotirs_k@aol.com';
-				// $name_from='sotiris';
-				// $mail->AddAddress($email, $name);
-				// $mail->SetFrom($email_from, $name_from);
-				// $mail->Subject = "My Subject";
-				// $mail->Body = "Mail contents";
-
-				// try {
-				// 	$mail->Send();
-				// 	echo "Success!";
-				// } catch (Exception $e) {
-				// 	//Something went bad
-				// 	echo "Fail - " . $mail->ErrorInfo;
-				// }
+								
+				
+				smtpmailer('soteris100@gmail.com', 'sotiris_k@aol.com', 'Sotiris', 'test mail message', 'Hello World!');
+				if (smtpmailer('soteris100@mail.com', 'sotiris_k@aol.com', 'yourName', 'test mail message', 'Hello World!')==true) {
+					$confirm_message = 'Message has send succesfully';
+				}else{
+					$confirm_message = "Fail - " . $mail->ErrorInfo;
+				}
 			}
 		}
 	}

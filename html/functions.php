@@ -1,5 +1,13 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once '../PHPMailer/src/Exception.php';
+require_once '../PHPMailer/src/SMTP.php';
+require_once '../PHPMailer/src/PHPMailer.php';
+define('GUSER', 'noreply.info.testing@gmail.com'); // GMail username
+define('GPWD', 'LKJPOI123!!'); // GMail password
 function navigation_bar($str = 'HOME')
 {
   $arr = array();
@@ -138,7 +146,7 @@ function footer()
         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
     
           <!-- Content -->
-          <h6 class="text-uppercase font-weight-bold"><img src="images/logo-white.png" alt="" srcset=""></h6>
+          <h6 class="text-uppercase font-weight-bold"><img src="/images/logo-white.png" alt="" srcset=""></h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p class="text-info" style="font-size: 1.2rem">A <span style="font-size: 1.5rem"><em> MEMBER </em></span> of <span style="font-size: 1.8rem; display: inline-block"> Tsokkos Hotels</span>.</p>
     
@@ -300,13 +308,12 @@ function is_valid_name($name)
   if (empty($name)) {
     return false;
   } else {
-   
+
     // check if name only contains letters and whitespace
     if (ctype_alpha($name)) {
-      return true; 
+      return true;
     }
     return false;
-    
   }
 }
 
@@ -326,10 +333,36 @@ function is_valid_email($email)
 }
 function is_valid_comment($comment)
 {
-  if (empty($comment) || strlen($comment)<15 ||strlen($comment)>3000 ) {
+  if (empty($comment) || strlen($comment) < 15 || strlen($comment) > 3000) {
     return false;
   } else {
-   return true;
+    return true;
   }
 }
 
+//sent email
+function smtpmailer($to, $from, $from_name, $subject, $body)
+{
+  global $error;
+  $mail = new PHPMailer();  // create a new object
+  $mail->IsSMTP(); // enable SMTP
+  $mail->SMTPDebug = 0;  // debugging: 1 = errors and messages, 2 = messages only
+  $mail->SMTPAuth = true;  // authentication enabled
+  $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+  $mail->Host = 'smtp.gmail.com';
+  $mail->Port = 465;
+  $mail->Username = GUSER;
+  $mail->Password = GPWD;
+
+  $mail->SetFrom($from, $from_name);
+  $mail->Subject = $subject;
+  $mail->Body = $body;
+  $mail->AddAddress($to);
+  if (!$mail->Send()) {
+    $error = 'Mail error: ' . $mail->ErrorInfo;
+    return false;
+  } else {
+    $error = 'Message sent!';
+    return true;
+  }
+}
