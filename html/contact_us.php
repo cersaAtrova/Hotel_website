@@ -31,15 +31,14 @@ if (isset($_POST['submit'])) {
 			$confirm_message = 'Please fill out all the require fields';
 		} else {
 			if (empty($_POST['guest_title']) || empty($_POST['country'])) {
-						$confirm_message = 'Please fill out all the require fields';
-
+				$confirm_message = 'Please fill out all the require fields';
 			} else {
-								
+
+				$body = send_guest_message(($_POST['first_name'] . ' ' . $_POST['last_name']), $_POST['email'], $_POST['country'], $_POST['subject'], $_POST['guest_message']);
 				
-				smtpmailer('soteris100@gmail.com', 'sotiris_k@aol.com', 'Sotiris', 'test mail message', 'Hello World!');
-				if (smtpmailer('soteris100@mail.com', 'sotiris_k@aol.com', 'yourName', 'test mail message', 'Hello World!')==true) {
+				if (smtpmailer('soteris100@gmail.com',  $_POST['email'], 'New Message', $_POST['subject'], $body) == true) {
 					$confirm_message = 'Message has send succesfully';
-				}else{
+				} else {
 					$confirm_message = "Fail - " . $mail->ErrorInfo;
 				}
 			}
@@ -110,7 +109,7 @@ if (isset($_POST['submit'])) {
 						<label for="guest_title"><span>&starf;</span> Title</label>
 						<!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
 						<select name="guest_title" class="dropdown-select" required id="guest_title" aria-placeholder="Title">
-							<option value=""></option>
+							
 							<option value="Mr">Mr</option>
 							<option value="Ms">Ms</option>
 							<option value="Sir">Sir</option>
@@ -167,12 +166,12 @@ if (isset($_POST['submit'])) {
 					<div class="col-12">
 						<label for="subject"><span>&starf;</span> Subject</label>
 						<select name="subject" class="dropdown-select" id="subject" required>
-							<option default value="">Select Subject</option>
-							<option value="">Reservation Enquiry</option>
-							<option value="">Wedding Enquiry</option>
-							<option value="">SPA Enquiry</option>
-							<option value="">Conference Enquiry</option>
-							<option value="">Lost and Found Department</option>
+							<option value="">Select Subject</option>
+							<option value="Reservation Enquiry">Reservation Enquiry</option>
+							<option value="Wedding Enquiry">Wedding Enquiry</option>
+							<option value="SPA Enquiry">SPA Enquiry</option>
+							<option value="Conference Enquiry<">Conference Enquiry</option>
+							<option value="Lost and Found Department">Lost and Found Department</option>
 						</select>
 					</div>
 				</div>

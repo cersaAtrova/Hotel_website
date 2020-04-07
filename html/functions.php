@@ -356,6 +356,10 @@ function smtpmailer($to, $from, $from_name, $subject, $body)
 
   $mail->SetFrom($from, $from_name);
   $mail->Subject = $subject;
+  $mail->addReplyTo($from);
+  $mail->IsHTML(true);
+  $mail->AddEmbeddedImage('/images/contact_mail.JPG','img');
+  // $mail->addEmbeddedImage('/images/Princess Suite1.jpg','resv_image');
   $mail->Body = $body;
   $mail->AddAddress($to);
   if (!$mail->Send()) {
@@ -365,4 +369,139 @@ function smtpmailer($to, $from, $from_name, $subject, $body)
     $error = 'Message sent!';
     return true;
   }
+}
+
+function send_guest_message($name,$email,$country,$subject,$message)
+{
+
+  $msg = <<<send
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-size: 16px;
+            list-style: none;
+            font-family: 'Raleway', sans-serif;
+            text-decoration: none;
+        }
+
+        h2,
+        h3,
+        div,
+        a,
+        p {
+            padding: 10px;
+            line-height:1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        // h5{
+        //   font-size: 0.8rem;
+        //  font-weight:none;
+        // }
+        hr {
+            color: rgba(73, 73, 73, 0.2);
+            margin: 0;
+            padding: 0;
+        }
+
+        .box-email {
+            width: 100%;
+
+        }
+
+        .body-email {
+            width: 80%;
+            margin: auto;
+            border: 1px solid rgba(23, 22, 73, 0.644);
+        }
+
+        .img {
+    
+            width: 100%;
+            height: 25vh;
+        }
+
+        .button-reply {
+            margin: 10px 0 25px;
+            overflow: auto;
+            color:white;
+        }
+
+        .reply {
+            float: right;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            color: white;
+            border-radius: 10px;
+            font-weight: 700;
+            background-color: rgba(25, 25, 117, 0.89);
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <div class="box-email">
+        <div class="body-email">
+        <div class="img"><img src="cid:reply" width="100%" height="100%"></div>
+            <div class="divider-line">
+                <h2>Vrissiana Beach Hotel</h2>
+                <h3>You receive Message from Guest</h3>
+
+                <hr />
+            </div>
+            <div class="recieve_mail">
+                <fieldset>
+                    <legend>Guest Information</legend>
+                    
+                        <h5>Full name: $name </h5>
+                        <h5>From: $country</h5>
+                        <h5>Email: $email</h5>
+                        <h5>Subject: $subject</h5>
+                   
+                </fieldset>
+            </div>
+            <div class="divider-line">
+                <hr />
+            </div>
+
+            <div class="content-email">
+                <fieldset>
+                    <legend>Message</legend>
+                    <p> $message</p>
+                </fieldset>
+            </div>
+
+            <div class="divider-line">
+                <hr />
+            </div>
+            <div class="button-reply">
+                <a class="reply" href="mailto:$email">Reply</a>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
+send;
+return $msg;
 }
