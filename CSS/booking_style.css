@@ -38,7 +38,13 @@ div.dropdown-select {
 }
 
 
-.dropdown-select,.text-form-control,textarea {
+div.ui.input.right.icon>input{
+  border: none;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.dropdown-select,.text-form-control,textarea,.input {
   background-color: white;
   font-size: 1.5rem;
   border: none;
@@ -47,6 +53,7 @@ div.dropdown-select {
   border: 1px solid black;
   
 }
+
 select.dropdown-select{
   background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right white;
   -webkit-appearance: none;
@@ -76,7 +83,7 @@ box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
   }
   input,
   textarea,
-  div.dropdown-select {
+  div.dropdown-select,.input {
     font-size: .7rem;
   }
   .dropdown-select,.text-form-control,textarea {
@@ -103,7 +110,7 @@ box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
     width: 75%;
     font-size: 1rem;
   }
-  .dropdown-select,.text-form-control,textarea {
+  .dropdown-select,.text-form-control,textarea,.input {
     font-size: 1rem;
     padding: 3px;   
   }

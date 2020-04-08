@@ -173,7 +173,6 @@ if (isset($_POST['submit'])) {
 					</div>
 				</div>
 				<div class="flex-box-form">
-
 					<div class="col-12">
 						<label for="subject"><span>&starf;</span> Subject</label>
 						<select name="subject" class="dropdown-select" id="subject" required>
