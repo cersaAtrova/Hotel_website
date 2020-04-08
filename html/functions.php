@@ -1,7 +1,6 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 require_once '../PHPMailer/src/Exception.php';
 require_once '../PHPMailer/src/SMTP.php';
@@ -82,7 +81,7 @@ function navigation_bar($str = 'HOME')
         </li>
     </ul>
 </div>
-<form class="form-inline my-2 my-lg-0" action="reservation_calendar.php" method="GET">
+<form class="form-inline my-2 my-lg-0" action="booking_calendar.php" method="GET">
     <button class="btn-nav btn-lg my-md-2 btn-primary" type="submit">BOOK</button>
 </form>
 </nav>
@@ -111,19 +110,19 @@ function footer()
           <div class="col-md-6 col-lg-7 text-center text-lg-right">
     
             <!-- Facebook -->
-            <a class="link" href="#">
+            <a class="link social_link" href="#">
               <i class="fab fa-facebook-f white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Twitter -->
-            <a class="link" href="#">
+            <a class="link social_link" href="#">
               <i class="fab fa-twitter white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Google +-->
-            <a class="link">
+            <a class="link social_link">
               <i class="fab fa-google-plus-g white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!--Instagram-->
-            <a class="link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
+            <a class="link social_link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
               <i class="fab fa-instagram white-text" style="font-size: 1.5rem"> </i>
             </a>
     
@@ -278,19 +277,83 @@ print;
 }
 
 //get the ip address from user
-function getRealIpAddr()
-{
-  if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-  {
-    $ip = $_SERVER['HTTP_CLIENT_IP'];
-  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-  {
-    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+function getRealIp() {
+  if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
+    $ip=$_SERVER['HTTP_CLIENT_IP'];
+  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
+    $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
   } else {
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip=$_SERVER['REMOTE_ADDR'];
   }
   return $ip;
 }
+function writeLog($where)
+{
+
+  $ip = getRealIp(); // Get the IP from superglobal
+  $host = gethostbyaddr($ip);    // Try to locate the host of the attack
+  $date = date("d M Y");
+
+  // create a logging message with php heredoc syntax
+  $logging = <<<LOG
+    \n
+    << Start of Message >>
+    There was a hacking attempt on your form. \n 
+    Date of Attack: {$date}
+    IP-Adress: {$ip} \n
+    Host of Attacker: {$host}
+    Point of Attack: {$where}
+    << End of Message >>
+LOG;
+  // Awkward but LOG must be flush left
+
+  // open log file
+  if ($handle = fopen('hacklog.log', 'a')) {
+
+    fputs($handle, $logging);  // write the Data to file
+    fclose($handle);           // close the file
+
+  
+  }
+}
+
+function verifyFormToken($form)
+{
+
+  // check if a session is started and a token is transmitted, if not return an error
+  if (!isset($_SESSION[$form . '_token'])) {
+    return false;
+  }
+
+  // check if the form is sent with token in it
+  if (!isset($_POST['token'])) {
+    return false;
+  }
+
+  // compare the tokens against each other if they are still the same
+  if ($_SESSION[$form . '_token'] !== $_POST['token']) {
+    return false;
+  }
+
+  return true;
+}
+
+function generateFormToken($form)
+{
+
+  // generate a token from an unique value, took from microtime, you can also use salt-values, other crypting methods...
+  $token = md5(uniqid(microtime(), true));
+
+  // Write the generated token to the session variable to check it against the hidden field when the form is sent
+  $_SESSION[$form . '_token'] = $token;
+
+  return $token;
+}
+
+
+
+
 
 
 //validation
@@ -358,7 +421,7 @@ function smtpmailer($to, $from, $from_name, $subject, $body)
   $mail->Subject = $subject;
   $mail->addReplyTo($from);
   $mail->IsHTML(true);
-  $mail->AddEmbeddedImage('/images/contact_mail.JPG','img');
+  $mail->AddEmbeddedImage('/images/contact_mail.JPG', 'img');
   // $mail->addEmbeddedImage('/images/Princess Suite1.jpg','resv_image');
   $mail->Body = $body;
   $mail->AddAddress($to);
@@ -371,7 +434,7 @@ function smtpmailer($to, $from, $from_name, $subject, $body)
   }
 }
 
-function send_guest_message($name,$email,$country,$subject,$message)
+function send_guest_message($name, $email, $country, $subject, $message)
 {
 
   $msg = <<<send
@@ -503,5 +566,5 @@ function send_guest_message($name,$email,$country,$subject,$message)
 
 </html>
 send;
-return $msg;
+  return $msg;
 }

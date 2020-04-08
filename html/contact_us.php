@@ -7,7 +7,7 @@ require_once 'countries.php';
 session_start();
 
 //get the country from user
-$xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . getRealIpAddr());
+$xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . getRealIp());
 echo $xml->geoplugin_countryName;
 $country_name_by_ip;
 foreach ($xml as $key => $value) {
@@ -24,25 +24,31 @@ if (isset($_COOKIE['user'])) {
 }
 
 if (isset($_POST['submit'])) {
-	$confirm_message = "";
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if (verifyFormToken('form1')) {
+		$confirm_message = "";
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-		if (is_valid_name($_POST['last_name']) == false || is_valid_name($_POST['last_name']) == false || is_valid_email($_POST['email']) == false || is_valid_comment($_POST['guest_message']) == false) {
-			$confirm_message = 'Please fill out all the require fields';
-		} else {
-			if (empty($_POST['guest_title']) || empty($_POST['country'])) {
+			if (is_valid_name($_POST['last_name']) == false || is_valid_name($_POST['last_name']) == false || is_valid_email($_POST['email']) == false || is_valid_comment($_POST['guest_message']) == false) {
 				$confirm_message = 'Please fill out all the require fields';
 			} else {
-
-				$body = send_guest_message(($_POST['first_name'] . ' ' . $_POST['last_name']), $_POST['email'], $_POST['country'], $_POST['subject'], $_POST['guest_message']);
-				
-				if (smtpmailer('soteris100@gmail.com',  $_POST['email'], 'New Message', $_POST['subject'], $body) == true) {
-					$confirm_message = 'Message has send succesfully';
+				if (empty($_POST['guest_title']) || empty($_POST['country'])) {
+					$confirm_message = 'Please fill out all the require fields';
 				} else {
-					$confirm_message = "Fail - " . $mail->ErrorInfo;
+
+					$body = send_guest_message(($_POST['first_name'] . ' ' . $_POST['last_name']), $_POST['email'], $_POST['country'], $_POST['subject'], $_POST['guest_message']);
+
+					if (smtpmailer('soteris100@gmail.com',  $_POST['email'], 'New Message', $_POST['subject'], $body) == true) {
+						$confirm_message = 'Message has send succesfully';
+					} else {
+						$confirm_message = "Fail - " . $mail->ErrorInfo;
+					}
 				}
 			}
 		}
+	} else {
+
+		$confirm_message = "Fail - " . $mail->ErrorInfo;
+		writeLog('Formtoken');
 	}
 }
 
@@ -73,7 +79,7 @@ if (isset($_POST['submit'])) {
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 
 	<link rel="stylesheet" href="/CSS/style.css">
-	<link rel="stylesheet" href="/CSS/contat_style.css">
+	<link rel="stylesheet" href="/CSS/booking_style.css">
 </head>
 
 <body>
@@ -104,12 +110,17 @@ if (isset($_POST['submit'])) {
 		</section>
 		<div class="container-contact-form">
 			<form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="contact_form">
+				<?php
+				// generate a new token for the $_SESSION superglobal and put them in a hidden field
+				$newToken = generateFormToken('form1');
+				?>
+				<input type="hidden" name="token" value="<?php echo $newToken; ?>">
 				<div class="flex-box-form">
 					<div class="col-4">
 						<label for="guest_title"><span>&starf;</span> Title</label>
 						<!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
 						<select name="guest_title" class="dropdown-select" required id="guest_title" aria-placeholder="Title">
-							
+
 							<option value="Mr">Mr</option>
 							<option value="Ms">Ms</option>
 							<option value="Sir">Sir</option>
