@@ -47,17 +47,21 @@ function navigation_bar($str = 'HOME')
 </div>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top-30">
 
-<a class="navbar-brand text-center" href="/html/homepage.php">
-    <img src="/images/logo-white.png" alt="logo" width="60%" height="500%">
-</a>
+
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-    <ul class="navbar-nav mr-auto  " style="line-height: 2rem; font-size: 1.2em; font-weight=500">
+    <ul class="navbar-nav mr-auto  " style="line-height: 1.5rem; font-size: 1em; font-weight=500">
+        <li class="nav-item">
+          <a class="navbar-brand text-center logo_link" href="/html/homepage.php">
+           <img id="logo_img" src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="logo" width="60%" height="50%">
+          </a>
+        </li>
+    
         <li class="nav-item {$arr[0]}">
             <a class="nav-link" href="/html/homepage.php">HOME {$arr[10]}</a>
         </li>
@@ -145,7 +149,7 @@ function footer()
         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
     
           <!-- Content -->
-          <h6 class="text-uppercase font-weight-bold"><img src="/images/logo-white.png" alt="" srcset=""></h6>
+          <h6 class="text-uppercase font-weight-bold"><img src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="" srcset=""></h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p class="text-info" style="font-size: 1.2rem">A <span style="font-size: 1.5rem"><em> MEMBER </em></span> of <span style="font-size: 1.8rem; display: inline-block"> Tsokkos Hotels</span>.</p>
     
@@ -278,13 +282,14 @@ print;
 
 //get the ip address from user
 
-function getRealIp() {
+function getRealIp()
+{
   if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
-    $ip=$_SERVER['HTTP_CLIENT_IP'];
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
   } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
-    $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
   } else {
-    $ip=$_SERVER['REMOTE_ADDR'];
+    $ip = $_SERVER['REMOTE_ADDR'];
   }
   return $ip;
 }
@@ -314,7 +319,7 @@ LOG;
     fputs($handle, $logging);  // write the Data to file
     fclose($handle);           // close the file
 
-  
+
   }
 }
 
@@ -421,8 +426,7 @@ function smtpmailer($to, $from, $from_name, $subject, $body)
   $mail->Subject = $subject;
   $mail->addReplyTo($from);
   $mail->IsHTML(true);
-  $mail->AddEmbeddedImage('/images/contact_mail.JPG', 'img');
-  // $mail->addEmbeddedImage('/images/Princess Suite1.jpg','resv_image');
+  $mail->AddEmbeddedImage('https://res.cloudinary.com/sotiris/image/upload/v1586610215/Vrissiana/contact_mail_dwuuv2.jpg', 'img');
   $mail->Body = $body;
   $mail->AddAddress($to);
   if (!$mail->Send()) {
@@ -567,4 +571,186 @@ function send_guest_message($name, $email, $country, $subject, $message)
 </html>
 send;
   return $msg;
+}
+
+
+function display_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img)
+{
+  $str = '';
+  foreach ($img as $e) {
+    $str .= '<div class="carousel-item active"> <img class="d-block w-100" src="' . $e . '" width="100%" height="100%" alt="First slide"> </div>';
+  }
+
+  $msg = <<<rooms
+  <div class="container-fluid box-container" style="padding:10px 0; ">
+  <div class="row">
+      <div class="col-md-8" style="max-height: 60%">
+          <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                  $str
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
+                  <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next pr-5" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span aria-hidden="true"><i class="angle huge black right icon"></i></span>
+                  <span class="sr-only ">Next</span>
+              </a>
+          </div>
+
+      </div>
+
+      <div class="col align-self-center">
+          <div class="col box-content-image-right pad-25 text-white">
+              <form class="ui" action="select_room.php" method="GET">
+
+                  <p class="pad-25 h4">Room  $count_room </p>
+                  <p class="pad-20 h2 text-uppercase"> $room_name</p>
+                  <input type="hidden" name="room_name" value="$room_name">
+                  <div class="ui inverted segment">
+                      <div class="ui inverted divider"></div>
+                      <div class="container">
+                          <div class="row row-col-3">
+                              <div class="col">
+                                  <P class="h5 pb-2">Non-refuntable</P>
+                                  <a href="" class="text-white"><u>View terms</u></a>
+                              </div>
+                              <div class="col text-center">
+                                  <h3><i class="euro sign icon"></i> $daily_price_nfr</h3>
+                                  <input type="hidden" name="price" value=" $daily_price_nfr">
+                                  <p>Per night</p>
+                              </div>
+                              <div class="col">
+                              
+                                  <input type="submit" name="non_refandable" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="ui inverted divider"></div>
+                      <div class="container">
+                          <div class="row row-col-3">
+                              <div class="col">
+                                  <h3>Refuntable</h3>
+                                  <a href="" class="text-white"><u>View terms</u></a>
+                              </div>
+                              <div class="col text-center">
+                                  <h3><i class="euro sign icon"></i>$daily_price_fr</h3>
+                                  <p>Per night</p>
+                              </div>
+                              <div class="col">
+                                  <input type="submit" name="refandable" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="ui inverted divider"> </div>
+                      <p class="pl-2 pd-5 pt-2">Room size: $room_size m<sup>2</sup></p>
+                      <p class="pl-2 pd-5 pt-2">Sleep up to $max_guest</p>
+                  </div>
+              </form>
+          </div>
+
+      </div>
+
+  </div>
+</div>
+
+
+
+rooms;
+  print $msg;
+}
+
+
+function display_not_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img,$min_stay)
+{
+  $str = '';
+  foreach ($img as $e) {
+    $str .= '<div class="carousel-item active"> <img class="d-block w-100" src="' . $e . '" width="100%" height="100%" alt="First slide"> </div>';
+  }
+
+  $msg = <<<rooms
+
+
+  <div class="container-fluid box-container" style="padding:10px 0; ">
+<div class="row">
+    <div class="col-md-8" style="max-height: 60%">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="Third slide">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next pr-5" href="#carouselExampleControls" role="button" data-slide="next">
+                <span aria-hidden="true"><i class="angle huge black right icon"></i></span>
+                <span class="sr-only ">Next</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="col align-self-center">
+        <div class="col box-content-image-right pad-25 text-white">
+                <p class="pad-25 h4">Room  $count_room </p>
+                <p class="pad-20 h2 text-uppercase"> $room_name</p>
+          
+                <div class="ui inverted segment">
+                    <div class="ui inverted divider"></div>
+                    <div class="container">
+                        <div class="row row-col-3">
+                            <div class="col">
+                                <P class="h5 pb-2">Non-refuntable</P>
+                                <a href="" class="text-white"><u>View terms</u></a>
+                            </div>
+                            <div class="col text-center">
+                                <h3><i class="euro sign icon"></i> $daily_price_nfr</h3>
+                                <p>Per night</p>
+                            </div>
+                            <div class="col">
+                                <a aria-disabled="true" style=" pointer-events: none;"  class="btn-nav disabled btn-xl bg-secondary">Not available</a>
+                                <p>Min stay $min_stay days</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui inverted divider"></div>
+                    <div class="container">
+                        <div class="row row-col-3">
+                            <div class="col">
+                                <h3>Refuntable</h3>
+                                <a href="" class="text-white"><u>View terms</u></a>
+                            </div>
+                            <div class="col text-center">
+                                <h3><i class="euro sign icon"></i>$daily_price_fr</h3>
+                                <p>Per night</p>
+                            </div>
+                            <div class="col">
+                            <a aria-disabled="true" style=" pointer-events: none;"  class="btn-nav disabled btn-lg bg-secondary">Not available</a>
+                            <p>Min stay $min_stay days</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui inverted divider"> </div>
+                    <p class="pl-2 pd-5 pt-2">Room size: $room_size m<sup>2</sup></p>
+                    <p class="pl-2 pd-5 pt-2">Sleep up to $max_guest</p>
+                </div>
+         
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+rooms;
+  print $msg;
 }
