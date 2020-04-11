@@ -30,7 +30,7 @@
     <?php navigation_bar('GALLERY') ?>
     <section class="header">
         <div class="box-header" style="background-color: black">
-            <img src="/images/vrissiana.jpg" alt="Rocks and the sea" class="back-img" style="opacity: 0.6">
+            <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610228/Vrissiana/vrissiana_yh99oc.jpg" alt="Rocks and the sea" class="back-img" style="opacity: 0.6">
         </div>
     </section>
     <section class="overview">

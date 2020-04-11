@@ -21,7 +21,7 @@
 body {
   font-family: 'Raleway', sans-serif;
   box-sizing: inherit;
-  background-image: url('/images/water.jpg');
+  background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586610225/Vrissiana/water_vteo2m.jpg');
   background-repeat: repeat;
 }
 
@@ -62,7 +62,10 @@ body {
   background-color: rgb(10, 5, 53) !important;
 
 }
-
+.navbar-nav{
+  align-items: center !important;
+  font-size: 1.3em !important;
+}
 .btn-nav {
   display: inline-block;
   padding: 1rem 1.2rem;
@@ -130,7 +133,7 @@ body {
   width: 100%;
   position: relative;
   padding: 50px 0;
-  background-image: url('/images/aqua.jpg');
+  background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586610192/Vrissiana/aqua_g06cr9.jpg');
   height: max-content;
 }
 
@@ -158,6 +161,7 @@ body {
   border: 1px solid #ffffff;
 }
 
+
 .pad-25 {
   padding: 1em;
 }
@@ -167,14 +171,30 @@ body {
 }
 
 
-
-
-@media only screen and (max-width: 890px) {
-  .navbar-brand img {
-    width: 50%;
-    height: 40%;
+@media only screen and (max-width: 590px) {
+  #logo_img{
+    width: 20%;
+    height: 15%;
   }
 
+  .overview>div{
+    width: 90%!important;
+  }
+}
+
+@media only screen and (max-width: 890px) {
+  #logo_img{
+    width: 30%;
+    height: 25%;
+  }
+ .btn-nav{
+   padding: .8em;
+   letter-spacing: 0;
+   text-indent: 0;
+ }
+  .overview>div{
+    width: 80% !important;
+  }
   .col-md-8 {
     width: 100vh !important;
     max-width: 100%;
@@ -198,12 +218,18 @@ body {
   .box-content-image-left {
     margin: 0;
   }
+  .overview>div{
+    width: 60%;
+  }
 }
 
 @media only screen and (max-width: 1280px) {
   .pad-25 {
     padding: 0.6em;
   }
+}
+.overview>div{
+  width: 40%;
 }
 
 .header {

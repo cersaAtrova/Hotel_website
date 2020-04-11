@@ -30,7 +30,7 @@
     <!-- /BACKROUND IMAGE -->
     <section class="header">
         <div class="box-header">
-            <img src="/images/thalassa-restaurant--v4619901.jpg" alt="" class="back-img">
+            <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610220/Vrissiana/thalassa-restaurant--v4619901_tlfcdt.jpg" alt="" class="back-img">
         </div>
     </section>
 
@@ -53,13 +53,13 @@
         $img = array();
         $img[0]['h2'] = 'Restaurant';
         $img[0]['h5'] = 'Thalassa Restaurant - Buffet ';
-        $img[0]['img'] = '/images/RESTAURANT.JPG';
+        $img[0]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/v1586610215/Vrissiana/RESTAURANT_tc4rsz.jpg';
         $img[0]['desc'] = 'Rich International Buffet Breakfast to Buffet Dinner which is different theme every night.<br/>Kids corner available in every meal. Beverages for all meals are waiter service';
         image_left_content_right($img[0]['h2'], $img[0]['h5'], $img[0]['img'], $img[0]['desc']);
 
         $img[1]['h2'] = 'Mexican Restaurant';
         $img[1]['h5'] = 'Los Amigos Restaurant - A La Carte';
-        $img[1]['img'] = '/images/losamigos.jpg';
+        $img[1]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/v1586610213/Vrissiana/losamigos_ysused.jpg';
         $img[1]['desc'] = 'This spectacular beachfront summer time restaurant serves exceptional Mexican delicacies that are guaranteed to please.';
         image_right_content_left($img[1]['h2'], $img[1]['h5'], $img[1]['img'], $img[1]['desc']);
         ?>
@@ -81,13 +81,13 @@
         $img = array();
         $img[0]['h2'] = 'Bars';
         $img[0]['h5'] = 'C-View Bars '. htmlspecialchars('&') .' Teracce';
-        $img[0]['img'] = '/images/bar.jpg';
+        $img[0]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/bar_w2jjjf.jpg';
         $img[0]['desc'] = 'A casual place to relax and admire the panoramic view of the blue Mediterranean Sea whilst enjoying a long cool drink and conversation with friends. ';
         image_left_content_right($img[0]['h2'], $img[0]['h5'], $img[0]['img'], $img[0]['desc']);
 
         $img[1]['h2'] = 'Pool Bar';
         $img[1]['h5'] = 'Paradise Pool Bar';
-        $img[1]['img'] = '/images/poolbar.jpg';
+        $img[1]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/v1586610215/Vrissiana/poolbar_i6aamm.jpg';
         $img[1]['desc'] = 'Sit in the shade of a tree and enjoy a cool drink, delicious ice cream at our Paradise Pool Bar. A quiet oasis overlooking the pool, the beach and Mediterranean Sea.';
         image_right_content_left($img[1]['h2'], $img[1]['h5'], $img[1]['img'], $img[1]['desc']);
         ?>

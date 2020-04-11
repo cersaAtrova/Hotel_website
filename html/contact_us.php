@@ -88,7 +88,7 @@ if (isset($_POST['submit'])) {
 	<!-- /BACKROUND IMAGE -->
 	<section class="header">
 		<div class="box-header" style="background-color: black">
-			<img src="/images/VRIS27A - Front Sea View Room.jpg" alt="Rocks and the sea" class="back-img" style="opacity: 0.6">
+			<img src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" alt="Rocks and the sea" class="back-img" style="opacity: 0.6">
 		</div>
 	</section>
 

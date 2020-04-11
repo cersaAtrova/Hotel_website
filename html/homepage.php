@@ -38,17 +38,14 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="d-block w-100" src="images/vrissiana.jpg" alt="First slide">
-                <!-- <div class="carousel-caption d-none d-md-block">
-                    <h5>sdfdddddddddddddf</h5>
-                    <p>sdf</p>
-                </div> -->
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610236/Vrissiana/VRIS07B_-_Pool_Area_vmiqgt.jpg" alt="First slide">
+             
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="/images/vrissiana-boutique-beach-hotel-185606.jpg" alt="Second slide">
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610235/Vrissiana/vrissiana-boutique-beach-hotel-185606_nwkauw.jpg" alt="Second slide">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="/images/VRIS07B - Pool Area.JPG" alt="Third slide">
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610228/Vrissiana/vrissiana_yh99oc.jpg" alt="Third slide">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -79,7 +76,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8" style="max-height: 60%">
-                    <img src="/images/housekeping.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610213/Vrissiana/housekeping_ay5ul4.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center">
                     <div class="col box-content-image-right pad-25 text-white">
@@ -100,7 +97,7 @@
         <div class="container-fluid" style="padding-top:20px; ">
             <div class="row" style="flex-direction: row-reverse;">
                 <div class="col-md-8" style="max-height: 60%; ">
-                    <img src="/images/RESTAURANT.JPG" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610215/Vrissiana/RESTAURANT_tc4rsz.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center ">
                     <div class="col box-content-image-left pad-25 text-white">
@@ -129,7 +126,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8" style="max-height: 60%">
-                    <img src="/images/VRIS19 - Sauna.JPG"  width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610224/Vrissiana/VRIS19_-_Sauna_tlo2z1.jpg"  width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center">
                     <div class="col box-content-image-right pad-25 text-white">
@@ -148,7 +145,7 @@
         <div class="container-fluid" style="padding-top:20px; ">
             <div class="row" style="flex-direction: row-reverse;">
                 <div class="col-md-8" style="max-height: 60%; ">
-                    <img src="/images/VRIS13 - Spa.JPG" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610221/Vrissiana/VRIS13_-_Spa_yolfwf.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center ">
                     <div class="col box-content-image-left pad-25 text-white">
@@ -172,7 +169,7 @@
             <h1>IMERSE INTO LUXURY</h1>
             <H3>See more on Instagram</H3>
             <a style="font-size: 1.5rem" href="https://www.instagram.com/explore/locations/1032562090/vrissiana-beach-hotel/">@vrissiana beach hotel</a>
-                  </div>
+     </div>
     </section>
   
    <!-- Footer -->
