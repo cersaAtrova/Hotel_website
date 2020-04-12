@@ -133,7 +133,7 @@ body {
   width: 100%;
   position: relative;
   padding: 50px 0;
-  background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586610192/Vrissiana/aqua_g06cr9.jpg');
+  background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586708797/Vrissiana/aqua_nltj7o.jpg');
   height: max-content;
 }
 
@@ -161,7 +161,14 @@ body {
   border: 1px solid #ffffff;
 }
 
-
+.box-content{
+  z-index: 5;
+  background-color: rgba(29, 29, 92, 1);
+  box-sizing: border-box;
+  overflow: auto;
+  border: 1px solid #ffffff;
+  margin: 5px 20px;
+}
 .pad-25 {
   padding: 1em;
 }

@@ -578,12 +578,14 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
 {
   $str = '';
   foreach ($img as $e) {
-    $str .= '<div class="carousel-item active"> <img class="d-block w-100" src="' . $e . '" width="100%" height="100%" alt="First slide"> </div>';
+    if(empty($str)){
+      $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>'; 
+     }
+    $str .= '<div class="carousel-item"> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
   }
 
   $msg = <<<rooms
-  <div class="container-fluid box-container" style="padding:10px 0; ">
-  <div class="row">
+  <div class="row mb-3">
       <div class="col-md-8" style="max-height: 60%">
           <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
@@ -639,7 +641,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                                   <p>Per night</p>
                               </div>
                               <div class="col">
-                                  <input type="submit" name="refandable" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
+                                  <input type="submit" name="flexible" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
                               </div>
                           </div>
                       </div>
@@ -653,39 +655,32 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
       </div>
 
   </div>
-</div>
 
 
 
 rooms;
-  print $msg;
+  echo $msg;
 }
 
 
-function display_not_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img,$min_stay)
+function display_not_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img, $min_stay)
 {
   $str = '';
   foreach ($img as $e) {
-    $str .= '<div class="carousel-item active"> <img class="d-block w-100" src="' . $e . '" width="100%" height="100%" alt="First slide"> </div>';
+   if(empty($str)){
+    $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>'; 
+   }
+    $str .= '<div class="carousel-item "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
   }
 
   $msg = <<<rooms
 
 
-  <div class="container-fluid box-container" style="padding:10px 0; ">
-<div class="row">
+  <div class="row mb-3">
     <div class="col-md-8" style="max-height: 60%">
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="First slide">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="Second slide">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" width="100%" height="100%" alt="Third slide">
-                </div>
+                $str
             </div>
             <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                 <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
@@ -743,14 +738,11 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
                     <p class="pl-2 pd-5 pt-2">Room size: $room_size m<sup>2</sup></p>
                     <p class="pl-2 pd-5 pt-2">Sleep up to $max_guest</p>
                 </div>
-         
-        </div>
-
-    </div>
-
-</div>
-</div>
+          </div>
+       </div>
+   </div>
+ 
 
 rooms;
-  print $msg;
+  echo $msg;
 }
