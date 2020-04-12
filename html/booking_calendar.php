@@ -6,13 +6,13 @@ session_start();
 
 
 if (isset($_GET['submit'])) {
-    $check_in_date = $_REQUEST['check_in'];
-    $check_out_date = $_REQUEST['check_out'];
+    $check_in_date = new DateTime($_REQUEST['check_in']);
+    $check_out_date = new DateTime($_REQUEST['check_out']);
     $room_select = $_REQUEST['room'];
     //check the dates
     if ($check_in_date < $check_out_date) {
         if ($room_select == 1) {
-            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infats']);
+            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
             //check the guest if is correct
             if ($guest_select[0] + $guest_select[1] > 4) {
                 $error_details = 'Please provide correct information';
@@ -24,7 +24,7 @@ if (isset($_GET['submit'])) {
                     $_SESSION['room_1_guest']['kids']=$guest_select[1];
                     $_SESSION['room_1_guest']['infants']=$guest_select[2];
                     //general details
-                    $_SESSION['room_info']['mael_plan']=$_REQUEST['meal_plan'];
+                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
                     $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
                     $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
                     header('Location: select_room.php?total_room=1');
@@ -32,8 +32,8 @@ if (isset($_GET['submit'])) {
                     
             }
         }else if($room_select==2){
-            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infats']);
-            $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infats2']);
+            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
+            $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infants2']);
             //check the guest if is correct
             if ($guest_select[0] + $guest_select[1] > 4 ||$guest_select2[1] + $guest_select2[1] > 4 ) {
                 $error_details = 'Please provide correct information';
@@ -45,11 +45,11 @@ if (isset($_GET['submit'])) {
                     $_SESSION['room_1_guest']['kids']=$guest_select[1];
                     $_SESSION['room_1_guest']['infants']=$guest_select[2];
                     //room 2
-                    $_SESSION['room_2_guest']['adults']=$guest_select[0];
-                    $_SESSION['room_2_guest']['kids']=$guest_select[1];
-                    $_SESSION['room_2_guest']['infants']=$guest_select[2];
+                    $_SESSION['room_2_guest']['adults']=$guest_select2[0];
+                    $_SESSION['room_2_guest']['kids']=$guest_select2[1];
+                    $_SESSION['room_2_guest']['infants']=$guest_select2[2];
                     //general details
-                    $_SESSION['room_info']['mael_plan']=$_REQUEST['meal_plan'];
+                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
                     $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
                     $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
                     header('Location: select_room.php?total_room=2');
@@ -57,9 +57,9 @@ if (isset($_GET['submit'])) {
                     
             }
         }else if($room_select==3){
-            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infats']);
-            $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infats2']);
-            $guest_select3 = array($_REQUEST['adults3'], $_REQUEST['kids3'], $_REQUEST['infats3']);
+            $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
+            $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infants2']);
+            $guest_select3 = array($_REQUEST['adults3'], $_REQUEST['kids3'], $_REQUEST['infants3']);
             //check the guest if is correct
             if ($guest_select[0] + $guest_select[1] > 4 ||$guest_select2[1] + $guest_select3[1] > 4
             ||$guest_select3[1] + $guest_select3[1] > 4 ) {
@@ -79,7 +79,7 @@ if (isset($_GET['submit'])) {
                     $_SESSION['room_3_guest']['kids']=$guest_select3[1];
                     $_SESSION['room_3_guest']['infants']=$guest_select3[2];
 
-                    $_SESSION['room_info']['mael_plan']=$_REQUEST['meal_plan'];
+                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
                     $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
                     $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
                     
@@ -106,6 +106,8 @@ if (isset($_GET['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
+   
     <title>Availability</title>
     <!-- Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
@@ -173,7 +175,7 @@ if (isset($_GET['submit'])) {
                                         <div class="field">
                                             <label>Check out</label>
                                             <div class="ui calendar" id="rangeend">
-                                                <div class="ui input right icon">
+                                                <div class="ui input right icon error_date">
                                                     <i class="calendar icon"></i>
                                                     <input id="check_out" type="text" name="check_out" placeholder="Check Out" value="<?php echo $check_out_date ?>">
                                                 </div>
@@ -259,11 +261,11 @@ if (isset($_GET['submit'])) {
                         </div>
                         <div class="flex-box-form">
                             <div class="col-12">
-                                <select name="meal_plan" class="dropdown-select " id="subject" required>
+                                <select name="meal_plan" class="dropdown-select " id="meal_plan" required>
                                     <option selected value="BB">Bed &amp; Breakfast</option>
                                     <option value="HF">Half Board</option>
                                     <option value="FB">Full Board</option>
-                                    <option selected value="AL">Premium All Inclusive</option>
+                                    <option selected value="PAI">Premium All Inclusive</option>
                                 </select>
                             </div>
                         </div>
@@ -277,7 +279,7 @@ if (isset($_GET['submit'])) {
                             <input type="submit" class="btn-nav btn-lg my-md-2 btn-primary h-100 mt-3 p-4 text-uppercase font-weight-bold " value="Check Availability" name="submit">
                         </div>
                     </div>
-                    <p class="ui"><?php echo $error_details ?></p>
+                    <p id="error-button" class="ui"><?php echo $error_details ?></p>
                 </div>
             </div>
             <div class="ui vertical divider"></div>
