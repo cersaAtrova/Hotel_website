@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require_once '../PHPMailer/src/Exception.php';
 require_once '../PHPMailer/src/SMTP.php';
 require_once '../PHPMailer/src/PHPMailer.php';
+require_once '../connect_dbase.php';
 define('GUSER', 'noreply.info.testing@gmail.com'); // GMail username
 define('GPWD', 'LKJPOI123!!'); // GMail password
 function navigation_bar($str = 'HOME')
@@ -578,24 +579,25 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
 {
   $str = '';
   foreach ($img as $e) {
-    if(empty($str)){
-      $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>'; 
-     }
-    $str .= '<div class="carousel-item"> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    if (empty($str)) {
+      $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    } else {
+      $str .= '<div class="carousel-item"> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    }
   }
 
   $msg = <<<rooms
   <div class="row mb-3">
       <div class="col-md-8" style="max-height: 60%">
-          <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+          <div id="$room_name" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                   $str
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <a class="carousel-control-prev" href="#$room_name" role="button" data-slide="prev">
                   <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
                   <span class="sr-only">Previous</span>
               </a>
-              <a class="carousel-control-next pr-5" href="#carouselExampleControls" role="button" data-slide="next">
+              <a class="carousel-control-next pr-5" href="#$room_name" role="button" data-slide="next">
                   <span aria-hidden="true"><i class="angle huge black right icon"></i></span>
                   <span class="sr-only ">Next</span>
               </a>
@@ -638,6 +640,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                               </div>
                               <div class="col text-center">
                                   <h3><i class="euro sign icon"></i>$daily_price_fr</h3>
+                                  <input type="hidden" name="price" value=" $daily_price_fr">
                                   <p>Per night</p>
                               </div>
                               <div class="col">
@@ -667,10 +670,11 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
 {
   $str = '';
   foreach ($img as $e) {
-   if(empty($str)){
-    $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>'; 
-   }
-    $str .= '<div class="carousel-item "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    if (empty($str)) {
+      $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt=""> </div>';
+    } else {
+      $str .= '<div class="carousel-item "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt=""> </div>';
+    }
   }
 
   $msg = <<<rooms
@@ -678,22 +682,20 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
 
   <div class="row mb-3">
     <div class="col-md-8" style="max-height: 60%">
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div id="$room_name" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 $str
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#$room_name" role="button" data-slide="prev">
                 <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next pr-5" href="#carouselExampleControls" role="button" data-slide="next">
+            <a class="carousel-control-next pr-5" href="#$room_name" role="button" data-slide="next">
                 <span aria-hidden="true"><i class="angle huge black right icon"></i></span>
                 <span class="sr-only ">Next</span>
             </a>
         </div>
-
     </div>
-
     <div class="col align-self-center">
         <div class="col box-content-image-right pad-25 text-white">
                 <p class="pad-25 h4">Room  $count_room </p>
@@ -745,4 +747,222 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
 
 rooms;
   echo $msg;
+}
+
+
+
+function is_room_available($rm_type, $check_in, $check_out)
+{
+  global $db;
+  $query_ra = 'SELECT *
+             From Room_availability
+            
+             WHERE ra_date >= ? AND ra_date < ?
+             AND Room_availability.rm_type=? AND ra_status=\'Open\'AND Room_availability.ra_days >=1 ';
+
+  $rm_availability = $db->prepare($query_ra);
+  $rm_availability->bindValue(1, $check_in->format('Y/m/d'));
+  $rm_availability->bindValue(2, $check_out->format('Y/m/d'));
+  $rm_availability->bindValue(3, $rm_type);
+  $rm_availability->execute();
+  if ($rm_availability->rowCount() != 0) {
+    $rm_availability->closeCursor();
+    return true;
+  } else {
+    $rm_availability->closeCursor();
+    return false;
+  }
+}
+//retrive all rooms information
+function prepare_all_rooms()
+{
+  global $db;
+  $query_ra = 'SELECT Room_availability.ra_date,Room_availability.rm_type,Room_availability.ra_days,
+  Room_rate.rr_price ,Room_constraint.rc_days ,Room.rm_price_diff,Room.rm_size,Room.rm_max_guest,Room.rm_name
+             From Room_availability
+             JOIN Room_rate ON ra_date=  rr_date 
+             JOIN Room_constraint   ON Room_availability.rm_type = Room_constraint.rm_type 
+             AND Room_availability.ra_date = Room_constraint.rc_date
+             JOIN Room ON Room.rm_type=Room_availability.rm_type
+             WHERE ra_date >= ? AND ra_date < ?
+             AND Room_availability.rm_type=? AND ra_status=\'Open\'AND Room_availability.ra_days >=? ';
+
+  $rm_availability = $db->prepare($query_ra);
+  return $rm_availability;
+}
+function get_all_available_rooms($check_in, $check_out, $rm_type, $total_room)
+{
+  $rm_availability = prepare_all_rooms();
+  $rm_availability->bindValue(1, $check_in->format('Y/m/d'));
+  $rm_availability->bindValue(2, $check_out->format('Y/m/d'));
+  $rm_availability->bindValue(3, $rm_type);
+  $rm_availability->bindValue(4, $total_room);
+  $rm_availability->execute();
+
+
+  return  $rm_availability;
+}
+// retrive all room type
+function get_room_type()
+{
+  global $db;
+  $query  = 'SELECT rm_type From Room';
+  $rm = $db->prepare($query);
+  $rm->execute();
+  $rm_type = $rm->fetchAll();
+  $rm->closeCursor();
+  
+  return $rm_type;
+}
+//get the type and the information aboout the room
+function get_room_type_row($room_name)
+{
+  global $db;
+  $query_rm = 'SELECT * From Room WHERE rm_name=?';
+  $rm = $db->prepare($query_rm);
+  $rm->bindValue(1, $room_name);
+  $rm->execute();
+  $row = $rm->fetch();
+  $rm->closeCursor();
+  return $row;
+}
+function get_room_image($rm_type)
+{
+  global $db;
+  $query_img = 'SELECT img_rm_img
+  From Room_image
+  WHERE rm_type=?';
+  $ri = $db->prepare($query_img);
+  $ri->bindValue(1, $rm_type);
+  $ri->execute();
+  $rm_img = $ri->fetchAll();
+  $ri->closeCursor();
+  return $rm_img;
+}
+function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
+{
+
+  global $db;
+  $query = 'SELECT Room_availability.ra_date,Room_availability.rm_type,
+                   Room.rm_price_diff,
+                   Room_rate.rr_price,Room_rate.rr_extra_person,Room_rate.rr_kids
+            From Room_availability
+            JOIN Room_rate ON ra_date=  rr_date 
+            JOIN Room USING(rm_type)
+            WHERE ra_date >= ? AND ra_date < ? AND Room_availability.rm_type=?';
+  $rm_rate = $db->prepare($query);
+  $rm_rate->bindValue(1, $check_in->format('Y/m/d'));
+  $rm_rate->bindValue(2, $check_out->format('Y/m/d'));
+  $rm_rate->bindValue(3, $rm_type);
+  $rm_rate->execute();
+  $rate = $rm_rate->fetch();
+  $rm_rate->closeCursor();
+
+
+  // retrive all meal price
+  $query_meal_plan = 'SELECT * FROM Room_meal_price
+                      WHERE rm_meal IN ("FL",?)';
+  $rm_m_p = $db->prepare($query_meal_plan);
+
+  $rm_m_p->execute(array($_SESSION['room_info']['meal_plan']));
+  $meal_pr = $rm_m_p->fetchAll();
+  $rm_m_p->closeCursor();
+
+  //get the different price of the meal
+  foreach ($meal_pr as $e) {
+    if ($e['rm_meal'] == 'FL') {
+      $_SESSION['meal_price']['FL'] = $e['rm_price_diff'];
+    } else {
+      $_SESSION['meal_price']['OT'] = $e['rm_price_diff'];
+      $meal_kids_rate = $e['rm_kids_price'];
+    }
+  }
+  $room_price = $rate['rr_price'] + $rate['rm_price_diff'];
+  //is standart price for the adults
+  $meal_adults = $_SESSION['meal_price']['OT'] * $adults;
+
+
+  // get the price for the meal supliment if the first char is + or just the value just add the perice in the total amount if is * the is a percentage result
+  if ($kids != null && is_numeric($kids) && substr($meal_kids_rate, 1) < $room_price) {
+    //get the first character and calculate the result
+    if (substr($meal_kids_rate, 0, 1) == '+') {
+      if (is_numeric(substr($meal_kids_rate, 1)) && substr($meal_kids_rate, 1) > 0 && substr($meal_kids_rate, 1) < $room_price) {
+        //if the price is on + then just get this price and multiply by addults . 
+        $meal_kids = (substr($meal_kids_rate, 1) * $kids);
+      }
+      // * is describe the percentage
+    } elseif (substr($meal_kids_rate, 0, 1) == '*') {
+      if (is_numeric(substr($meal_kids_rate, 1)) && substr($meal_kids_rate, 1) > 0 && substr($meal_kids_rate, 1) <= 100) {
+        // get the result and divaded by 100 to get the percentage. and added to the total cost
+        $percentage = (100 - substr($meal_kids_rate, 1)) / 100;
+        $meal_kids = $_SESSION['meal_price']['OT'] * $percentage * $kids;
+      }
+    } elseif (is_numeric($meal_kids_rate)) {
+      if ($meal_kids_rate >= 0 && substr($meal_kids_rate, 1) < $room_price) {
+        $meal_kids = (substr($meal_kids_rate, 1) * $kids);
+      }
+    }
+  }
+
+  //count adults price after meal suppliment
+  // get the price for the meal supliment if the first char is + or just the value just add the perice in the total amount if is * the is a percentage result
+
+  if ($adults >= 3) {
+    $adls = $adults - 2;
+    //get the price for one person
+    $extra_adl = $room_price / 2;
+    //get the first character and calculate the result
+    if (substr($rate['rr_extra_person'], 0, 1) == '+') {
+      if (is_numeric(substr($rate['rr_extra_person'], 1)) && substr($rate['rr_extra_person'], 1) > 0 && substr($rate['rr_extra_person'], 1) < $room_price) {
+        //if the price is on + then just get this price and multiply by addults . 
+        $extra_adl = (substr($rate['rr_extra_person'], 1) * $adls);
+      } else {
+        return false;
+      }
+      // * is describe the percentage
+    } elseif (substr($rate['rr_extra_person'], 0, 1) == '*') {
+      if (is_numeric(substr($rate['rr_extra_person'], 1)) && substr($rate['rr_extra_person'], 1) > 0 && substr($rate['rr_extra_person'], 1) <= 100) {
+        // get the result and divaded by 100 to get the percentage. and added to the total cost
+        $percentage = (100 - substr($rate['rr_extra_person'], 1)) / 100;
+        $extra_adl = $extra_adl * $percentage * $adls;
+      } else {
+        return false;
+      }
+    } elseif (is_numeric($rate['rr_extra_person'])) {
+      if ($rate['rr_extra_person'] >= 0 && $rate['rr_extra_person'] < $room_price) {
+        $extra_adl = $rate['rr_extra_person'] * $adls;
+      }
+    }
+  }
+
+  if ($kids != null && is_numeric($kids) && substr($rate['rr_kids'], 1) < $room_price) {
+    //get the price for one person
+    $extra = $room_price / 2;
+    //get the first character and calculate the result
+    if (substr($rate['rr_kids'], 0, 1) == '+') {
+      if (is_numeric(substr($rate['rr_kids'], 1)) && substr($rate['rr_kids'], 1) > 0 && substr($rate['rr_kids'], 1) < $room_price) {
+        //if the price is on + then just get this price and multiply by addults . 
+        $extra = (substr($rate['rr_kids'], 1) * $kids);
+      } else {
+        return false;
+      }
+      // * is describe the percentage
+    } elseif (substr($rate['rr_kids'], 0, 1) == '*') {
+      if (is_numeric(substr($rate['rr_kids'], 1)) && substr($rate['rr_kids'], 1) > 0 && substr($rate['rr_kids'], 1) <= 100) {
+        // get the result and divaded by 100 to get the percentage. and added to the total cost
+        $percentage = (100 - substr($rate['rr_kids'], 1)) / 100;
+        $extra = $extra * $percentage * $kids;
+      } else {
+        return false;
+      }
+    } elseif (is_numeric($rate['rr_kids'])) {
+      if ($rate['rr_kids'] >= 0 && substr($rate['rr_kids'], 1) < $room_price) {
+        $extra = $rate['rr_kids'] * $kids;
+      } else {
+        return false;
+      }
+    }
+  }
+  $room_price = $room_price + $extra_adl + $extra + $meal_kids + $meal_adults;
+  return array($room_price, ($room_price + $_SESSION['meal_price']['FL']));
 }

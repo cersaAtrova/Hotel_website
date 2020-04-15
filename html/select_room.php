@@ -1,70 +1,139 @@
 <?php
 require_once 'functions.php';
-require_once '../connect_dbase.php';
+// require_once '../connect_dbase.php';
 session_start();
+$check_in = new DateTime($_SESSION['room_info']['check_in']);
+$check_out = new DateTime($_SESSION['room_info']['check_out']);
+
+// find the difference of the days
+$interval = $check_in->diff($check_out)->format('%a');
+
+$adults = $_SESSION['room_1_guest']['adults'];
+$kids = $_SESSION['room_1_guest']['kids'];
+
+$total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest']['adults'] + $_SESSION['room_3_guest']['adults'];
+$total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
+$total_infants = $_SESSION['room_1_guest']['infants'] + $_SESSION['room_2_guest']['infants'] + $_SESSION['room_3_guest']['infants'];
+//double check if the room are selected correctly
 if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
+    if ($_SESSION['total_room'] == 1) {
+        //get the type and the information about the room
+        $_SESSION['room_1_selected'] = get_room_type_row($_REQUEST['room_name']);
+        if (is_room_available($_SESSION['room_1_selected']['rm_type'], $check_in, $check_out) == false) {
+            $error_room_selected = 'Something went wrong! Please try again';
+        } else {
+            $begin = new DateTime($_SESSION['room_info']['check_in']);
+            $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+            $step = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod($begin, $step, $end);
+            foreach ($period as $dt) {
+                $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_1_selected']['rm_type'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids']);
+            }
+            if (isset($_GET['flexible'])) {
+                foreach ($arr as $r) {
+                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[1];
+                }
+            } else {
+                foreach ($arr as $r) {
+                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[0];
+                }
+            }
+            //change the price of per room selected and meal selected
+            header('Location: billing_information.php');
+            die();
+        }
+    } elseif ($_SESSION['total_room'] == 2) {
+        $adults = $_SESSION['room_2_guest']['adults'];
+        $kids = $_SESSION['room_2_guest']['kids'];
+       
+        //get the type and the information about the room
+        if (!isset($_SESSION['go_to_room_2'])) {
+            $_SESSION['room_1_selected'] = get_room_type_row($_REQUEST['room_name']);
+            if (is_room_available($_SESSION['room_1_selected']['rm_type'], $check_in, $check_out) == false) {
+                $error_room_selected = 'Something went wrong! Please try again';
+            } else {
+                $begin = new DateTime($_SESSION['room_info']['check_in']);
+                $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+                $step = DateInterval::createFromDateString('1 day');
+                $period = new DatePeriod($begin, $step, $end);
+                foreach ($period as $dt) {
+                    $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_1_selected']['rm_type'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids']);
+                }
+                if (isset($_GET['flexible'])) {
+                    foreach ($arr as $r) {
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[1];
+                    }
+                } else {
+                    foreach ($arr as $r) {
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[0];
+                    }
+                }
+             
+                //searching for available rooms . 
+                $rm_type = get_room_type();
+                foreach ($rm_type as $e) {
+                    $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], 1);
+                    if ($rm_availability->rowCount() == $interval) {
+                        $rm_ave[] = $rm_availability->fetchAll();
+                        $rm_availability->closeCursor();
+                      
+                    }
+                }
+               
+                $_SESSION['go_to_room_2'] = true;
+            }
+        } else {
+            $_SESSION['room_2_selected'] = get_room_type_row($_REQUEST['room_name']);
+            if (is_room_available($_SESSION['room_2_selected']['rm_type'], $check_in, $check_out) == false) {
+                $error_room_selected = 'Something went wrong! Please try again';
+            } else {
+                $begin = new DateTime($_SESSION['room_info']['check_in']);
+                $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+                $step = DateInterval::createFromDateString('1 day');
+                $period = new DatePeriod($begin, $step, $end);
+                foreach ($period as $dt) {
+                    $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_2_selected']['rm_type'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids']);
+                }
+                if (isset($_GET['flexible'])) {
+                    foreach ($arr as $r) {
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = $r[1];
+                    }
+                } else {
+                    foreach ($arr as $r) {
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = $r[0];
+                    }
+                }
+              
+                //change the price of per room selected and meal selected
+                // header('Location: billing_information.php');
+                // die();
+            }
+        }
+    } elseif ($_SESSION['total_room'] == 3) {
+    }
 } else {
-
-    $check_in = new DateTime($_SESSION['room_info']['check_in']);
-    $check_out = new DateTime($_SESSION['room_info']['check_out']);
-
-    // find the difference of the days
-    $interval = $check_in->diff($check_out)->format('%a');
-
-
-    $total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest']['adults'] + $_SESSION['room_3_guest']['adults'];
-    $total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
-    $total_infants = $_SESSION['room_1_guest']['infants'] + $_SESSION['room_2_guest']['infants'] + $_SESSION['room_3_guest']['infants'];
-    $total_room = $_REQUEST['total_room'];
-
-    // retrive all images
-    $query_rm = 'SELECT rm_type From Room';
-    $rm = $db->prepare($query_rm);
-    $rm->execute();
-    $rm_type = $rm->fetchAll();
-
-    //retrive all rooms information
-    $query_ra = 'SELECT Room_availability.ra_date,Room_availability.rm_type,Room_availability.ra_days,
-     Room_rate.rr_price ,Room_constraint.rc_days ,Room.rm_price_diff,Room.rm_size,Room.rm_max_guest,Room.rm_name
-                From Room_availability
-                JOIN Room_rate ON ra_date=  rr_date 
-                JOIN Room_constraint   ON Room_availability.rm_type = Room_constraint.rm_type 
-                AND Room_availability.ra_date = Room_constraint.rc_date
-                JOIN Room ON Room.rm_type=Room_availability.rm_type
-                WHERE ra_date >= ? AND ra_date < ?
-                AND Room_availability.rm_type=? AND ra_status=\'Open\'AND Room_availability.ra_days >=? ';
-
-    $rm_availability = $db->prepare($query_ra);
+    if ($_REQUEST['total_room'] > 3) {
+        $total_room = $_SESSION['total_room'] = 3;
+    } elseif ($_REQUEST['total_room'] < 1) {
+        header('Location: booking_calendar.php');
+        die();
+    } else {
+        $total_room = $_SESSION['total_room'] = $_REQUEST['total_room'];
+    }
     //retrive all available rooms
     //searching for date of check in and check out
     //searching in all type of rooms
     //searching for available rooms . 
+    $rm_type = get_room_type();
     foreach ($rm_type as $e) {
-        $rm_availability->execute(array($check_in->format('Y/m/d'), $check_out->format('Y/m/d'), $e[0], $_REQUEST['total_room']));
+        $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], $total_room);
         if ($rm_availability->rowCount() == $interval) {
-            var_dump($rm_availability->rowCount());
             $rm_ave[] = $rm_availability->fetchAll();
-        }
-    }
-    // retrive all images
-    $query_img = 'SELECT img_rm_img
-                  From Room_image
-                  WHERE rm_type=?';
-    $ri = $db->prepare($query_img);
-
-    // retrive all meal price
-    $query_meal_plan = 'SELECT * FROM Room_meal_price
-                        WHERE rm_meal IN ("FL",?)';
-    $rm_m_p = $db->prepare($query_meal_plan);
-
-    $rm_m_p->execute(array($_SESSION['room_info']['meal_plan']));
-    $meal_pr = $rm_m_p->fetchAll();
-    $rm_meal_price = array();
-    foreach ($meal_pr as $e) {
-        if ($e['rm_meal'] == 'FL') {
-            $rm_meal_price['FL'] = $e['rm_price_diff'];
-        } else {
-            $rm_meal_price['OT'] = $e['rm_price_diff'];
+            $rm_availability->closeCursor();
+          
         }
     }
 }
@@ -126,10 +195,11 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
             <p class="h3 text-dark"><?php echo "{$_SESSION['room_info']['check_in']} - {$_SESSION['room_info']['check_out']} "; ?></p>
             <p class="h3 text-dark"><?php echo "Room $total_room, Adults $total_adults, Kids $total_kids, Infants $total_infants" ?></p>
             <p class="h3 text-dark">Rates are per selected number of rooms per night.</p>
+            <p class="text-danger"><?php echo $error_room_selected ?></p>
         </div>
     </div>
     <!-- add here the rooms -->
-    <?php if (empty($rm_ave)) : ?>
+    <?php   if (empty($rm_ave)) : ?>
         <div class="container-fluid box-container" style="padding:20px 0; margin: auto ">
             <div class=" align-self-center">
                 <div class=" box-content   pad-25 text-white w-75 m-auto">
@@ -154,16 +224,16 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
         <div class="container-fluid box-container" style="padding:10px; margin: auto ">
             <?php
             foreach ($rm_ave as $e) {
-                $ri->execute(array($e[0]['rm_type']));
-                $rm_img = $ri->fetchAll();
-
+                // retrive all images
+                $price = get_daily_price($check_in, $check_out, $e[0]['rm_type'], $adults, $kids);
+                $rm_img =  get_room_image($e[0]['rm_type']);
                 if ($e[0]['rc_days'] > $interval) {
 
                     display_not_available_room(
                         $_GET['total_room'],
                         $e[0]['rm_name'],
-                        ($e[0]['rr_price'] + $e[0]['rm_price_diff'] + $rm_meal_price['OT']),
-                        ($e[0]['rr_price'] + $e[0]['rm_price_diff'] + $rm_meal_price["OT"] + $rm_meal_price['FL']),
+                        $price[0],
+                        $price[1],
                         $e[0]['rm_size'],
                         $e[0]['rm_max_guest'],
                         $rm_img,
@@ -173,20 +243,18 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                     display_available_room(
                         $_GET['total_room'],
                         $e[0]['rm_name'],
-                        ($e[0]['rr_price'] + $e[0]['rm_price_diff'] + $rm_meal_price['OT']),
-                        ($e[0]['rr_price'] + $e[0]['rm_price_diff'] + $rm_meal_price["OT"] + $rm_meal_price['FL']),
+                        $price[0],
+                        $price[1],
                         $e[0]['rm_size'],
                         $e[0]['rm_max_guest'],
                         $rm_img
                     );
                 }
             }
-
             ?>
-
         </div>
     <?php endif ?>
-    
+
 
 </body>
 
