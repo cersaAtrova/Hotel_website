@@ -22,10 +22,7 @@ $('#rangeend').calendar({
     },
 });
 
-$('#inline_calendar')
-    .calendar({
-        type: 'date',
-    });
+
 
 
 $(document).ready(function () {
@@ -103,14 +100,13 @@ $(document).ready(function () {
         $("#room" + i).append('<div class=" col-4  "><label for="adults"><span>&starf;</span> Adults (13+)</label><div class="ui "><div class="field "><select name="adults' + i + '" id="adults' + i + '" class="dropdown-select adults' + i + '" required  ><option value="1">1</option><option selected value="2">2</option><option value="3">3</option><option value="4">4</option></select></div></div></div><div class="col-4"><label for="kids"><span>&starf;</span> Kids (2-12)</label><div class="ui "><div class="field"><select name="kids' + i + '" id="kids' + i + '" class="dropdown-select kids' + i + '" required  ><option selected value="0">0</option><option  value="1">1</option><option value="2">2</option><option disabled value="3">3</option></select></div></div></div><div class="col-4"><label for="last-name"><span>&starf;</span> Infants (0-2)</label><div class="ui "><div class="field"><select name="infants' + i + '" class="dropdown-select infants' + i + '" required id="infants' + i + '" aria-placeholder="Infant"><option selected value="0">0</option><option value="1">1</option><option value="2">2</option></select></div></div></div>');
     }
     $('#date-form').bind('submit', function (event) {
-       
+
         if (new Date($('#check_in').val()) >= new Date($('#check_out').val())) {
-         alert(new Date($('#check_in').val()) >= new Date($('#check_out').val()));
-         $('#error-button').text('Please enter correct days');
-         $('.error_date').css('border-color','red');
+            $('#error-button').text('Please enter correct days');
+            $('.error_date').css('border-color', 'red');
             return false;
         }
-       
+
     });
 
 });

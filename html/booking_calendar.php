@@ -19,78 +19,77 @@ if (isset($_GET['submit'])) {
             } else {
                 if (!isset($_REQUEST['meal_plan'])) {
                 }
-                    //room 1
-                    $_SESSION['room_1_guest']['adults']=$guest_select[0];
-                    $_SESSION['room_1_guest']['kids']=$guest_select[1];
-                    $_SESSION['room_1_guest']['infants']=$guest_select[2];
-                    //general details
-                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
-                    $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
-                    $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
-                    header('Location: select_room.php?total_room=1');
-                    die();
-                    
+                //room 1
+                $_SESSION['room_1_guest']['adults'] = $guest_select[0];
+                $_SESSION['room_1_guest']['kids'] = $guest_select[1];
+                $_SESSION['room_1_guest']['infants'] = $guest_select[2];
+                //general details
+                $_SESSION['room_info']['meal_plan'] = $_REQUEST['meal_plan'];
+                $_SESSION['room_info']['check_in'] = $_REQUEST['check_in'];
+                $_SESSION['room_info']['check_out'] = $_REQUEST['check_out'];
+                header('Location: select_room.php?total_room=1');
+                die();
             }
-        }else if($room_select==2){
+        } else if ($room_select == 2) {
             $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
             $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infants2']);
             //check the guest if is correct
-            if ($guest_select[0] + $guest_select[1] > 4 ||$guest_select2[1] + $guest_select2[1] > 4 ) {
+            if ($guest_select[0] + $guest_select[1] > 4 || $guest_select2[1] + $guest_select2[1] > 4) {
                 $error_details = 'Please provide correct information';
             } else {
                 if (!isset($_REQUEST['meal_plan'])) {
                 }
-                    //room 1
-                    $_SESSION['room_1_guest']['adults']=$guest_select[0];
-                    $_SESSION['room_1_guest']['kids']=$guest_select[1];
-                    $_SESSION['room_1_guest']['infants']=$guest_select[2];
-                    //room 2
-                    $_SESSION['room_2_guest']['adults']=$guest_select2[0];
-                    $_SESSION['room_2_guest']['kids']=$guest_select2[1];
-                    $_SESSION['room_2_guest']['infants']=$guest_select2[2];
-                    //general details
-                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
-                    $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
-                    $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
-                    header('Location: select_room.php?total_room=2');
-                    die();
-                    
+                //room 1
+                $_SESSION['room_1_guest']['adults'] = $guest_select[0];
+                $_SESSION['room_1_guest']['kids'] = $guest_select[1];
+                $_SESSION['room_1_guest']['infants'] = $guest_select[2];
+                //room 2
+                $_SESSION['room_2_guest']['adults'] = $guest_select2[0];
+                $_SESSION['room_2_guest']['kids'] = $guest_select2[1];
+                $_SESSION['room_2_guest']['infants'] = $guest_select2[2];
+                //general details
+                $_SESSION['room_info']['meal_plan'] = $_REQUEST['meal_plan'];
+                $_SESSION['room_info']['check_in'] = $_REQUEST['check_in'];
+                $_SESSION['room_info']['check_out'] = $_REQUEST['check_out'];
+                header('Location: select_room.php?total_room=2');
+                die();
             }
-        }else if($room_select==3){
+        } else if ($room_select == 3) {
             $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
             $guest_select2 = array($_REQUEST['adults2'], $_REQUEST['kids2'], $_REQUEST['infants2']);
             $guest_select3 = array($_REQUEST['adults3'], $_REQUEST['kids3'], $_REQUEST['infants3']);
             //check the guest if is correct
-            if ($guest_select[0] + $guest_select[1] > 4 ||$guest_select2[1] + $guest_select3[1] > 4
-            ||$guest_select3[1] + $guest_select3[1] > 4 ) {
+            if (
+                $guest_select[0] + $guest_select[1] > 4 || $guest_select2[1] + $guest_select3[1] > 4
+                || $guest_select3[1] + $guest_select3[1] > 4
+            ) {
                 $error_details = 'Please provide correct information';
             } else {
                 if (!isset($_REQUEST['meal_plan'])) {
                 }
-                    $_SESSION['room_1_guest']['adults']=$guest_select[0];
-                    $_SESSION['room_1_guest']['kids']=$guest_select[1];
-                    $_SESSION['room_1_guest']['infants']=$guest_select[2];
-                    
-                    $_SESSION['room_2_guest']['adults']=$guest_select2[0];
-                    $_SESSION['room_2_guest']['kids']=$guest_select2[1];
-                    $_SESSION['room_2_guest']['infants']=$guest_select2[2];
+                $_SESSION['room_1_guest']['adults'] = $guest_select[0];
+                $_SESSION['room_1_guest']['kids'] = $guest_select[1];
+                $_SESSION['room_1_guest']['infants'] = $guest_select[2];
 
-                    $_SESSION['room_3_guest']['adults']=$guest_select3[0];
-                    $_SESSION['room_3_guest']['kids']=$guest_select3[1];
-                    $_SESSION['room_3_guest']['infants']=$guest_select3[2];
+                $_SESSION['room_2_guest']['adults'] = $guest_select2[0];
+                $_SESSION['room_2_guest']['kids'] = $guest_select2[1];
+                $_SESSION['room_2_guest']['infants'] = $guest_select2[2];
 
-                    $_SESSION['room_info']['meal_plan']=$_REQUEST['meal_plan'];
-                    $_SESSION['room_info']['check_in']=$_REQUEST['check_in'];
-                    $_SESSION['room_info']['check_out']=$_REQUEST['check_out'];
-                    
-                    header('Location: select_room.php?total_room=3');
-                    die();
-                    
+                $_SESSION['room_3_guest']['adults'] = $guest_select3[0];
+                $_SESSION['room_3_guest']['kids'] = $guest_select3[1];
+                $_SESSION['room_3_guest']['infants'] = $guest_select3[2];
+
+                $_SESSION['room_info']['meal_plan'] = $_REQUEST['meal_plan'];
+                $_SESSION['room_info']['check_in'] = $_REQUEST['check_in'];
+                $_SESSION['room_info']['check_out'] = $_REQUEST['check_out'];
+
+                header('Location: select_room.php?total_room=3');
+                die();
             }
-        }else{
+        } else {
             $error_details = 'Please select Rooms between 1 and 3';
         }
-    }else{
+    } else {
         $error_details = 'Please provide correct Dates';
     }
 } else {
@@ -107,11 +106,11 @@ if (isset($_GET['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
-   
+
     <title>Availability</title>
     <!-- Bootstrap -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script> -->
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
@@ -121,9 +120,10 @@ if (isset($_GET['submit'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
     <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
@@ -274,6 +274,24 @@ if (isset($_GET['submit'])) {
                 </div>
                 <div class="middle aligned column">
                     <div class="ui calendarc h-100 w-75" id="inline_calendar"></div>
+                    <script>
+                        $('#inline_calendar')
+                            .calendar({
+                                type: 'date',
+                              
+                                eventClass: ' red',
+                                eventDates: [
+                                    new Date(2020, 3, 20), //no message tooltip
+                                    {
+                                        date: new Date(2020, 3, 21),
+                                        message: 'I got the default color (light red)'
+                                    }, {
+                                        date: new Date(2020, 3, 22),
+                                        message: 'Me too'
+                                    }
+                                ]
+                            });
+                    </script>
                     <div class="flex-box-form">
                         <div class=" w-75 " style="font-size: 1.2rem">
                             <input type="submit" class="btn-nav btn-lg my-md-2 btn-primary h-100 mt-3 p-4 text-uppercase font-weight-bold " value="Check Availability" name="submit">
