@@ -715,7 +715,7 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
                             </div>
                             <div class="col">
                                 <a aria-disabled="true" style=" pointer-events: none;"  class="btn-nav disabled btn-xl bg-secondary">Not available</a>
-                                <p>Min stay $min_stay days</p>
+                                <p> $min_stay </p>
                             </div>
                         </div>
                     </div>
@@ -732,7 +732,7 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
                             </div>
                             <div class="col">
                             <a aria-disabled="true" style=" pointer-events: none;"  class="btn-nav disabled btn-lg bg-secondary">Not available</a>
-                            <p>Min stay $min_stay days</p>
+                            <p> $min_stay </p>
                             </div>
                         </div>
                     </div>
@@ -778,7 +778,9 @@ function prepare_all_rooms()
 {
   global $db;
   $query_ra = 'SELECT Room_availability.ra_date,Room_availability.rm_type,Room_availability.ra_days,
-  Room_rate.rr_price ,Room_constraint.rc_days ,Room.rm_price_diff,Room.rm_size,Room.rm_max_guest,Room.rm_name
+                      Room.rm_name,Room.rm_price_diff,Room.rm_size,Room.rm_max_guest,
+                      Room_rate.rr_price ,
+                      Room_constraint.rc_days 
              From Room_availability
              JOIN Room_rate ON ra_date=  rr_date 
              JOIN Room_constraint   ON Room_availability.rm_type = Room_constraint.rm_type 
@@ -811,7 +813,7 @@ function get_room_type()
   $rm->execute();
   $rm_type = $rm->fetchAll();
   $rm->closeCursor();
-  
+
   return $rm_type;
 }
 //get the type and the information aboout the room
@@ -839,9 +841,22 @@ function get_room_image($rm_type)
   $ri->closeCursor();
   return $rm_img;
 }
+// function get_standart_daily_rate($check_in, $check_out)
+// {
+//   global $db;
+//   $query = 'SELECT *
+//              From Room_rate
+//              WHERE ra_date >= ? AND ra_date < ?';
+//   $rm_rr = $db->prepare($query);
+//   $rm_rr->bindValue(1, $check_in->format('Y/m/d'));
+//   $rm_rr->bindValue(2, $check_out->format('Y/m/d'));
+//   $rm_rr->execute();
+//   $rm_rate = $rm_rr->fetchAll();
+//   $rm_rr->closeCursor();
+//   return $rm_rate;
+// }
 function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
 {
-
   global $db;
   $query = 'SELECT Room_availability.ra_date,Room_availability.rm_type,
                    Room.rm_price_diff,
@@ -964,5 +979,5 @@ function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
     }
   }
   $room_price = $room_price + $extra_adl + $extra + $meal_kids + $meal_adults;
-  return array($room_price, ($room_price + $_SESSION['meal_price']['FL']));
+  return array($room_price, ($room_price + $_SESSION['meal_price']['FL']),$meal_adults,$meal_kids);
 }

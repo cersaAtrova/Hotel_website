@@ -15,7 +15,11 @@ $total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest'][
 $total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
 $total_infants = $_SESSION['room_1_guest']['infants'] + $_SESSION['room_2_guest']['infants'] + $_SESSION['room_3_guest']['infants'];
 //double check if the room are selected correctly
+$room_get_selected = 1;
 if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
+    //=======================================================
+    //get in when the total room are selected is equal to one
+    //=======================================================
     if ($_SESSION['total_room'] == 1) {
         //get the type and the information about the room
         $_SESSION['room_1_selected'] = get_room_type_row($_REQUEST['room_name']);
@@ -31,24 +35,36 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                 $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_1_selected']['rm_type'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids']);
             }
             if (isset($_GET['flexible'])) {
+                $_SESSION['room_1_selected']['rate_plan_selected'] = 'Flexible';
                 foreach ($arr as $r) {
-                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[1];
+                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
                 }
             } else {
+                $_SESSION['room_1_selected']['rate_plan_selected'] = 'Non-Refundable';
                 foreach ($arr as $r) {
-                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[0];
+                    $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
                 }
             }
             //change the price of per room selected and meal selected
-            header('Location: billing_information.php');
+            header('Location: billing_information.php?total_room=1');
             die();
         }
+
+        //=======================================================
+        //get in when the total room are selected is equal to Two
+        //=======================================================
     } elseif ($_SESSION['total_room'] == 2) {
+
+        //===========
+        //1 0f 2 Room
+        //===========
         $adults = $_SESSION['room_2_guest']['adults'];
         $kids = $_SESSION['room_2_guest']['kids'];
-       
+        $room_get_selected = $_SESSION['go_to_room'];
+        $room_get_selected = 2;
         //get the type and the information about the room
-        if (!isset($_SESSION['go_to_room_2'])) {
+        if ($_SESSION['go_to_room'] == 1) {
+            $_SESSION['go_to_room'] = 2; //move to next room
             $_SESSION['room_1_selected'] = get_room_type_row($_REQUEST['room_name']);
             if (is_room_available($_SESSION['room_1_selected']['rm_type'], $check_in, $check_out) == false) {
                 $error_room_selected = 'Something went wrong! Please try again';
@@ -62,29 +78,31 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                     $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_1_selected']['rm_type'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids']);
                 }
                 if (isset($_GET['flexible'])) {
+                    $_SESSION['room_1_selected']['rate_plan_selected'] = 'Flexible';
                     foreach ($arr as $r) {
-                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[1];
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
                     }
                 } else {
+                    $_SESSION['room_1_selected']['rate_plan_selected'] = 'Non-Refundable';
                     foreach ($arr as $r) {
-                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = $r[0];
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
                     }
                 }
-             
-                //searching for available rooms . 
+
+                //searching for new available rooms . 
                 $rm_type = get_room_type();
                 foreach ($rm_type as $e) {
                     $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], 1);
                     if ($rm_availability->rowCount() == $interval) {
                         $rm_ave[] = $rm_availability->fetchAll();
                         $rm_availability->closeCursor();
-                      
                     }
                 }
-               
-                $_SESSION['go_to_room_2'] = true;
             }
         } else {
+            //===========
+            //2 0f 2 Room
+            //===========
             $_SESSION['room_2_selected'] = get_room_type_row($_REQUEST['room_name']);
             if (is_room_available($_SESSION['room_2_selected']['rm_type'], $check_in, $check_out) == false) {
                 $error_room_selected = 'Something went wrong! Please try again';
@@ -98,42 +116,166 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                     $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_2_selected']['rm_type'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids']);
                 }
                 if (isset($_GET['flexible'])) {
+                    $_SESSION['room_2_selected']['rate_plan_selected'] = 'Flexible';
                     foreach ($arr as $r) {
-                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = $r[1];
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
                     }
                 } else {
+                    $_SESSION['room_2_selected']['rate_plan_selected'] = 'Non-Refundable';
                     foreach ($arr as $r) {
-                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = $r[0];
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
                     }
                 }
-              
+                unset($_SESSION['go_to_room']);
                 //change the price of per room selected and meal selected
-                // header('Location: billing_information.php');
-                // die();
+                header('Location: billing_information.php?total_room=2');
+                die();
             }
         }
     } elseif ($_SESSION['total_room'] == 3) {
+        //get the type and the information about the room
+        //===========
+        //1 0f 3 Room
+        //===========
+        if ($_SESSION['go_to_room'] == 1) {
+            $_SESSION['go_to_room'] = 2; //move to next room
+            $_SESSION['room_1_selected'] = get_room_type_row($_REQUEST['room_name']);
+            if (is_room_available($_SESSION['room_1_selected']['rm_type'], $check_in, $check_out) == false) {
+                $error_room_selected = 'Something went wrong! Please try again';
+            } else {
+                $begin = new DateTime($_SESSION['room_info']['check_in']);
+                $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+                $step = DateInterval::createFromDateString('1 day');
+                $period = new DatePeriod($begin, $step, $end);
+                foreach ($period as $dt) {
+                    $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_1_selected']['rm_type'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids']);
+                }
+                if (isset($_GET['flexible'])) {
+                    $_SESSION['room_1_selected']['rate_plan_selected'] = 'Flexible';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
+                    }
+                } else {
+                    $_SESSION['room_1_selected']['rate_plan_selected'] = 'Non-Refundable';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_1_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
+                    }
+                }
+                $adults = $_SESSION['room_2_guest']['adults'];
+                $kids = $_SESSION['room_2_guest']['kids'];
+                $room_get_selected = 2;
+
+                //searching for available rooms . 
+                $rm_type = get_room_type();
+                foreach ($rm_type as $e) {
+                    $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], 1);
+                    if ($rm_availability->rowCount() == $interval) {
+                        $rm_ave[] = $rm_availability->fetchAll();
+                        $rm_availability->closeCursor();
+                    }
+                }
+            }
+        } elseif ($_SESSION['go_to_room'] == 2) {
+            //===========
+            //2 0f 3 Room
+            //===========
+
+            $_SESSION['room_2_selected'] = get_room_type_row($_REQUEST['room_name']);
+            if (is_room_available($_SESSION['room_2_selected']['rm_type'], $check_in, $check_out) == false) {
+                $error_room_selected = 'Something went wrong! Please try again';
+            } else {
+                $begin = new DateTime($_SESSION['room_info']['check_in']);
+                $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+                $step = DateInterval::createFromDateString('1 day');
+                $period = new DatePeriod($begin, $step, $end);
+                foreach ($period as $dt) {
+                    $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_2_selected']['rm_type'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids']);
+                }
+                if (isset($_GET['flexible'])) {
+                    $_SESSION['room_2_selected']['rate_plan_selected'] = 'Flexible';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
+                    }
+                } else {
+                    $_SESSION['room_2_selected']['rate_plan_selected'] = 'Non-Refundable';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_2_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
+                    }
+                }
+                $room_get_selected = 3;
+                $_SESSION['go_to_room'] = 3; //move to next room
+                //searching for available rooms . 
+                $rm_type = get_room_type();
+                foreach ($rm_type as $e) {
+                    $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], 1);
+                    if ($rm_availability->rowCount() == $interval) {
+                        $rm_ave[] = $rm_availability->fetchAll();
+                        $rm_availability->closeCursor();
+                    }
+                }
+            }
+        } else {
+            //===========
+            //3 0f 3 Room
+            //===========
+            $_SESSION['room_3_selected'] = get_room_type_row($_REQUEST['room_name']);
+            if (is_room_available($_SESSION['room_3_selected']['rm_type'], $check_in, $check_out) == false) {
+                $error_room_selected = 'Something went wrong! Please try again';
+            } else {
+                $begin = new DateTime($_SESSION['room_info']['check_in']);
+                $end =  new DateTime($_SESSION['room_info']['check_out']);
+
+                $step = DateInterval::createFromDateString('1 day');
+                $period = new DatePeriod($begin, $step, $end);
+                foreach ($period as $dt) {
+                    $arr[] =   get_daily_price($dt, $check_out,  $_SESSION['room_3_selected']['rm_type'], $_SESSION['room_3_guest']['adults'], $_SESSION['room_3_guest']['kids']);
+                }
+                if (isset($_GET['flexible'])) {
+                    $_SESSION['room_3_selected']['rate_plan_selected'] = 'Flexible';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_3_selected']['room_daily_rate_selected'][] = array($r[1], $r[2], $r[3]);
+                    }
+                } else {
+                    $_SESSION['room_3_selected']['rate_plan_selected'] = 'Non-Refundable';
+                    foreach ($arr as $r) {
+                        $_SESSION['room_3_selected']['room_daily_rate_selected'][] = array($r[0], $r[2], $r[3]);
+                    }
+                }
+                unset($_SESSION['go_to_room']); //move to next room
+                //change the price of per room selected and meal selected
+                header('Location: billing_information.php?total_room=3');
+                die();
+            }
+        }
     }
 } else {
-    if ($_REQUEST['total_room'] > 3) {
-        $total_room = $_SESSION['total_room'] = 3;
-    } elseif ($_REQUEST['total_room'] < 1) {
+    if (isset($_REQUEST['total_room'])) {
+        if ($_REQUEST['total_room'] > 3) {
+            $total_room = $_SESSION['total_room'] = 3;
+        } elseif ($_REQUEST['total_room'] < 1) {
+            header('Location: booking_calendar.php');
+            die();
+        } else {
+            $total_room = $_SESSION['total_room'] = $_REQUEST['total_room'];
+        }
+    } else {
         header('Location: booking_calendar.php');
         die();
-    } else {
-        $total_room = $_SESSION['total_room'] = $_REQUEST['total_room'];
     }
+    $_SESSION['go_to_room'] = 1;
     //retrive all available rooms
     //searching for date of check in and check out
     //searching in all type of rooms
     //searching for available rooms . 
+
     $rm_type = get_room_type();
     foreach ($rm_type as $e) {
         $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], $total_room);
         if ($rm_availability->rowCount() == $interval) {
             $rm_ave[] = $rm_availability->fetchAll();
             $rm_availability->closeCursor();
-          
         }
     }
 }
@@ -148,7 +290,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Select Room</title>
+    <title>Vrissiana Beach Hotel | Select Room</title>
     <!-- Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>
@@ -199,7 +341,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
         </div>
     </div>
     <!-- add here the rooms -->
-    <?php   if (empty($rm_ave)) : ?>
+    <?php if (empty($rm_ave)) : ?>
         <div class="container-fluid box-container" style="padding:20px 0; margin: auto ">
             <div class=" align-self-center">
                 <div class=" box-content   pad-25 text-white w-75 m-auto">
@@ -227,28 +369,41 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                 // retrive all images
                 $price = get_daily_price($check_in, $check_out, $e[0]['rm_type'], $adults, $kids);
                 $rm_img =  get_room_image($e[0]['rm_type']);
-                if ($e[0]['rc_days'] > $interval) {
-
+                if ($e[0]['rm_max_guest'] < $adults + $kids) {
                     display_not_available_room(
-                        $_GET['total_room'],
+                        $room_get_selected,
                         $e[0]['rm_name'],
                         $price[0],
                         $price[1],
                         $e[0]['rm_size'],
                         $e[0]['rm_max_guest'],
                         $rm_img,
-                        $e[0]['rc_days']
+                        'Max Guest ' . $e[0]['rm_max_guest']
                     );
                 } else {
-                    display_available_room(
-                        $_GET['total_room'],
-                        $e[0]['rm_name'],
-                        $price[0],
-                        $price[1],
-                        $e[0]['rm_size'],
-                        $e[0]['rm_max_guest'],
-                        $rm_img
-                    );
+                    if ($e[0]['rc_days'] > $interval) {
+
+                        display_not_available_room(
+                            $room_get_selected,
+                            $e[0]['rm_name'],
+                            $price[0],
+                            $price[1],
+                            $e[0]['rm_size'],
+                            $e[0]['rm_max_guest'],
+                            $rm_img,
+                            'Min stay ' . $e[0]['rc_days'] . ' days'
+                        );
+                    } else {
+                        display_available_room(
+                            $room_get_selected,
+                            $e[0]['rm_name'],
+                            $price[0],
+                            $price[1],
+                            $e[0]['rm_size'],
+                            'Min stay ' . $e[0]['rc_days'] . ' days',
+                            $rm_img
+                        );
+                    }
                 }
             }
             ?>
