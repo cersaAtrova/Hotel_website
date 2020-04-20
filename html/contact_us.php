@@ -24,7 +24,7 @@ if (isset($_COOKIE['user'])) {
 }
 
 if (isset($_POST['submit'])) {
-	if (verifyFormToken('form1')) {
+	if (verifyFormToken('Contact_form')) {
 		$confirm_message = "";
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -39,8 +39,10 @@ if (isset($_POST['submit'])) {
 
 					if (smtpmailer('soteris100@gmail.com',  $_POST['email'], 'New Message', $_POST['subject'], $body) == true) {
 						$confirm_message = 'Message has send succesfully';
+						writeLog('Mail Sent');
 					} else {
 						$confirm_message = "Fail - " . $mail->ErrorInfo;
+						writeLog('Fatal: Mail Not Sent');
 					}
 				}
 			}
@@ -48,7 +50,7 @@ if (isset($_POST['submit'])) {
 	} else {
 
 		$confirm_message = "Fail - " . $mail->ErrorInfo;
-		writeLog('Formtoken');
+		writeLog('Fatal: Mail Not Sent');
 	}
 }
 
