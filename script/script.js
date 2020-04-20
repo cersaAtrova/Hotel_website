@@ -21,11 +21,8 @@ $('#rangeend').calendar({
 
     },
 });
-
-
-
-
 $(document).ready(function () {
+
     $('.flex-box-form').on('change', '#adults', function () {
         validAdults('#kids', '#adults');
     });
@@ -108,5 +105,48 @@ $(document).ready(function () {
         }
 
     });
+
+    $('.first_room_active').click();
+    $('.fa_extra_Room_1').click(function () {
+
+        if (!$(this).hasClass('fa_checked_Room_1')) {
+            $('.ext_fac_Room_1').text(parseInt($('.ext_fac_Room_1').text()) + parseInt($(this).attr('data-cost')))
+            $('.total_Room_1').text(parseInt($('.total_Room_1').text()) + parseInt($(this).attr('data-cost')));
+            $(this).toggleClass('fa_checked_Room_1');
+        } else {
+            $(this).toggleClass('fa_checked_Room_1');
+            $('.ext_fac_Room_1').text(parseInt($('.ext_fac_Room_1').text()) - parseInt($(this).attr('data-cost')))
+            $('.total_Room_1').text(parseInt($('.total_Room_1').text()) - parseInt($(this).attr('data-cost')));
+        }
+    });
+
+    $('.fa_extra_Room_2').click(function () {
+
+        if (!$(this).hasClass('fa_checked_Room_2')) {
+            $('.ext_fac_Room_2').text(parseInt($('.ext_fac_Room_2').text()) + parseInt($(this).attr('data-cost')))
+            $('.total_Room_2').text(parseInt($('.total_Room_2').text()) + parseInt($(this).attr('data-cost')));
+            $(this).toggleClass('fa_checked_Room_2');
+        } else {
+            $(this).toggleClass('fa_checked_Room_2');
+            $('.ext_fac_Room_2').text(parseInt($('.ext_fac_Room_2').text()) - parseInt($(this).attr('data-cost')))
+            $('.total_Room_2').text(parseInt($('.total_Room_2').text()) - parseInt($(this).attr('data-cost')));
+        }
+    });
+
+    $('.fa_extra_Room_3').click(function () {
+
+        if (!$(this).hasClass('fa_checked_Room_3')) {
+            $('.ext_fac_Room_3').text(parseInt($('.ext_fac_Room_3').text()) + parseInt($(this).attr('data-cost')))
+            $('.total_Room_3').text(parseInt($('.total_Room_3').text()) + parseInt($(this).attr('data-cost')));
+            $(this).toggleClass('fa_checked_Room_3');
+        } else {
+            $(this).toggleClass('fa_checked_Room_3');
+            $('.ext_fac_Room_3').text(parseInt($('.ext_fac_Room_3').text()) - parseInt($(this).attr('data-cost')))
+            $('.total_Room_3').text(parseInt($('.total_Room_3').text()) - parseInt($(this).attr('data-cost')));
+        }
+    });
+
+    
+
 
 });

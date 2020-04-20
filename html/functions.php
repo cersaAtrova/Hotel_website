@@ -281,6 +281,250 @@ print;
   echo $image;
 }
 
+function room_billining_information($check_in, $check_out, $rm_name, $adults, $kids, $infants, $num_room, $room_rate_selected, $rate_plan_selected)
+{
+  $begin = date('M-d-Y', strtotime($check_in));
+  foreach ($room_rate_selected as $pr) {
+
+    $subtotal += $pr[0];
+    $ml_p = $pr[1] + $pr[2];
+    $rr = $pr[0] - $ml_p;
+    $str .= <<<pr
+  <tr>
+      <td class="border-top" data-label="Date">{$begin}</td>
+      <td class="border-top" data-label="Meal Price"><i class="euro sign icon"></i>{$ml_p}</td>
+      <td class="border-top" data-label="Room Rate"><i class="euro sign icon"></i>{$rr}</td>
+      <td class="border-top" data-label="Total"><i class="euro sign icon"></i>{$pr[0]}</td>
+  </tr>
+
+pr;
+    $repeat = strtotime("+1 day", strtotime($begin));
+    $begin = date('M-d-Y', $repeat);
+  }
+
+  $rooms = <<<print
+              <div class="ui segment border-bottom" style="background: transparent;">
+                  <p class="h2 pb-5">Booking Summary</p>
+                  <div class="ui two column very relaxed grid">
+                      <div class="column">
+                          <p class="h4 p-2 font-weight-bold">Room type selected: </p>
+                          <p class="h4 p-2 font-weight-bold">Dates: </p>
+                          <p class="h4 p-2 font-weight-bold">Rate plan selected: </p>
+                          <p class="h4 p-2 font-weight-bold">Terms and Condition</p>
+                      </div>
+                      <div class="column">
+                          <p class="h4 p-2"> {$rm_name}</p>
+                          <p class="h4 p-2"> {$check_in} - {$check_out}</p>
+                          <p class="h4 p-2"> {$rate_plan_selected}</p>
+                          <p class="h4 p-2"></p>
+                      </div>
+                  </div>
+                  <div class="ui vertical divider "></div>
+              </div>
+              <div class="ui segment pb-5 border-bottom" style="background: transparent ">
+                  <p class="h4 font-weight-bold">Adults: {$adults}, Kids: {$kids} Infants: {$infants}</p>
+                  <div class="ui fitted divider"></div>
+                  <table class="ui celled table text-white font-weight-bold border border_cell_line p-3" style="background: transparent;  ">
+
+
+                      <tr>
+                          <th class="border-0">Date</th>
+                          <th class="border-0">Meal Price</th>
+                          <th class="border-0">Room Rate</th>
+                          <th class="border-0">Total</th>
+                      </tr>
+                          {$str}
+                  </table>
+              </div>
+              <div class="container rm_preferences pb-4 border-bottom">
+                  <p class="h4 font-weight-bold mb-4">Room Preferences </p>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox ">
+                              <input id="king_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="King size">
+                              <label for="king_{$num_room}">King size</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="twin_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Twin Bed">
+                              <label for="twin_{$num_room}">Twin Bed</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="concerning_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Concerning Room">
+                              <label for="concerning_{$num_room}">Concerning Room</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="high_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="High Floor">
+                              <label for="high_{$num_room}">High Floor</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="lower_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Lower Floor">
+                              <label for="lower_{$num_room}">Lower Floor</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox ">
+                              <input id="baby_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Baby Cot">
+                              <label for="baby_{$num_room}">Baby cot</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="smoking_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="No Smoking">
+                              <label for="smoking_{$num_room}">No smoking</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="far_lift_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Far lift">
+                              <label for="far_lift_{$num_room}">Far lift</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox ">
+                              <input id="near_lift_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Near Lift">
+                              <label for="near_lift_{$num_room}">Near Lift</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="container rm_preferences pb-4 border-bottom chked">
+                  <p class="h4 font-weight-bold mb-4 pt-3">Extra Room Facilities</p>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="chang_{$num_room}" class="fa_extra_{$num_room}" data-cost="25" type="checkbox" name="rm_extra_{$num_room}[]" value="chang_25">
+                              <label for="chang_{$num_room}">Champagne <i class="euro sign icon"></i>25</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="flowers_25_{$num_room}" class="fa_extra_{$num_room}" data-cost="25" type="checkbox" name="rm_extra_{$num_room}[]" value="flowers_25">
+                              <label for="flowers_25_{$num_room}">Small Bouquet <i class="euro sign icon"></i>25</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="flowers_50_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="50" name="rm_extra_{$num_room}[]" value="flowers_50">
+                              <label for="flowers_50_{$num_room}">Normal Bouquet <i class="euro sign icon"></i>50</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="red_wine_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="30" name="rm_extra[]" value="red_wine">
+                              <label for="red_wine_{$num_room}">Red wine <i class="euro sign icon"></i>30</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="white_wine_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="30" name="rm_extra_{$num_room}[]" value="white_wine">
+                              <label for="white_wine_{$num_room}">White wine <i class="euro sign icon"></i>30</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="choco_20_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="30" name="rm_extra_{$num_room}[]" value="choco_20">
+                              <label for="choco_20_{$num_room}">Chocolate Cake <i class="euro sign icon"></i>30</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            
+              <div class="container rm_preferences pb-4 border-bottom">
+                  <p class="h4 font-weight-bold mb-4 pt-3">Allergies</p>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox ">
+                              <input id="gluten_free_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Gluten free">
+                              <label for="gluten_free_{$num_room}">Gluten Free</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="wheat_free_{$num_room}" type="checkbox" name="rm_alegies_{$num_room}[]" value="Wheat">
+                              <label for="wheat_free_{$num_room}">Wheat</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="Egg_{$num_room}" type="checkbox" name="rm_alegies_{$num_room}[]" value="Egg">
+                              <label for="Egg_{$num_room}">Egg</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="dairy_free_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Dairy free">
+                              <label for="dairy_free_{$num_room}">Dairy Free</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="peanats_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Peanats">
+                              <label for="peanats_{$num_room}">Peanats</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="Soy_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Soy">
+                              <label for="Soy_{$num_room}">Soy</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row ">
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="vegan_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Vegan">
+                              <label for="vegan_{$num_room}">Vegan</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="ui checkbox">
+                              <input id="veggi_{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Vegeterian">
+                              <label for="veggi_{$num_room}">Vegeterian</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                      <div class="ui checkbox">
+                          <input id="Shellfish{$num_room}" type="checkbox" name="rm_alergies{$num_room}[]" value="Shellfish">
+                          <label for="Shellfish{$num_room}">Shellfish</label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="container rm_preferences pb-4 border-bottom">
+              <div class="row font-weight-bold ">
+                  <div class="col">
+                      <p class="h3">Subtotal:  $subtotal </p>
+                      <p class="h3">Extra: <span class="ext_fac_{$num_room}">0</span></p>
+                      <p class="h3">Total: <span class="total_{$num_room}"> $subtotal</span></p>
+                  </div>
+              </div>
+          </div>
+        
+print;
+  echo $rooms;
+}
+
+
+
+
 //get the ip address from user
 
 function getRealIp()
@@ -374,7 +618,7 @@ function test_input($data)
 //check the name
 function is_valid_name($name)
 {
-  if (empty($name)) {
+  if (empty($name)||strlen($name)>30) {
     return false;
   } else {
 
@@ -389,7 +633,7 @@ function is_valid_name($name)
 //validate email
 function is_valid_email($email)
 {
-  if (empty($email)) {
+  if (empty($email)||strlen($email)>50) {
     return false;
   } else {
     $email = test_input($email);
@@ -855,6 +1099,9 @@ function get_room_image($rm_type)
 //   $rm_rr->closeCursor();
 //   return $rm_rate;
 // }
+
+
+
 function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
 {
   global $db;
@@ -894,7 +1141,7 @@ function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
   }
   $room_price = $rate['rr_price'] + $rate['rm_price_diff'];
   //is standart price for the adults
-  $meal_adults = $_SESSION['meal_price']['OT'] * $adults;
+  $meal_adults = ($_SESSION['meal_price']['OT'] / 2) * $adults;
 
 
   // get the price for the meal supliment if the first char is + or just the value just add the perice in the total amount if is * the is a percentage result
@@ -910,7 +1157,7 @@ function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
       if (is_numeric(substr($meal_kids_rate, 1)) && substr($meal_kids_rate, 1) > 0 && substr($meal_kids_rate, 1) <= 100) {
         // get the result and divaded by 100 to get the percentage. and added to the total cost
         $percentage = (100 - substr($meal_kids_rate, 1)) / 100;
-        $meal_kids = $_SESSION['meal_price']['OT'] * $percentage * $kids;
+        $meal_kids = ($_SESSION['meal_price']['OT'] / 2) * $percentage * $kids;
       }
     } elseif (is_numeric($meal_kids_rate)) {
       if ($meal_kids_rate >= 0 && substr($meal_kids_rate, 1) < $room_price) {
@@ -918,7 +1165,6 @@ function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
       }
     }
   }
-
   //count adults price after meal suppliment
   // get the price for the meal supliment if the first char is + or just the value just add the perice in the total amount if is * the is a percentage result
 
@@ -979,5 +1225,88 @@ function get_daily_price($check_in, $check_out, $rm_type, $adults, $kids = null)
     }
   }
   $room_price = $room_price + $extra_adl + $extra + $meal_kids + $meal_adults;
-  return array($room_price, ($room_price + $_SESSION['meal_price']['FL']),$meal_adults,$meal_kids);
+  return array(round($room_price, 2), round($room_price + $_SESSION['meal_price']['FL'], 2), $meal_adults, $meal_kids);
 }
+function luhn_check($number)
+{
+  // Strip any non-digits (useful for credit card numbers with spaces and hyphens)
+  $number = preg_replace('/\D/', '', $number);
+
+  // Set the string length and parity
+  $number_length = strlen($number);
+  $parity = $number_length % 2;
+
+  // Loop through each digit and do the maths
+  $total = 0;
+  for ($i = 0; $i < $number_length; $i++) {
+    $digit = $number[$i];
+    // Multiply alternate digits by two
+    if ($i % 2 == $parity) {
+      $digit *= 2;
+      // If the sum is two digits, add them together (in effect)
+      if ($digit > 9) {
+        $digit -= 9;
+      }
+    }
+    // Total up the digits
+    $total += $digit;
+  }
+  // If the total mod 10 equals 0, the number is valid
+  return ($total % 10 == 0) ? TRUE : FALSE;
+}
+function get_extra_price_and_name($fa_extra)
+{
+
+
+  foreach ($fa_extra as $e) {
+    $extra=array();
+    if ($e == 'chang_25') {
+      $extra[] = array(25, 'Chanpagne');
+    } elseif ($e == 'flowers_25') {
+      $extra[] = array(25, 'Small Flowers');
+    } elseif ($e == 'flowers_50') {
+      $extra[] = array(50, 'Normal Flowers');
+    } elseif ($e == 'red_wine') {
+      $extra[] = array(30, 'Red Wine');
+    } elseif ($e == 'white_wine') {
+      $extra[] = array(30, 'White wine');
+    } elseif ($e == 'choco_20') {
+      $extra[] = array(30, 'Chocolate Cake');
+    }
+  }
+  return $extra;
+}
+function is_email_exist($email)
+{
+  global $db;
+  $query = 'SELECT *
+              FROM Member WHERE member_email=?';
+  $log = $db->prepare($query);
+  $log->bindValue(1, $email);
+  $log->execute();
+  $login = $log->fetch();
+  $log->closeCursor();
+  if ($login == null) {
+    return  false;
+  } else {
+    return $login;
+  }
+}
+
+function is_telephone_exist($tel)
+{
+  global $db;
+  $query = 'SELECT *
+              FROM Member WHERE member_tel=?';
+  $log = $db->prepare($query);
+  $log->bindValue(1, $tel);
+  $log->execute();
+  $login = $log->fetch();
+  $log->closeCursor();
+  if ($login == null) {
+    return  false;
+  } else {
+    return $login;
+  }
+}
+

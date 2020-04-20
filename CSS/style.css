@@ -176,7 +176,14 @@ body {
 .pad-20 {
   padding: 0 1rem;
 }
-
+.rm_preferences label{
+color: white !important;
+font-size: 1.2rem !important;
+cursor: pointer !important;
+}
+.rm_preferences .row{
+  padding-top: 10px;
+}
 
 @media only screen and (max-width: 590px) {
   #logo_img{
