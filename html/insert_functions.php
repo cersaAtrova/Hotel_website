@@ -77,8 +77,10 @@ function insert_new_member($name, $last, $email, $country, $tel)
         $prep->bindValue(':tel', $tel);
         // $prep->bindValue(8, 1);
         if ($prep->execute()) {
+            $prep->closeCursor();
             return $id;
         } else {
+            $prep->closeCursor();
             return false;
         }
     } catch (PDOException $e) {
@@ -96,8 +98,10 @@ function insert_new_allergies($resv_reference, $alergy)
         $prep->bindValue(':id', $resv_reference);
         $prep->bindValue(':aname', $alergy);
         if ($prep->execute()) {
+            $prep->closeCursor();
             return true;
         } else {
+            $prep->closeCursor();
             return false;
         }
     } catch (PDOException $e) {
@@ -116,8 +120,10 @@ function insert_new_preference($resv_reference, $preference)
         $prep->bindValue(1, $preference);
         $prep->bindValue(2, $resv_reference);
         if ($prep->execute()) {
+            $prep->closeCursor();
             return true;
         } else {
+            $prep->closeCursor();
             return false;
         }
     } catch (PDOException $e) {
@@ -125,10 +131,10 @@ function insert_new_preference($resv_reference, $preference)
     }
 }
 
-function insert_new_facilities($resv_reference, $price, $facility)
+function insert_new_facilities($facility, $price, $resv_reference)
 {
     global $db;
-    $query = 'INSERT INTO Facility() 
+    $query = 'INSERT INTO Facility(fa_name,fa_price,resv_reference) 
               VALUES(:aname,:price,:id)';
     $prep = $db->prepare($query);
     try {
@@ -136,9 +142,11 @@ function insert_new_facilities($resv_reference, $price, $facility)
         $prep->bindValue(':price', $price);
         $prep->bindValue(':id', $resv_reference);
         if ($prep->execute()) {
+            $prep->closeCursor();
             return true;
         } else {
             return false;
+            $prep->closeCursor();
         }
     } catch (PDOException $e) {
         return $e->getMessage();
@@ -147,26 +155,49 @@ function insert_new_facilities($resv_reference, $price, $facility)
 function insert_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
 {
     global $db;
-    $query = 'INSERT INTO Credit_card() 
-              VALUES(:id,:aname,:num,:moth,:eyear,:cvv,Valid)';
+    $query = 'INSERT INTO Credit_card(resv_reference,cc_full_name,cc_card_number,cc_exp_moth,cc_exp_year,cc_card_cvv,cc_card_status) 
+              VALUES(?,?,?,?,?,?,?)';
     $prep = $db->prepare($query);
     try {
-        $prep->bindValue(':id', $resv_reference);
-        $prep->bindValue(':aname', $name);
-        $prep->bindValue(':num', $number);
-        $prep->bindValue(':moth', $moth);
-        $prep->bindValue(':eyear', $year);
-        $prep->bindValue(':cvv', $cvv);
+        $prep->bindValue(1, $resv_reference);
+        $prep->bindValue(2, $name);
+        $prep->bindValue(3, $number);
+        $prep->bindValue(4, $moth);
+        $prep->bindValue(5, $year);
+        $prep->bindValue(6, $cvv);
+        $prep->bindValue(7, 'Valid');
         if ($prep->execute()) {
             return true;
+            $prep->closeCursor();
         } else {
+            $prep->closeCursor();
             return false;
         }
     } catch (PDOException $e) {
         return $e->getMessage();
     }
 }
-
+function insert_guest($people, $qnt, $resv_reference)
+{
+    global $db;
+    $query = 'INSERT INTO Resv_total_guest(rtg_people,rtg_qnt,resv_reference) 
+              VALUES(?,?,?)';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(1, $people);
+        $prep->bindValue(2, $qnt);
+        $prep->bindValue(3, $resv_reference);
+        if ($prep->execute()) {
+            $prep->closeCursor();
+            return true;
+        } else {
+            $prep->closeCursor();
+            return false;
+        }
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
 function insert_new_reservation($id, $resv_meal, $resv_type, $member_id, $rm_type)
 {
     if ($resv_meal == 'BB') {
@@ -205,4 +236,38 @@ function insert_new_reservation($id, $resv_meal, $resv_type, $member_id, $rm_typ
     } catch (PDOException $e) {
         return $e->getMessage();
     }
+}
+
+
+function insert_into_daily_rate($resv_reference, $date, $price)
+{
+    global $db;
+    $query = 'INSERT INTO Daily_rate(resv_reference,dr_date,dr_price) 
+              VALUES(?,?,?)';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(1, $resv_reference);
+        $prep->bindValue(2, $date);
+        $prep->bindValue(3, $price);
+
+        if ($prep->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+function get_member($email)
+{
+    global $db;
+    $query = ' SELECT * FROM Member
+              WHERE member_email=?';
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $email);
+    $prep->execute();
+    $member = $prep->fetch();
+    $prep->closeCursor();
+    return $member;
 }

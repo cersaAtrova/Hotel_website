@@ -424,7 +424,7 @@ pr;
                       </div>
                       <div class="col">
                           <div class="ui checkbox">
-                              <input id="red_wine_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="30" name="rm_extra[]" value="red_wine">
+                              <input id="red_wine_{$num_room}" class="fa_extra_{$num_room}" type="checkbox" data-cost="30" name="rm_extra_{$num_room}[]" value="red_wine">
                               <label for="red_wine_{$num_room}">Red wine <i class="euro sign icon"></i>30</label>
                           </div>
                       </div>
@@ -502,7 +502,7 @@ pr;
                       </div>
                       <div class="col">
                       <div class="ui checkbox">
-                          <input id="Shellfish{$num_room}" type="checkbox" name="rm_alergies{$num_room}[]" value="Shellfish">
+                          <input id="Shellfish{$num_room}" type="checkbox" name="rm_alergies_{$num_room}[]" value="Shellfish">
                           <label for="Shellfish{$num_room}">Shellfish</label>
                       </div>
                   </div>
@@ -618,7 +618,7 @@ function test_input($data)
 //check the name
 function is_valid_name($name)
 {
-  if (empty($name)||strlen($name)>30) {
+  if (empty($name) || strlen($name) > 30) {
     return false;
   } else {
 
@@ -633,7 +633,7 @@ function is_valid_name($name)
 //validate email
 function is_valid_email($email)
 {
-  if (empty($email)||strlen($email)>50) {
+  if (empty($email) || strlen($email) > 50) {
     return false;
   } else {
     $email = test_input($email);
@@ -1257,23 +1257,23 @@ function luhn_check($number)
 function get_extra_price_and_name($fa_extra)
 {
 
-
+  $extra = array();
   foreach ($fa_extra as $e) {
-    $extra=array();
     if ($e == 'chang_25') {
-      $extra[] = array(25, 'Chanpagne');
+      $extra[] = array('price' => 25, 'name' => 'Chanpagne');
     } elseif ($e == 'flowers_25') {
-      $extra[] = array(25, 'Small Flowers');
+      $extra[] = array('price' => 25, 'name' => 'Small Flowers');
     } elseif ($e == 'flowers_50') {
-      $extra[] = array(50, 'Normal Flowers');
+      $extra[] = array('price' => 50, 'name' => 'Normal Flowers');
     } elseif ($e == 'red_wine') {
-      $extra[] = array(30, 'Red Wine');
+      $extra[] = array('price' => 30, 'name' => 'Red Wine');
     } elseif ($e == 'white_wine') {
-      $extra[] = array(30, 'White wine');
+      $extra[] = array('price' => 30, 'name' => 'White wine');
     } elseif ($e == 'choco_20') {
-      $extra[] = array(30, 'Chocolate Cake');
+      $extra[] = array('price' => 30, 'name' => 'Chocolate Cake');
     }
   }
+
   return $extra;
 }
 function is_email_exist($email)
@@ -1309,4 +1309,3 @@ function is_telephone_exist($tel)
     return $login;
   }
 }
-
