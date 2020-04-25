@@ -1,6 +1,8 @@
 <?php
+require_once 'functions.php';
+require_once 'insert_functions.php';
 if (isset($_POST['submit'])) {
-    if (luhn_check($_POST['card_number']) == false) {
+    if (luhn_check($_POST['card_number'])== false) {
         //check the card if is valid
         $error_card_selected = 'Please enter a valid credit card';
     } else {
@@ -15,13 +17,12 @@ if (isset($_POST['submit'])) {
                 $error_card_selected = 'Please enter a valid Name and Surname for credit card';
             } else {
 
-                if(update_credit_card($_POST['id'], $owner, $_POST['card_number'], $_POST['month_expired'],$_POST['year_expired'], $_POST['cvv'])){
+                if (update_credit_card($_POST['id'], $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv'])) {
                     header('Location: user_account.php');
                     die();
-                }else{
+                } else {
                     $error_card_selected = 'Something went wrong. Please try again';
                 }
-
             }
         }
     }

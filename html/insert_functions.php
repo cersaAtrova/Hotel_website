@@ -490,13 +490,13 @@ function update_availability($rm_type, $date, $days)
 function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
 {
     global $db;
-    $query = 'UPDATE LOW_PRIORITY  Credit_card
+    $query = 'UPDATE Credit_card
               SET cc_full_name=:fname,
-              SET cc_card_number=:ncard,
-              SET cc_exp_moth=:moth,
-              SET cc_exp_year=:eyear,
-              SET cc_card_cvv=:cvv,
-              SET cc_card_status=:stats
+                  cc_card_number=:ncard,
+                  cc_exp_moth=:moth,
+                  cc_exp_year=:eyear,
+                  cc_card_cvv=:cvv,
+                  cc_card_status=:stats
               WHERE resv_reference=:id';
     $prep = $db->prepare($query);
     try {
