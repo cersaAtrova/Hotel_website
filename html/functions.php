@@ -7,7 +7,7 @@ require_once '../PHPMailer/src/SMTP.php';
 require_once '../PHPMailer/src/PHPMailer.php';
 require_once '../connect_dbase.php';
 define('GUSER', 'noreply.info.testing@gmail.com'); // GMail username
-define('GPWD', 'LKJPOI123!!'); // GMail password
+define('GPWD', 'G^$&/v.6/no-reply'); // GMail password
 function navigation_bar($str = 'HOME')
 {
   $arr = array();
@@ -44,7 +44,7 @@ function navigation_bar($str = 'HOME')
   }
   $nav = <<<print
 <div class="font-roboto bg-light fixed-top">
-<a class="nav-link" href="#">MY ACCOUNT</a>
+<a class="nav-link" href="user_account.php">MY ACCOUNT</a>
 </div>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top-30">
 
@@ -1048,6 +1048,22 @@ function get_all_available_rooms($check_in, $check_out, $rm_type, $total_room)
 
   return  $rm_availability;
 }
+function get_availability($check_in,$rm_type)
+{
+  global $db;
+  $query  = 'SELECT * From Room_availability
+             WHERE ra_date=:checkin  AND rm_type=:rm'  ;
+  $rm_availability= $db->prepare($query);
+  $rm_availability->bindValue(':checkin', $check_in);
+  
+  $rm_availability->bindValue(':rm', $rm_type);
+  
+  $rm_availability->execute();
+  $ave = $rm_availability->fetch();
+  $rm_availability->closeCursor();
+
+  return $ave;
+}
 // retrive all room type
 function get_room_type()
 {
@@ -1060,13 +1076,24 @@ function get_room_type()
 
   return $rm_type;
 }
-//get the type and the information aboout the room
+//get the type and the information about the room
 function get_room_type_row($room_name)
 {
   global $db;
   $query_rm = 'SELECT * From Room WHERE rm_name=?';
   $rm = $db->prepare($query_rm);
   $rm->bindValue(1, $room_name);
+  $rm->execute();
+  $row = $rm->fetch();
+  $rm->closeCursor();
+  return $row;
+}
+function get_room_by_rm_type($rm_type)
+{
+  global $db;
+  $query_rm = 'SELECT * From Room WHERE rm_type=?';
+  $rm = $db->prepare($query_rm);
+  $rm->bindValue(1, $rm_type);
   $rm->execute();
   $row = $rm->fetch();
   $rm->closeCursor();

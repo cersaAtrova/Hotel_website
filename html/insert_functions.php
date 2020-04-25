@@ -259,15 +259,262 @@ function insert_into_daily_rate($resv_reference, $date, $price)
         return $e->getMessage();
     }
 }
+
+//=======================
+//Member account function
+//=======================
+
 function get_member($email)
 {
     global $db;
     $query = ' SELECT * FROM Member
-              WHERE member_email=?';
+               WHERE member_email=?';
     $prep = $db->prepare($query);
     $prep->bindValue(1, $email);
     $prep->execute();
     $member = $prep->fetch();
+
     $prep->closeCursor();
     return $member;
+}
+function update_member($id, $name, $last, $email, $country, $passwd, $tel)
+{
+    $hash = password_hash($passwd, PASSWORD_BCRYPT);
+
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Member
+            SET
+            member_name= :mname,
+            member_last= :mlast,
+            member_email= :email,
+            member_country= :country,
+            member_password= :passwd,
+            member_tel= :tel
+            WHERE member_id =:id';
+    $prep = $db->prepare($query);
+    $prep->bindValue(":mname", $name);
+    $prep->bindValue(":mlast", $last);
+    $prep->bindValue(":email", $email);
+    $prep->bindValue(":country", $country);
+    $prep->bindValue(":passwd", $hash);
+    $prep->bindValue(":tel", $tel);
+    $prep->bindValue(":id", $id);
+    $prep->execute();
+    $prep->closeCursor();
+}
+function get_reservation_by_member_id($id)
+{
+    global $db;
+    $query = ' SELECT * FROM Reservation
+               WHERE member_id=?';
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $id);
+    $prep->execute();
+    $resv = $prep->fetchall();
+    $prep->closeCursor();
+    return $resv;
+}
+function get_reservation_price($id)
+{
+    global $db;
+    $query = 'SELECT SUM(dr_price)
+              FROM Daily_rate
+              WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $id);
+    $prep->execute();
+    $total = $prep->fetch();
+    $prep->closeCursor();
+    return $total;
+}
+function get_reservation_facilities_price($id)
+{
+    global $db;
+    $query = 'SELECT sum(fa_price)
+            FROM Facility
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $id);
+    $prep->execute();
+    $total = $prep->fetch();
+    $prep->closeCursor();
+    return $total;
+}
+function insert_guest_reservation($id, $name, $last, $country, $tel)
+{
+
+    global $db;
+    $query = 'INSERT INTO Guest_reservation() 
+              VALUES(:id,:fname,:lname,:country,:tel)';
+    $prep = $db->prepare($query);
+    try {
+
+        $prep->bindValue(':id', $id);
+        $prep->bindValue(':fname', $name);
+        $prep->bindValue(':lname', $last);
+        $prep->bindValue(':country', $country);
+        $prep->bindValue(':tel', $tel);
+        if ($prep->execute()) {
+            $prep->closeCursor();
+            return true;
+        } else {
+            $prep->closeCursor();
+            return false;
+        }
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+function get_facilities($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Facility
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_preferences($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Preferences
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_allergies($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Allergy
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_reservation_by_resv_id($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Reservation
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetch();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_total_guest($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Resv_total_guest
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_reservation_guest_profile($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Guest_reservation
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetch();
+    $prep->closeCursor();
+    return $fa;
+}
+function update_status_reservation($resv_id, $status)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Reservation 
+              SET resv_status = :stats
+              WHERE resv_reference =:id';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $resv_id);
+    $prep->bindValue(':stats', $status);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+function update_availability($rm_type, $date, $days)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Room_availability 
+              SET ra_days= :cdays
+              WHERE rm_type =:id 
+              AND ra_date=:dates';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $rm_type);
+    $prep->bindValue(':dates', $date);
+    $prep->bindValue(':cdays', $days);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY  Credit_card
+              SET cc_full_name=:fname,
+              SET cc_card_number=:ncard,
+              SET cc_exp_moth=:moth,
+              SET cc_exp_year=:eyear,
+              SET cc_card_cvv=:cvv,
+              SET cc_card_status=:stats
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $resv_reference);
+        $prep->bindValue(':fname', $name);
+        $prep->bindValue(':ncard', $number);
+        $prep->bindValue(':moth', $moth);
+        $prep->bindValue(':eyear', $year);
+        $prep->bindValue(':cvv', $cvv);
+        $prep->bindValue(':stats', 'Valid');
+        if ($prep->execute()) {
+            return true;
+            $prep->closeCursor();
+        } else {
+            $prep->closeCursor();
+            return false;
+        }
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
 }
