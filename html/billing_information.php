@@ -16,6 +16,7 @@ if (isset($_REQUEST['total_room'])) {
     }
 }
 
+
 if ($_REQUEST['total_room'] == 1) {
     $room_name_selected = 'Room 1 ' . $_SESSION['room_1_selected']['rm_name'];
 } elseif ($_REQUEST['total_room'] == 2) {
@@ -58,72 +59,28 @@ if (isset($_POST['submit'])) {
 
                     $member = is_email_exist($user_email);
                     $existing_guest = false;
-                    $not_valid_email = false;
                     if ($member != false) {
-                        if ($_POST['first_name'] != $member['member_name']) {
-                            $error_room_selected = 'Email address is not accepted! Please enter a different email address';
-                            $not_valid_email = true;
-                        } else {
-                            $existing_guest = true;
-                        }
+                        $existing_guest = true;
                     }
-                    if ($not_valid_email == false) {
-                        if ($_SESSION['total_room'] == 1) {
-                            //create new reservation for new Member
-                            if ($existing_guest == false) {
-                                //insert new member and guest the id
-                                $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
-                                if ($member_id == false) {
-                                    $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
-                                } else {
-                                    // get reservation reference (id)
-                                    $resv_id = random_reservation_id() . '/1';
-                                    $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
-                                    if ($resv == false) {
-                                        $error_room_selected = 'We cause some errors Your Reservation is not accepted. Please try again letter';
-                                    } else {
-                                        // add all allergy into database
 
-                                        if (isset($_POST['rm_alergies_Room_1'])) {
-                                            foreach ($_POST['rm_alergies_Room_1'] as $e) {
-                                                insert_new_allergies($resv_id, $e);
-                                            }
-                                        }
-                                        if (isset($_POST['rm_preference_Room_1'])) {
-                                            foreach ($_POST['rm_preference_Room_1'] as $e) {
-                                                insert_new_preference($resv_id, $e);
-                                            }
-                                        }
-                                        //add all extra facilities into Facility table
-                                        if (isset($_POST['rm_extra_Room_1'])) {
-                                            $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
-                                            foreach ($arr as $e) {
-                                                insert_new_facilities($e['name'], $e['price'], $resv_id);
-                                            }
-                                        }
-                                        // insert into daily rate table- Add all Rates in of each date
-                                        $begin = date('Y-m-d', strtotime($check_in));
-                                        foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
-                                            insert_into_daily_rate($resv_id, $begin, $pr[0]);
-                                            $repeat = strtotime("+1 day", strtotime($begin));
-                                            $begin = date('Y-m-d', $repeat);
-                                        }
-                                        //Save credit card into database(DANGEROUS)
-                                        //save here temporary for testing. 
-                                        //Will change this with STRIPE or JCC
-                                        $cc =  insert_credit_card($resv_id, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                        insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
-                                        insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
-                                        insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
-                                    }
-                                }
-                            } else { //create reservation with existing customer
-                                $ex_member = get_member($_POST['email']);
+                    //====\\
+                    //Room 1\\
+                    //========\\
+                    if ($_SESSION['total_room'] == 1) {
+                        //create new reservation for new Member
+                        if ($existing_guest == false) {
+                            //insert new member and guest the id
+                            $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
+                            if ($member_id == false) {
+                                $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
+                            } else {
+                                // get reservation reference (id)
                                 $resv_id = random_reservation_id() . '/1';
-                                $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $ex_member['member_id'], $_SESSION['room_1_selected']['rm_type']);
+                                $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
                                 if ($resv == false) {
                                     $error_room_selected = 'We cause some errors Your Reservation is not accepted. Please try again letter';
                                 } else {
+                                    insert_guest_reservation($resv_id, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
                                     // add all allergy into database
 
                                     if (isset($_POST['rm_alergies_Room_1'])) {
@@ -157,36 +114,517 @@ if (isset($_POST['submit'])) {
                                     insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
                                     insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
                                     insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
+
+                                    //update availability
+                                    $in = new DateTime($check_in);
+                                    $out = new DateTime($check_out);
+                                    // find the difference of the days
+                                    $diff = $in->diff($out)->format('%a');
+                                    $begin = date('Y-m-d', strtotime($check_in));
+
+                                    for ($i = 0; $i < $diff; $i++) {
+                                        $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+
+                                        $day = $ave['ra_days'];
+                                        $day--;
+                                        $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    header('Location: confirmation_page.php');
+                                    die();
                                 }
                             }
-                        }
-                        //==================//
-                        //------------------//
-                        //=Room selected 2==//
-                        //------------------//
-                        //==================//
-                        if ($_SESSION['total_room'] == 2) {
-                            //create new reservation for new Member
-                            if ($existing_guest == false) {
-                                //insert new member and guest the id
-                                $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
-                                if ($member_id == false) {
-                                    $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
-                                } else {
-                                    // get reservation reference (id)
-                                    $resv_id = random_reservation_id();
-                                    $r1 = '/1';
-                                    $r2 = '/2';
-                                    // reservation for first room
-                                    $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
-                                    if ($resv == false) {
-                                        $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
+                        } else { //create reservation with existing customer
+                            $ex_member = get_member($_POST['email']);
+                            $resv_id = random_reservation_id() . '/1';
+                            $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $ex_member['member_id'], $_SESSION['room_1_selected']['rm_type']);
+
+                            if ($resv == false) {
+                                $error_room_selected = 'We cause some errors Your Reservation is not accepted. Please try again letter';
+                            } else {
+                                insert_guest_reservation($resv_id, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                // add all allergy into database
+                                if (isset($_POST['rm_alergies_Room_1'])) {
+                                    foreach ($_POST['rm_alergies_Room_1'] as $e) {
+                                        insert_new_allergies($resv_id, $e);
                                     }
+                                }
+                                if (isset($_POST['rm_preference_Room_1'])) {
+                                    foreach ($_POST['rm_preference_Room_1'] as $e) {
+                                        insert_new_preference($resv_id, $e);
+                                    }
+                                }
+                                //add all extra facilities into Facility table
+                                if (isset($_POST['rm_extra_Room_1'])) {
+                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
+                                    foreach ($arr as $e) {
+                                        insert_new_facilities($e['name'], $e['price'], $resv_id);
+                                    }
+                                }
+                                // insert into daily rate table- Add all Rates in of each date
+                                $begin = date('Y-m-d', strtotime($check_in));
+                                foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
+                                    insert_into_daily_rate($resv_id, $begin, $pr[0]);
+                                    $repeat = strtotime("+1 day", strtotime($begin));
+                                    $begin = date('Y-m-d', $repeat);
+                                }
+                                //Save credit card into database(DANGEROUS)
+                                //save here temporary for testing. 
+                                //Will change this with STRIPE or JCC
+                                $cc =  insert_credit_card($resv_id, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
+                                insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
+                                insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
+
+                                //update availability
+                                $in = new DateTime($check_in);
+                                $out = new DateTime($check_out);
+                                // find the difference of the days
+                                $diff = $in->diff($out)->format('%a');
+                                $begin = date('Y-m-d', strtotime($check_in));
+
+                                for ($i = 0; $i < $diff; $i++) {
+                                    $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+
+                                    $day = $ave['ra_days'];
+                                    $day--;
+                                    $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                    $repeat = strtotime("+1 day", strtotime($begin));
+                                    $begin = date('Y-m-d', $repeat);
+                                }
+                                header('Location: confirmation_page.php');
+                                die();
+                            }
+                        }
+                    }
+                    //==================//
+                    //------------------//
+                    //=Room selected 2==//
+                    //------------------//
+                    //==================//
+                    if ($_SESSION['total_room'] == 2) {
+                        //create new reservation for new Member
+                        if ($existing_guest == false) {
+                            //insert new member and guest the id
+                            $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
+                            if ($member_id == false) {
+                                $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
+                            } else {
+                                // get reservation reference (id)
+                                $resv_id = random_reservation_id();
+                                $r1 = '/1';
+                                $r2 = '/2';
+                                // reservation for first room
+                                $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
+                                if ($resv == false) {
+                                    $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
+                                }
+                                // reservation for second room
+                                $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
+                                if ($resv == false) {
+                                    $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
+                                } else {
+                                    insert_guest_reservation($resv_id . $r1, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                    insert_guest_reservation($resv_id . $r2, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                    // add all allergy into database
+                                    //for room 1
+                                    if (isset($_POST['rm_alergies_Room_1'])) {
+                                        foreach ($_POST['rm_alergies_Room_1'] as $e) {
+                                            insert_new_allergies($resv_id . $r1, $e);
+                                        }
+                                    }
+                                    //for room 2
+                                    if (isset($_POST['rm_alergies_Room_2'])) {
+                                        foreach ($_POST['rm_alergies_Room_2'] as $e) {
+                                            insert_new_allergies($resv_id . $r2, $e);
+                                        }
+                                    }
+                                    //add all preferences
+                                    //for room 1
+                                    if (isset($_POST['rm_preference_Room_1'])) {
+                                        foreach ($_POST['rm_preference_Room_1'] as $e) {
+                                            insert_new_preference($resv_id . $r1, $e);
+                                        }
+                                    }
+                                    //for room 2
+                                    if (isset($_POST['rm_preference_Room_2'])) {
+                                        foreach ($_POST['rm_preference_Room_2'] as $e) {
+                                            insert_new_preference($resv_id . $r2, $e);
+                                        }
+                                    }
+                                    //add all extra facilities into Facility table
+                                    //room 1
+                                    if (isset($_POST['rm_extra_Room_1'])) {
+                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
+                                        foreach ($arr as $e) {
+                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
+                                        }
+                                    }
+                                    //room 2
+                                    if (isset($_POST['rm_extra_Room_2'])) {
+                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
+                                        foreach ($arr as $e) {
+                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
+                                        }
+                                    }
+                                    // insert into daily rate table- Add all Rates in of each date
+                                    $begin = date('Y-m-d', strtotime($check_in));
+                                    foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
+                                        insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    $begin = date('Y-m-d', strtotime($check_in));
+                                    foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
+                                        insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    //Save credit card into database(DANGEROUS)
+                                    //save here temporary for testing. 
+                                    //Will change this with STRIPE or JCC
+                                    $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                    $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                    //Add the person into Database for room 1
+                                    insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
+                                    insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
+                                    insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
+
+                                    //Add the person into Database for room 2
+                                    insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
+                                    insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
+                                    insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
+
+                                    //update availability
+                                    $in = new DateTime($check_in);
+                                    $out = new DateTime($check_out);
+                                    // find the difference of the days
+                                    $diff = $in->diff($out)->format('%a');
+                                    $begin = date('Y-m-d', strtotime($check_in));
+
+                                    for ($i = 0; $i < $diff; $i++) {
+                                        $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+                                        $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+
+                                        $day = $ave['ra_days'];
+                                        $day2 = $ave2['ra_days'];
+                                        $day--;
+                                        $day2--;
+                                        $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                        $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    header('Location: confirmation_page.php');
+                                    die();
+                                }
+                            }
+                        } else { //create reservation with existing customer
+                            $ex_member = get_member($_POST['email']);
+                            $resv_id = random_reservation_id();
+                            $r1 = '/1';
+                            $r2 = '/2';
+                            // reservation for first room
+                            $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
+                            if ($resv == false) {
+                                $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
+                            }
+                            // reservation for second room
+                            $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
+                            if ($resv == false) {
+                                $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
+                            } else {
+                                insert_guest_reservation($resv_id . $r1, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                insert_guest_reservation($resv_id . $r2, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+
+                                // add all allergy into database
+                                //for room 1
+                                if (isset($_POST['rm_alergies_Room_1'])) {
+                                    foreach ($_POST['rm_alergies_Room_1'] as $e) {
+                                        insert_new_allergies($resv_id . $r1, $e);
+                                    }
+                                }
+                                //for room 2
+                                if (isset($_POST['rm_alergies_Room_2'])) {
+                                    foreach ($_POST['rm_alergies_Room_2'] as $e) {
+                                        insert_new_allergies($resv_id . $r2, $e);
+                                    }
+                                }
+                                //add all preferences
+                                //for room 1
+                                if (isset($_POST['rm_preference_Room_1'])) {
+                                    foreach ($_POST['rm_preference_Room_1'] as $e) {
+                                        insert_new_preference($resv_id . $r1, $e);
+                                    }
+                                }
+                                //for room 2
+                                if (isset($_POST['rm_preference_Room_2'])) {
+                                    foreach ($_POST['rm_preference_Room_2'] as $e) {
+                                        insert_new_preference($resv_id . $r2, $e);
+                                    }
+                                }
+                                //add all extra facilities into Facility table
+                                //room 1
+                                if (isset($_POST['rm_extra_Room_1'])) {
+                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
+                                    foreach ($arr as $e) {
+                                        insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
+                                    }
+                                }
+                                //room 2
+                                if (isset($_POST['rm_extra_Room_2'])) {
+                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
+                                    foreach ($arr as $e) {
+                                        insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
+                                    }
+                                }
+                                // insert into daily rate table- Add all Rates in of each date
+                                $begin = date('Y-m-d', strtotime($check_in));
+                                foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
+                                    insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
+                                    $repeat = strtotime("+1 day", strtotime($begin));
+                                    $begin = date('Y-m-d', $repeat);
+                                }
+                                $begin = date('Y-m-d', strtotime($check_in));
+                                foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
+                                    insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
+                                    $repeat = strtotime("+1 day", strtotime($begin));
+                                    $begin = date('Y-m-d', $repeat);
+                                }
+                                //Save credit card into database(DANGEROUS)
+                                //save here temporary for testing. 
+                                //Will change this with STRIPE or JCC
+                                $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                //Add the person into Database for room 1
+                                insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
+                                insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
+                                insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
+
+                                //Add the person into Database for room 2
+                                insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
+                                insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
+                                insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
+
+                                //update availability
+                                $in = new DateTime($check_in);
+                                $out = new DateTime($check_out);
+                                // find the difference of the days
+                                $diff = $in->diff($out)->format('%a');
+                                $begin = date('Y-m-d', strtotime($check_in));
+
+                                for ($i = 0; $i < $diff; $i++) {
+                                    $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+                                    $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+
+                                    $day = $ave['ra_days'];
+                                    $day2 = $ave2['ra_days'];
+                                    $day--;
+                                    $day2--;
+                                    $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                    $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+                                    $repeat = strtotime("+1 day", strtotime($begin));
+                                    $begin = date('Y-m-d', $repeat);
+                                }
+                                header('Location: confirmation_page.php');
+                                die();
+                            }
+                        }
+                    }
+                    //==================//
+                    //------------------//
+                    //=Room selected 3==//
+                    //------------------//
+                    //==================//
+                    if ($_SESSION['total_room'] == 3) {
+                        //create new reservation for new Member
+                        if ($existing_guest == false) {
+                            //insert new member and guest the id
+                            $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
+                            if ($member_id == false) {
+                                $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
+                            } else {
+                                // get reservation reference (id)
+                                $resv_id = random_reservation_id();
+                                $r1 = '/1';
+                                $r2 = '/2';
+                                $r3 = '/3';
+                                // reservation for first room
+                                $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
+                                if ($resv == false) {
+                                    $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
+                                } else {
                                     // reservation for second room
                                     $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
                                     if ($resv == false) {
                                         $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
+                                    } else { // reservation for Third room
+                                        $resv = insert_new_reservation($resv_id . $r3, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
+                                        if ($resv == false) {
+                                            $error_room_selected = 'We cause some errors Your Reservation Room 3 is not accepted. Please try again letter';
+                                        } else {
+                                            insert_guest_reservation($resv_id . $r1, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                            insert_guest_reservation($resv_id . $r2, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                            insert_guest_reservation($resv_id . $r3, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+
+                                            // add all allergy into database
+                                            //for room 1
+                                            if (isset($_POST['rm_alergies_Room_1'])) {
+                                                foreach ($_POST['rm_alergies_Room_1'] as $e) {
+                                                    insert_new_allergies($resv_id . $r1, $e);
+                                                }
+                                            }
+                                            //for room 2
+                                            if (isset($_POST['rm_alergies_Room_2'])) {
+                                                foreach ($_POST['rm_alergies_Room_2'] as $e) {
+                                                    insert_new_allergies($resv_id . $r2, $e);
+                                                }
+                                            }
+                                            //for room 3
+                                            if (isset($_POST['rm_alergies_Room_3'])) {
+                                                foreach ($_POST['rm_alergies_Room_3'] as $e) {
+                                                    insert_new_allergies($resv_id . $r3, $e);
+                                                }
+                                            }
+                                            //add all preferences
+                                            //for room 1
+                                            if (isset($_POST['rm_preference_Room_1'])) {
+                                                foreach ($_POST['rm_preference_Room_1'] as $e) {
+                                                    insert_new_preference($resv_id . $r1, $e);
+                                                }
+                                            }
+                                            //for room 2
+                                            if (isset($_POST['rm_preference_Room_2'])) {
+                                                foreach ($_POST['rm_preference_Room_2'] as $e) {
+                                                    insert_new_preference($resv_id . $r2, $e);
+                                                }
+                                            }
+                                            //for room 3
+                                            if (isset($_POST['rm_preference_Room_3'])) {
+                                                foreach ($_POST['rm_preference_Room_3'] as $e) {
+                                                    insert_new_preference($resv_id . $r3, $e);
+                                                }
+                                            }
+                                            //add all extra facilities into Facility table
+                                            //room 1
+                                            if (isset($_POST['rm_extra_Room_1'])) {
+                                                $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
+                                                foreach ($arr as $e) {
+                                                    insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
+                                                }
+                                            }
+                                            //room 2
+                                            if (isset($_POST['rm_extra_Room_2'])) {
+                                                $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
+                                                foreach ($arr as $e) {
+                                                    insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
+                                                }
+                                            }
+                                            //room 2
+                                            if (isset($_POST['rm_extra_Room_3'])) {
+                                                $arr = get_extra_price_and_name($_POST['rm_extra_Room_3']);
+                                                foreach ($arr as $e) {
+                                                    insert_new_facilities($e['name'], $e['price'], $resv_id . $r3);
+                                                }
+                                            }
+                                            // insert into daily rate table- Add all Rates in of each date
+                                            //add the single daily rate for room 1
+                                            $begin = date('Y-m-d', strtotime($check_in));
+                                            foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
+                                                insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            //add the single daily rate for room 2
+                                            $begin = date('Y-m-d', strtotime($check_in));
+                                            foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
+                                                insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            //add the single daily rate for room 3
+                                            $begin = date('Y-m-d', strtotime($check_in));
+                                            foreach ($_SESSION['room_3_selected']['room_daily_rate_selected'] as $pr) {
+                                                insert_into_daily_rate($resv_id . $r3, $begin, $pr[0]);
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            //Save credit card into database(DANGEROUS)
+                                            //save here temporary for testing. 
+                                            //Will change this with STRIPE or JCC
+                                            $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                            $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                            $cc =  insert_credit_card($resv_id . $r3, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                            //Add the person into Database for room 1
+                                            insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
+                                            insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
+                                            insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
+
+                                            //Add the person into Database for room 2
+                                            insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
+                                            insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
+                                            insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
+
+                                            //Add the person into Database for room 3
+                                            insert_guest('Adults', $_SESSION['room_3_guest']['adults'], $resv_id . $r3);
+                                            insert_guest('Kids', $_SESSION['room_3_guest']['kids'], $resv_id . $r3);
+                                            insert_guest('Infants', $_SESSION['room_3_guest']['infants'], $resv_id . $r3);
+
+                                            //update availability
+                                            $in = new DateTime($check_in);
+                                            $out = new DateTime($check_out);
+                                            // find the difference of the days
+                                            $diff = $in->diff($out)->format('%a');
+                                            $begin = date('Y-m-d', strtotime($check_in));
+
+                                            for ($i = 0; $i < $diff; $i++) {
+                                                $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+                                                $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                                $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
+
+                                                $day = $ave['ra_days'];
+                                                $day2 = $ave2['ra_days'];
+                                                $day3 = $ave3['ra_days'];
+                                                $day--;
+                                                $day2--;
+                                                $day3--;
+                                                $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                                $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+                                                $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave['ra_date'], $day);
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            header('Location: confirmation_page.php');
+                                            die();
+                                        }
+                                    }
+                                }
+                            }
+                        } else { //create reservation with existing customer
+                            $ex_member = get_member($_POST['email']);
+                            $resv_id = random_reservation_id();
+                            $r1 = '/1';
+                            $r2 = '/2';
+                            $r3 = '/3';
+                            // reservation for first room
+                            $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
+                            if ($resv == false) {
+                                $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
+                            } else {
+                                // reservation for second room
+                                $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
+                                if ($resv == false) {
+                                    $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
+                                } else { // reservation for Third room
+                                    $resv = insert_new_reservation($resv_id . $r3, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
+                                    if ($resv == false) {
+                                        $error_room_selected = 'We cause some errors Your Reservation Room 3 is not accepted. Please try again letter';
                                     } else {
+                                        insert_guest_reservation($resv_id . $r1, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                        insert_guest_reservation($resv_id . $r2, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                        insert_guest_reservation($resv_id . $r3, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+
                                         // add all allergy into database
                                         //for room 1
                                         if (isset($_POST['rm_alergies_Room_1'])) {
@@ -200,6 +638,12 @@ if (isset($_POST['submit'])) {
                                                 insert_new_allergies($resv_id . $r2, $e);
                                             }
                                         }
+                                        //for room 3
+                                        if (isset($_POST['rm_alergies_Room_3'])) {
+                                            foreach ($_POST['rm_alergies_Room_3'] as $e) {
+                                                insert_new_allergies($resv_id . $r3, $e);
+                                            }
+                                        }
                                         //add all preferences
                                         //for room 1
                                         if (isset($_POST['rm_preference_Room_1'])) {
@@ -211,6 +655,12 @@ if (isset($_POST['submit'])) {
                                         if (isset($_POST['rm_preference_Room_2'])) {
                                             foreach ($_POST['rm_preference_Room_2'] as $e) {
                                                 insert_new_preference($resv_id . $r2, $e);
+                                            }
+                                        }
+                                        //for room 3
+                                        if (isset($_POST['rm_preference_Room_3'])) {
+                                            foreach ($_POST['rm_preference_Room_3'] as $e) {
+                                                insert_new_preference($resv_id . $r3, $e);
                                             }
                                         }
                                         //add all extra facilities into Facility table
@@ -228,16 +678,32 @@ if (isset($_POST['submit'])) {
                                                 insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
                                             }
                                         }
+                                        //room 2
+                                        if (isset($_POST['rm_extra_Room_3'])) {
+                                            $arr = get_extra_price_and_name($_POST['rm_extra_Room_3']);
+                                            foreach ($arr as $e) {
+                                                insert_new_facilities($e['name'], $e['price'], $resv_id . $r3);
+                                            }
+                                        }
                                         // insert into daily rate table- Add all Rates in of each date
+                                        //add the single daily rate for room 1
                                         $begin = date('Y-m-d', strtotime($check_in));
                                         foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
                                             insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
                                             $repeat = strtotime("+1 day", strtotime($begin));
                                             $begin = date('Y-m-d', $repeat);
                                         }
+                                        //add the single daily rate for room 2
                                         $begin = date('Y-m-d', strtotime($check_in));
                                         foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
                                             insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
+                                            $repeat = strtotime("+1 day", strtotime($begin));
+                                            $begin = date('Y-m-d', $repeat);
+                                        }
+                                        //add the single daily rate for room 3
+                                        $begin = date('Y-m-d', strtotime($check_in));
+                                        foreach ($_SESSION['room_3_selected']['room_daily_rate_selected'] as $pr) {
+                                            insert_into_daily_rate($resv_id . $r3, $begin, $pr[0]);
                                             $repeat = strtotime("+1 day", strtotime($begin));
                                             $begin = date('Y-m-d', $repeat);
                                         }
@@ -246,6 +712,7 @@ if (isset($_POST['submit'])) {
                                         //Will change this with STRIPE or JCC
                                         $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
                                         $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                        $cc =  insert_credit_card($resv_id . $r3, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
                                         //Add the person into Database for room 1
                                         insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
                                         insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
@@ -255,315 +722,39 @@ if (isset($_POST['submit'])) {
                                         insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
                                         insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
                                         insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
-                                    }
-                                }
-                            } else { //create reservation with existing customer
-                                $ex_member = get_member($_POST['email']);
-                                $resv_id = random_reservation_id();
-                                $r1 = '/1';
-                                $r2 = '/2';
-                                // reservation for first room
-                                $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
-                                if ($resv == false) {
-                                    $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
-                                }
-                                // reservation for second room
-                                $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
-                                if ($resv == false) {
-                                    $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
-                                } else {
-                                    // add all allergy into database
-                                    //for room 1
-                                    if (isset($_POST['rm_alergies_Room_1'])) {
-                                        foreach ($_POST['rm_alergies_Room_1'] as $e) {
-                                            insert_new_allergies($resv_id . $r1, $e);
-                                        }
-                                    }
-                                    //for room 2
-                                    if (isset($_POST['rm_alergies_Room_2'])) {
-                                        foreach ($_POST['rm_alergies_Room_2'] as $e) {
-                                            insert_new_allergies($resv_id . $r2, $e);
-                                        }
-                                    }
-                                    //add all preferences
-                                    //for room 1
-                                    if (isset($_POST['rm_preference_Room_1'])) {
-                                        foreach ($_POST['rm_preference_Room_1'] as $e) {
-                                            insert_new_preference($resv_id . $r1, $e);
-                                        }
-                                    }
-                                    //for room 2
-                                    if (isset($_POST['rm_preference_Room_2'])) {
-                                        foreach ($_POST['rm_preference_Room_2'] as $e) {
-                                            insert_new_preference($resv_id . $r2, $e);
-                                        }
-                                    }
-                                    //add all extra facilities into Facility table
-                                    //room 1
-                                    if (isset($_POST['rm_extra_Room_1'])) {
-                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
-                                        foreach ($arr as $e) {
-                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
-                                        }
-                                    }
-                                    //room 2
-                                    if (isset($_POST['rm_extra_Room_2'])) {
-                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
-                                        foreach ($arr as $e) {
-                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
-                                        }
-                                    }
-                                    // insert into daily rate table- Add all Rates in of each date
-                                    $begin = date('Y-m-d', strtotime($check_in));
-                                    foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
-                                        insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
-                                        $repeat = strtotime("+1 day", strtotime($begin));
-                                        $begin = date('Y-m-d', $repeat);
-                                    }
-                                    $begin = date('Y-m-d', strtotime($check_in));
-                                    foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
-                                        insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
-                                        $repeat = strtotime("+1 day", strtotime($begin));
-                                        $begin = date('Y-m-d', $repeat);
-                                    }
-                                    //Save credit card into database(DANGEROUS)
-                                    //save here temporary for testing. 
-                                    //Will change this with STRIPE or JCC
-                                    $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                    $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                    //Add the person into Database for room 1
-                                    insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
-                                    insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
-                                    insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
 
-                                    //Add the person into Database for room 2
-                                    insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
-                                    insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
-                                    insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
-                                }
-                            }
-                        }
-                        //==================//
-                        //------------------//
-                        //=Room selected 3==//
-                        //------------------//
-                        //==================//
-                        if ($_SESSION['total_room'] == 3) {
-                            //create new reservation for new Member
-                            if ($existing_guest == false) {
-                                //insert new member and guest the id
-                                $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
-                                if ($member_id == false) {
-                                    $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
-                                } else {
-                                    // get reservation reference (id)
-                                    $resv_id = random_reservation_id();
-                                    $r1 = '/1';
-                                    $r2 = '/2';
-                                    $r3 = '/3';
-                                    // reservation for first room
-                                    $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
-                                    if ($resv == false) {
-                                        $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
-                                    } else {
-                                        // reservation for second room
-                                        $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
-                                        if ($resv == false) {
-                                            $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
-                                        } else { // reservation for Third room
-                                            $resv = insert_new_reservation($resv_id . $r3, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
-                                            if ($resv == false) {
-                                                $error_room_selected = 'We cause some errors Your Reservation Room 3 is not accepted. Please try again letter';
-                                            } else {
-                                                // add all allergy into database
-                                                //for room 1
-                                                if (isset($_POST['rm_alergies_Room_1'])) {
-                                                    foreach ($_POST['rm_alergies_Room_1'] as $e) {
-                                                        insert_new_allergies($resv_id . $r1, $e);
-                                                    }
-                                                }
-                                                //for room 2
-                                                if (isset($_POST['rm_alergies_Room_2'])) {
-                                                    foreach ($_POST['rm_alergies_Room_2'] as $e) {
-                                                        insert_new_allergies($resv_id . $r2, $e);
-                                                    }
-                                                }
-                                                //for room 3
-                                                if (isset($_POST['rm_alergies_Room_3'])) {
-                                                    foreach ($_POST['rm_alergies_Room_3'] as $e) {
-                                                        insert_new_allergies($resv_id . $r3, $e);
-                                                    }
-                                                }
-                                                //add all preferences
-                                                //for room 1
-                                                if (isset($_POST['rm_preference_Room_1'])) {
-                                                    foreach ($_POST['rm_preference_Room_1'] as $e) {
-                                                        insert_new_preference($resv_id . $r1, $e);
-                                                    }
-                                                }
-                                                //for room 2
-                                                if (isset($_POST['rm_preference_Room_2'])) {
-                                                    foreach ($_POST['rm_preference_Room_2'] as $e) {
-                                                        insert_new_preference($resv_id . $r2, $e);
-                                                    }
-                                                }
-                                                //for room 3
-                                                if (isset($_POST['rm_preference_Room_3'])) {
-                                                    foreach ($_POST['rm_preference_Room_3'] as $e) {
-                                                        insert_new_preference($resv_id . $r3, $e);
-                                                    }
-                                                }
-                                                //add all extra facilities into Facility table
-                                                //room 1
-                                                if (isset($_POST['rm_extra_Room_1'])) {
-                                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
-                                                    foreach ($arr as $e) {
-                                                        insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
-                                                    }
-                                                }
-                                                //room 2
-                                                if (isset($_POST['rm_extra_Room_2'])) {
-                                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
-                                                    foreach ($arr as $e) {
-                                                        insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
-                                                    }
-                                                }
-                                                //room 2
-                                                if (isset($_POST['rm_extra_Room_3'])) {
-                                                    $arr = get_extra_price_and_name($_POST['rm_extra_Room_3']);
-                                                    foreach ($arr as $e) {
-                                                        insert_new_facilities($e['name'], $e['price'], $resv_id . $r3);
-                                                    }
-                                                }
-                                                // insert into daily rate table- Add all Rates in of each date
-                                                //add the single daily rate for room 1
-                                                $begin = date('Y-m-d', strtotime($check_in));
-                                                foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
-                                                    insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
-                                                    $repeat = strtotime("+1 day", strtotime($begin));
-                                                    $begin = date('Y-m-d', $repeat);
-                                                }
-                                                //add the single daily rate for room 2
-                                                $begin = date('Y-m-d', strtotime($check_in));
-                                                foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
-                                                    insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
-                                                    $repeat = strtotime("+1 day", strtotime($begin));
-                                                    $begin = date('Y-m-d', $repeat);
-                                                }
-                                                //add the single daily rate for room 3
-                                                $begin = date('Y-m-d', strtotime($check_in));
-                                                foreach ($_SESSION['room_3_selected']['room_daily_rate_selected'] as $pr) {
-                                                    insert_into_daily_rate($resv_id . $r3, $begin, $pr[0]);
-                                                    $repeat = strtotime("+1 day", strtotime($begin));
-                                                    $begin = date('Y-m-d', $repeat);
-                                                }
-                                                //Save credit card into database(DANGEROUS)
-                                                //save here temporary for testing. 
-                                                //Will change this with STRIPE or JCC
-                                                $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                                $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                                $cc =  insert_credit_card($resv_id . $r3, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                                //Add the person into Database for room 1
-                                                insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
-                                                insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
-                                                insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
+                                        //Add the person into Database for room 3
+                                        insert_guest('Adults', $_SESSION['room_3_guest']['adults'], $resv_id . $r3);
+                                        insert_guest('Kids', $_SESSION['room_3_guest']['kids'], $resv_id . $r3);
+                                        insert_guest('Infants', $_SESSION['room_3_guest']['infants'], $resv_id . $r3);
 
-                                                //Add the person into Database for room 2
-                                                insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
-                                                insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
-                                                insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
+                                        //update availability
+                                        $in = new DateTime($check_in);
+                                        $out = new DateTime($check_out);
+                                        // find the difference of the days
+                                        $diff = $in->diff($out)->format('%a');
+                                        $begin = date('Y-m-d', strtotime($check_in));
 
-                                                //Add the person into Database for room 3
-                                                insert_guest('Adults', $_SESSION['room_3_guest']['adults'], $resv_id . $r3);
-                                                insert_guest('Kids', $_SESSION['room_3_guest']['kids'], $resv_id . $r3);
-                                                insert_guest('Infants', $_SESSION['room_3_guest']['infants'], $resv_id . $r3);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else { //create reservation with existing customer
-                                $ex_member = get_member($_POST['email']);
-                                $resv_id = random_reservation_id();
-                                $r1 = '/1';
-                                $r2 = '/2';
-                                // reservation for first room
-                                $resv = insert_new_reservation($resv_id . $r1, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
-                                if ($resv == false) {
-                                    $error_room_selected = 'We cause some errors Your Reservation Room 1 is not accepted. Please try again letter';
-                                }
-                                // reservation for second room
-                                $resv = insert_new_reservation($resv_id . $r2, $_SESSION['room_info']['meal_plan'], $_SESSION['room_2_selected']['rate_plan_selected'], $member_id, $_SESSION['room_2_selected']['rm_type']);
-                                if ($resv == false) {
-                                    $error_room_selected = 'We cause some errors Your Reservation Room 2 is not accepted. Please try again letter';
-                                } else {
-                                    // add all allergy into database
-                                    //for room 1
-                                    if (isset($_POST['rm_alergies_Room_1'])) {
-                                        foreach ($_POST['rm_alergies_Room_1'] as $e) {
-                                            insert_new_allergies($resv_id . $r1, $e);
-                                        }
-                                    }
-                                    //for room 2
-                                    if (isset($_POST['rm_alergies_Room_2'])) {
-                                        foreach ($_POST['rm_alergies_Room_2'] as $e) {
-                                            insert_new_allergies($resv_id . $r2, $e);
-                                        }
-                                    }
-                                    //add all preferences
-                                    //for room 1
-                                    if (isset($_POST['rm_preference_Room_1'])) {
-                                        foreach ($_POST['rm_preference_Room_1'] as $e) {
-                                            insert_new_preference($resv_id . $r1, $e);
-                                        }
-                                    }
-                                    //for room 2
-                                    if (isset($_POST['rm_preference_Room_2'])) {
-                                        foreach ($_POST['rm_preference_Room_2'] as $e) {
-                                            insert_new_preference($resv_id . $r2, $e);
-                                        }
-                                    }
-                                    //add all extra facilities into Facility table
-                                    //room 1
-                                    if (isset($_POST['rm_extra_Room_1'])) {
-                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
-                                        foreach ($arr as $e) {
-                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r1);
-                                        }
-                                    }
-                                    //room 2
-                                    if (isset($_POST['rm_extra_Room_2'])) {
-                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_2']);
-                                        foreach ($arr as $e) {
-                                            insert_new_facilities($e['name'], $e['price'], $resv_id . $r2);
-                                        }
-                                    }
-                                    // insert into daily rate table- Add all Rates in of each date
-                                    $begin = date('Y-m-d', strtotime($check_in));
-                                    foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
-                                        insert_into_daily_rate($resv_id . $r1, $begin, $pr[0]);
-                                        $repeat = strtotime("+1 day", strtotime($begin));
-                                        $begin = date('Y-m-d', $repeat);
-                                    }
-                                    $begin = date('Y-m-d', strtotime($check_in));
-                                    foreach ($_SESSION['room_2_selected']['room_daily_rate_selected'] as $pr) {
-                                        insert_into_daily_rate($resv_id . $r2, $begin, $pr[0]);
-                                        $repeat = strtotime("+1 day", strtotime($begin));
-                                        $begin = date('Y-m-d', $repeat);
-                                    }
-                                    //Save credit card into database(DANGEROUS)
-                                    //save here temporary for testing. 
-                                    //Will change this with STRIPE or JCC
-                                    $cc =  insert_credit_card($resv_id . $r1, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                    $cc =  insert_credit_card($resv_id . $r2, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                    //Add the person into Database for room 1
-                                    insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id . $r1);
-                                    insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id . $r1);
-                                    insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id . $r1);
+                                        for ($i = 0; $i < $diff; $i++) {
+                                            $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+                                            $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                            $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
 
-                                    //Add the person into Database for room 2
-                                    insert_guest('Adults', $_SESSION['room_2_guest']['adults'], $resv_id . $r2);
-                                    insert_guest('Kids', $_SESSION['room_2_guest']['kids'], $resv_id . $r2);
-                                    insert_guest('Infants', $_SESSION['room_2_guest']['infants'], $resv_id . $r2);
+                                            $day = $ave['ra_days'];
+                                            $day2 = $ave2['ra_days'];
+                                            $day3 = $ave3['ra_days'];
+                                            $day--;
+                                            $day2--;
+                                            $day3--;
+                                            $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                            $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+                                            $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave['ra_date'], $day);
+                                            $repeat = strtotime("+1 day", strtotime($begin));
+                                            $begin = date('Y-m-d', $repeat);
+                                        }
+                                        header('Location: confirmation_page.php');
+                                        die();
+                                    }
                                 }
                             }
                         }
@@ -605,7 +796,7 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
     <link rel="stylesheet" href="../CSS/validate_card.css">
-    <script src="../script/script.js"></script>
+  
 
     <link rel="stylesheet" href="/CSS/style.css">
     <link rel="stylesheet" href="/CSS/booking_style.css">
@@ -633,6 +824,8 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     <div class="container-fluid">
+
+        <!-- ADD TO THE FORM THE LOCATION OF THE CONFIRMATION -->
         <form action="" method="post">
             <div class="m-auto" style="width: 80%">
                 <div class="row ui text-white" style="background-color: rgba(29, 29, 92, 0.8);">
@@ -641,21 +834,21 @@ if (isset($_POST['submit'])) {
                         <div class="row ">
                             <div class="col-md">
                                 <label for="first-name"><span>&starf;</span> First Name</label>
-                                <input type="text" class="form-control text-form-control" name="first_name" required placeholder="First name" maxlength="30" value="<?php echo $user_f_name; ?>" id="first_name" pattern="^[A-Za-z]+$">
+                                <input type="text" class="form-control text-form-control" name="first_name" required placeholder="First name" maxlength="30" value="<?php echo $_COOKIE['name'] ?>" id="first_name" pattern="^[A-Za-z]+$">
                             </div>
 
                             <div class="col-md">
                                 <label for="last-name"><span>&starf;</span> Last Name</label>
-                                <input type="text" class="form-control text-form-control" name="last_name" required placeholder="Last name" maxlength="30" value="<?php echo $user_l_name; ?>" aria-describedby="basic-addon1" pattern="^[A-Za-z]+$">
+                                <input type="text" class="form-control text-form-control" name="last_name" required placeholder="Last name" maxlength="30" value="<?php echo $_COOKIE['surname']; ?>" aria-describedby="basic-addon1" pattern="^[A-Za-z]+$">
                             </div>
                             <div class="col-12">
                                 <label for="email"><span>&starf;</span>Email</label>
-                                <input id="email" type="email" class="form-control text-form-control" name="email" maxlength="50" placeholder="Email" value="<?php echo  $user_email; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
+                                <input id="email" type="email" class="form-control text-form-control" name="email" maxlength="50" placeholder="Email" value="<?php echo  $_COOKIE['email']; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
                             </div>
 
                             <div class="col-12">
                                 <label for="tel"><span>&starf;</span>Telephone</label>
-                                <input id="tel" type="tel" class="form-control text-form-control" name="tel" placeholder="Telephone" value="<?php echo $user_tel; ?>" required aria-describedby="telephone" pattern="^[0-9]+$">
+                                <input id="tel" type="tel" class="form-control text-form-control" name="tel" placeholder="Telephone" value="<?php echo $_COOKIE['tel']; ?>" required aria-describedby="telephone" pattern="^[0-9]+$">
                             </div>
                             <div class="col-12">
                                 <label for="country"><span>&starf;</span> Country</label>
@@ -664,7 +857,7 @@ if (isset($_POST['submit'])) {
                                     //add all country
                                     asort($countries);
                                     foreach ($countries as $key => $value) {
-                                        if ($country_name_by_ip == $value) {
+                                        if ($_COOKIE['country'] == $value) {
                                             echo "<option selected>$value</option>";
                                         } else {
                                             echo "<option>$value</option>";
@@ -872,6 +1065,7 @@ if (isset($_POST['submit'])) {
                             .on('click', function() {
                                 $('.callback .checkbox').checkbox($(this).data('method'));
                             });
+                            $('.first_room_active').click();
                     </script>
 
                 </div>

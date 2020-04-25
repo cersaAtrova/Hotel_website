@@ -313,3 +313,6 @@ cursor: pointer !important;
 
   margin: auto auto;
 }
+.box_shadow{
+  box-shadow: 3px 5px 4px 3px grey;
+}
