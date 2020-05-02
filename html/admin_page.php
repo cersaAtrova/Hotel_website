@@ -1,3 +1,13 @@
+<?php
+require_once('insert_functions.php');
+require_once('functions.php');
+session_start();
+
+$today=new DateTime("100 days");
+$tommorow=new DateTime("101 days");
+$resv_tommorow = get_reservation_by_check_in($tommorow);
+$resv_today = get_reservation_by_check_in($today);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +33,6 @@
     <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
-    <link rel="stylesheet" href="../CSS/validate_card.css">
 
     <script src="../script/script.js"></script>
 
@@ -31,81 +40,35 @@
 </head>
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto ">
-                <li class="nav-item active h4">
-                    <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item h4">
-                    <a class="nav-link" href="#">Reservation <span class="sr-only">(current)</span></a>
-                </li>
-
-                <li class="nav-item dropdown h4">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Inventory
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Room Rate</a>
-                        <a class="dropdown-item" href="#">Insert Rate</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Reservation</a>
-                    </div>
-                </li>
-
-            </ul>
-            <form class="form-inline my-2 my-lg-0" action="admin_page.php" method="GET">
-                <input class="form-control mr-sm-2" name="resv_id" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" name="submit" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+   <?php include_once('admin_navigation_menu.php') ?>
     <div style="height: 10vh"></div>
     <div class="container-fluid p-5">
         <p class="display-3 text-primary font-weight-bold">Reservation Overview</p>
-        <p class="display-4 text-primary font-weight-bold">Today</p>
+        <p class="display-4 text-primary font-weight-bold">Today <span class="h3">(<?php echo $today->format('d-M-Y') ?>)</span></p>
         <div class="container">
-            <div class="ui message">
-                <div class="header">
-                    <a href="admin_reservation.php" class="ui link btn-link">RESERVATION ID</a>
-                </div>
-                <table class="ui celled table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Date in</th>
-                            <th>Date out</th>
-                            <th>Meal</th>
-                            <th>Status</th>
-                            <th>Room type</th>
-                            <th>Card</th>
-                            <th>Price</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td data-label="Name">James</td>
-                            <td data-label="Age">24</td>
-                            <td data-label="Job">Engineer</td>
-                            <td data-label="Name">Jill</td>
-                            <td data-label="Age">26</td>
-                            <td data-label="Job">Engineer</td>
-                            <td data-label="Name">Jill</td>
-                            <td data-label="Age">26</td>
-                        </tr>
-                       
-                    </tbody>
-                </table>
-            </div>
+                    <?php
+                 
+                    if($resv_today!=null){
+                        show_reservation_overview($resv_today);
+                        }else{
+                            echo '<p class="h4 p-3 border border-primary text-center">Nothing for Today</p>';
+                        }
+                   ?>
+        </div>
+        <p class="display-4 text-primary font-weight-bold mt-5">Tommorow <span class="h3"> (<?php echo $tommorow->format('d-M-Y') ?>)</span></p>
+        <div class="container">
+                    <?php
+                  
+                    if($resv_tommorow!=null){
+                    show_reservation_overview($resv_tommorow);
+                    }else{
+                        echo '<p class="h4 p-3 border border-primary text-center">Nothing for tommorow</p>';
+                    }
+                   ?>
         </div>
     </div>
 
-
+<div style="height: 10vh"></div>
 
 
 </body>

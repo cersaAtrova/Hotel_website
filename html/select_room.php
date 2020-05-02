@@ -400,7 +400,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                             $price[0],
                             $price[1],
                             $e[0]['rm_size'],
-                            'Min stay ' . $e[0]['rc_days'] . ' days',
+                            $e[0]['rm_max_guest'],
                             $rm_img
                         );
                     }

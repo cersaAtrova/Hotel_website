@@ -342,6 +342,19 @@ function get_reservation_facilities_price($id)
     $prep->closeCursor();
     return $total;
 }
+function get_member_by_id($member_id)
+{
+    global $db;
+    $query = ' SELECT * FROM Member
+               WHERE member_id=?';
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $member_id);
+    $prep->execute();
+    $member = $prep->fetch();
+
+    $prep->closeCursor();
+    return $member;
+}
 function insert_guest_reservation($id, $name, $last, $country, $tel)
 {
 
@@ -423,6 +436,98 @@ function get_reservation_by_resv_id($resv_id)
     $prep->closeCursor();
     return $fa;
 }
+function get_reservation_by_check_in($check_in, $check_in_to = null, $status = null)
+{
+
+    if ($status == null) {
+        $status = "Confirm|Cancelled";
+    }
+
+    if ($check_in_to == null) {
+        $check_in_to = $check_in;
+    }
+
+
+    global $db;
+    $query = 'SELECT *
+            FROM Reservation
+            WHERE resv_check_in>=?
+            AND resv_check_in<=?
+            AND resv_status REGEXP ?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $check_in->format('Y-m-d'));
+    $prep->bindValue(2, $check_in_to->format('Y-m-d'));
+    $prep->bindValue(3, $status);
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_reservation_by_check_out($check_out, $check_out_to = null, $status = null)
+{
+    if ($status == null) {
+        $status = "Confirm|Cancelled";
+    }
+    if ($check_out_to == null) {
+        $check_out_to = $check_out;
+    }
+
+    global $db;
+    $query = 'SELECT *
+            FROM Reservation
+            WHERE resv_check_out>=?
+            AND resv_check_out<=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $check_out->format('Y/m/d'));
+    $prep->bindValue(2, $check_out_to->format('Y/m/d'));
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+function get_reservation_by_day_booked($day_book, $day_book_to = null, $status = null)
+{
+    if ($status == null) {
+        $status = "Confirm|Cancelled";
+    }
+    if ($day_book_to == null) {
+        $date = (new DateTime($day_book))->add(new DateInterval("P1D"));
+    } else {
+        $date = (new DateTime($day_book_to))->add(new DateInterval("P1D"));
+    }
+
+    global $db;
+    $query = 'SELECT *
+            FROM Reservation
+            WHERE resv_check_out>=?
+            AND resv_check_out<=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $day_book->format('Y/m/d'));
+    $prep->bindValue(2, $date->format('Y/m/d'));
+    $prep->execute();
+    $fa = $prep->fetchAll();
+    $prep->closeCursor();
+    return $fa;
+}
+
+function get_credit_card_by_resv_id($resv_id)
+{
+    global $db;
+    $query = 'SELECT *
+            FROM Credit_card
+            WHERE resv_reference=?';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(1, $resv_id);
+    $prep->execute();
+    $fa = $prep->fetch();
+    $prep->closeCursor();
+    return $fa;
+}
+
 function get_total_guest($resv_id)
 {
     global $db;
@@ -487,8 +592,11 @@ function update_availability($rm_type, $date, $days)
     $prep->closeCursor();
     return false;
 }
-function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
+function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv, $status = null)
 {
+    if ($status == null) {
+        $status = 'Valid';
+    }
     global $db;
     $query = 'UPDATE Credit_card
               SET cc_full_name=:fname,
@@ -506,7 +614,7 @@ function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
         $prep->bindValue(':moth', $moth);
         $prep->bindValue(':eyear', $year);
         $prep->bindValue(':cvv', $cvv);
-        $prep->bindValue(':stats', 'Valid');
+        $prep->bindValue(':stats', $status);
         if ($prep->execute()) {
             return true;
             $prep->closeCursor();
@@ -517,4 +625,132 @@ function update_credit_card($resv_reference, $name, $number, $moth, $year, $cvv)
     } catch (PDOException $e) {
         return $e->getMessage();
     }
+}
+function update_room_rate($date, $rm_price, $extra_person, $kids_price)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Room_rate 
+              SET rr_price= :rmprice,
+                  rr_extra_person= :exprice,
+                  rr_kids= :kprice
+              WHERE rr_date=:dates';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':rmprice', $rm_price);
+    $prep->bindValue(':exprice', $extra_person);
+    $prep->bindValue(':kprice', $kids_price);
+    $prep->bindValue(':dates', $date);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+
+function update_room_constraint($rm_type, $date, $days)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Room_constraint
+              SET rc_days= :cdays
+              WHERE rm_type =:id 
+              AND rc_date=:dates';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $rm_type);
+    $prep->bindValue(':dates', $date);
+    $prep->bindValue(':cdays', $days);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+
+function insert_room_constraint($rm_type, $date)
+{
+    global $db;
+    $query = 'INSERT INTO Room_constraint()
+              VALUES(:dates,:id,:cdays)';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $rm_type);
+    $prep->bindValue(':dates', $date);
+    $prep->bindValue(':cdays', 1);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+function insert_room_rate($date, $rm_price, $extra_person, $kids_price)
+{
+    global $db;
+    $query = 'INSERT INTO Room_rate()
+              VALUES(:dates,:rmprice,:exprice,:kprice)';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':rmprice', $rm_price);
+    $prep->bindValue(':exprice', $extra_person);
+    $prep->bindValue(':kprice', $kids_price);
+    $prep->bindValue(':dates', $date);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+function insert_room_availability($date, $rm_type)
+{
+    global $db;
+    $query = 'INSERT INTO Room_availability()
+              VALUES(:dates,:id,:cdays,:stats)';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $rm_type);
+    $prep->bindValue(':dates', $date);
+    $prep->bindValue(':cdays', 0);
+    $prep->bindValue(':stats','Open');
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+
+
+function get_all_meal_price()
+{
+    // 
+    global $db;
+    $query = 'SELECT * FROM Room_meal_price ORDER BY rm_price_diff';
+    $prep = $db->prepare($query);
+    $prep->execute();
+    $re = $prep->fetchAll();
+    $prep->closeCursor();
+    return $re;
+}
+
+function update_meal_price($meal, $price, $kids_price)
+{
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Room_meal_price
+              SET rm_price_diff= :price,
+                  rm_kids_price= :kids
+              WHERE rm_meal=:meal';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':meal', $meal);
+    $prep->bindValue(':price', $price);
+    $prep->bindValue(':kids', $kids_price);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
 }

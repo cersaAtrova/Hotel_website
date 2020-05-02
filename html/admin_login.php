@@ -6,15 +6,16 @@ session_start();
 //============\\
 if (isset($_POST['submit'])) {
     $query = 'SELECT * 
-        FROM Sysadmin
-        WHERE sys_username=? AND sys_password=?';
+              FROM Sysadmin
+              WHERE sys_username=? AND sys_password=?';
     $log = $db->prepare($query);
     $log->bindValue(1, $_POST['username']);
     $log->bindValue(2, $_POST['passwd']);
-    if ($log->execute()) {
+
+    $log->execute();
+    if ($log->rowCount() == 1) {
         header('Location: admin_page.php');
         die();
-    } else {
     }
 }
 ?>
@@ -27,9 +28,9 @@ if (isset($_POST['submit'])) {
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/c_scale,w_50/v1587840916/Vrissiana/kb6QbnwXswcsbkcKtiCbwPXaln9XYAMhbOFW0dPaJm33Dt2A1qwwhMw8FZLmfO5q2so8Hfl5gy41VxgxbBnte0RCEVoKSEr8vr2wzgH4DCTyVNR4NkvcqOWClzW0_dko7d7.ico" type="image/x-icon" />
 
     <title>Vrissiana Beach Hotel | Account</title>
-  
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
     <link rel="stylesheet" href="/CSS/style.css">
@@ -38,7 +39,7 @@ if (isset($_POST['submit'])) {
 
 <body>
     <div style="height: 20vh"></div>
-   
+
     <div class="container-fluid">
         <div class="container text-center">
             <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">

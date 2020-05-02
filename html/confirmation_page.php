@@ -51,7 +51,7 @@ session_start();
             Having trouble? <a href="">Contact us</a>
         </p>
         <p class="lead">
-            <a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to homepage</a>
+            <a class="btn btn-primary btn-sm" href="homepage.php" role="button">Continue to homepage</a>
         </p>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

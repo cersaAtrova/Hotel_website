@@ -23,6 +23,11 @@ $('#rangeend').calendar({
 });
 $(document).ready(function () {
 
+    $('.admin_logout').click(function(){
+        var href='admin_login.php';
+        window.location=href;
+    });
+
     $('.flex-box-form').on('change', '#adults', function () {
         validAdults('#kids', '#adults');
     });

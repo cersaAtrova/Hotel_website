@@ -316,3 +316,24 @@ cursor: pointer !important;
 .box_shadow{
   box-shadow: 3px 5px 4px 3px grey;
 }
+
+
+.admin_room_rate input:required {
+  border: 1px solid #007bff;
+}
+.admin_room_rate input:invalid {
+  border: 1px solid #dc3545;
+}
+
+.admin_room_rate input:required:valid {
+  border: 1px solid #007bff;
+}
+.admin_room_rate input:invalid {
+  border: 1px solid #dc3545;
+}
+.admin_room_rate input:required:focus:valid {
+  border: 1px solid #007bff;
+}
+.admin_room_rate input:focus:invalid {
+  border: 1px solid #dc3545;
+}

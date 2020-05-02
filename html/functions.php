@@ -993,6 +993,19 @@ rooms;
   echo $msg;
 }
 
+function valid_rate($rate)
+{
+ 
+  if (is_numeric($rate)) {
+    return true;
+  }
+  if (substr($rate, 0, 1) == '*' || substr($rate, 0, 1) == '+') {
+    if (is_numeric(substr($rate, 1))) {
+      return true;
+    }
+  }
+  return false;
+}
 
 
 function is_room_available($rm_type, $check_in, $check_out)
@@ -1048,16 +1061,45 @@ function get_all_available_rooms($check_in, $check_out, $rm_type, $total_room)
 
   return  $rm_availability;
 }
-function get_availability($check_in,$rm_type)
+function get_availability($check_in, $rm_type)
 {
   global $db;
   $query  = 'SELECT * From Room_availability
-             WHERE ra_date=:checkin  AND rm_type=:rm'  ;
-  $rm_availability= $db->prepare($query);
+             WHERE ra_date=:checkin  AND rm_type=:rm';
+  $rm_availability = $db->prepare($query);
   $rm_availability->bindValue(':checkin', $check_in);
-  
+
   $rm_availability->bindValue(':rm', $rm_type);
-  
+
+  $rm_availability->execute();
+  $ave = $rm_availability->fetch();
+  $rm_availability->closeCursor();
+
+  return $ave;
+}
+function get_constraint($check_in, $rm_type)
+{
+  global $db;
+  $query  = 'SELECT * From Room_constraint
+             WHERE rc_date=:checkin  AND rm_type=:rm';
+  $rm_availability = $db->prepare($query);
+  $rm_availability->bindValue(':checkin', $check_in);
+
+  $rm_availability->bindValue(':rm', $rm_type);
+
+  $rm_availability->execute();
+  $ave = $rm_availability->fetch();
+  $rm_availability->closeCursor();
+
+  return $ave;
+}
+function get_room_rate_by_date($check_in)
+{
+  global $db;
+  $query  = 'SELECT * From Room_rate
+             WHERE rr_date=:checkin';
+  $rm_availability = $db->prepare($query);
+  $rm_availability->bindValue(':checkin', $check_in);
   $rm_availability->execute();
   $ave = $rm_availability->fetch();
   $rm_availability->closeCursor();
@@ -1068,7 +1110,7 @@ function get_availability($check_in,$rm_type)
 function get_room_type()
 {
   global $db;
-  $query  = 'SELECT rm_type From Room';
+  $query  = 'SELECT rm_type From Room ORDER BY rm_price_diff';
   $rm = $db->prepare($query);
   $rm->execute();
   $rm_type = $rm->fetchAll();
@@ -1112,20 +1154,19 @@ function get_room_image($rm_type)
   $ri->closeCursor();
   return $rm_img;
 }
-// function get_standart_daily_rate($check_in, $check_out)
-// {
-//   global $db;
-//   $query = 'SELECT *
-//              From Room_rate
-//              WHERE ra_date >= ? AND ra_date < ?';
-//   $rm_rr = $db->prepare($query);
-//   $rm_rr->bindValue(1, $check_in->format('Y/m/d'));
-//   $rm_rr->bindValue(2, $check_out->format('Y/m/d'));
-//   $rm_rr->execute();
-//   $rm_rate = $rm_rr->fetchAll();
-//   $rm_rr->closeCursor();
-//   return $rm_rate;
-// }
+function get_reservation_daily_rate($resv_id)
+{
+  global $db;
+  $query = 'SELECT *
+             From Daily_rate
+             WHERE resv_reference = ?';
+  $rm_rr = $db->prepare($query);
+  $rm_rr->bindValue(1, $resv_id);
+  $rm_rr->execute();
+  $rm_rate = $rm_rr->fetchAll();
+  $rm_rr->closeCursor();
+  return $rm_rate;
+}
 
 
 
@@ -1334,5 +1375,59 @@ function is_telephone_exist($tel)
     return  false;
   } else {
     return $login;
+  }
+}
+
+function show_reservation_overview($Date)
+{
+  foreach ($Date as $e) {
+    $card = get_credit_card_by_resv_id($e['resv_reference']);
+
+    $resv_profile = get_reservation_guest_profile($e['resv_reference']);
+    $resv_facility = get_reservation_facilities_price($e['resv_reference']);
+    $resv_total = get_reservation_price($e['resv_reference']);
+    if ($resv_facility[0] != null) {
+      $resv_total[0] += $resv_facility[0];
+    }
+    if ($e['resv_status'] == 'Cancelled') {
+      $color = 'text-danger';
+    } else {
+      $color = '';
+    }
+    $resv = <<<print
+            <div class="ui message">
+            <div class="header">
+                <a href="admin_view_reservation.php?id={$e['resv_reference']}" class="ui link btn-link">{$e['resv_reference']}</a>
+            </div>
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date in</th>
+                    <th>Date out</th>
+                    <th>Meal</th>
+                    <th>Status</th>
+                    <th>Room type</th>
+                    <th>Card</th>
+                    <th>Price</th>
+
+                </tr>
+                </thead>
+                <tbody>
+            <tr class="{$color}">
+                <td data-label="Name">{$resv_profile['resv_name']} {$resv_profile['resv_last']}</td>
+                <td data-label="Date in">{$e['resv_check_in']}</td>
+                <td data-label="Date out">{$e['resv_check_out']}</td>
+                <td data-label="meal">{$e['resv_meal_level']}</td>
+                <td data-label="Status" class="{$color}">{$e['resv_status']}</td>
+                <td data-label="Room type">{$e['rm_type']}</td>
+                <td data-label="Card">{$card['cc_card_status']}</td>
+                <td data-label="Price">{$resv_total[0]}</td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
+print;
+    echo $resv;
   }
 }
