@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
 
     <div class="container-fluid">
         <div class="container text-center">
-            <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
                 <p class="display-3">Admin Login</p>
 
                 <div class="container w-50 pt-5 mt-5">

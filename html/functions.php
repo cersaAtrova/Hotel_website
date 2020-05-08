@@ -150,7 +150,7 @@ function footer()
         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
     
           <!-- Content -->
-          <h6 class="text-uppercase font-weight-bold"><img src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="" srcset=""></h6>
+          <h6 class="text-uppercase font-weight-bold"><img src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="logo" srcset=""></h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p class="text-info" style="font-size: 1.2rem">A <span style="font-size: 1.5rem"><em> MEMBER </em></span> of <span style="font-size: 1.8rem; display: inline-block"> Tsokkos Hotels</span>.</p>
     

@@ -111,9 +111,7 @@ $(document).ready(function () {
 
     });
 
-    $('.first_room_active').click();
     $('.fa_extra_Room_1').click(function () {
-
         if (!$(this).hasClass('fa_checked_Room_1')) {
             $('.ext_fac_Room_1').text(parseInt($('.ext_fac_Room_1').text()) + parseInt($(this).attr('data-cost')))
             $('.total_Room_1').text(parseInt($('.total_Room_1').text()) + parseInt($(this).attr('data-cost')));

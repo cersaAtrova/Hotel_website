@@ -60,6 +60,7 @@ if (isset($_POST['submit'])) {
                     $member = is_email_exist($user_email);
                     $existing_guest = false;
                     if ($member != false) {
+                        $_SESSION['member'] = get_member($user_email);
                         $existing_guest = true;
                     }
 
@@ -74,6 +75,7 @@ if (isset($_POST['submit'])) {
                             if ($member_id == false) {
                                 $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
                             } else {
+                                $_SESSION['member'] = get_member($_POST['email']);
                                 // get reservation reference (id)
                                 $resv_id = random_reservation_id() . '/1';
                                 $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $member_id, $_SESSION['room_1_selected']['rm_type']);
@@ -131,6 +133,7 @@ if (isset($_POST['submit'])) {
                                         $repeat = strtotime("+1 day", strtotime($begin));
                                         $begin = date('Y-m-d', $repeat);
                                     }
+                                    $_SESSION['reservation_id'] = array($resv_id . $r1);
                                     header('Location: confirmation_page.php');
                                     die();
                                 }
@@ -193,6 +196,7 @@ if (isset($_POST['submit'])) {
                                     $repeat = strtotime("+1 day", strtotime($begin));
                                     $begin = date('Y-m-d', $repeat);
                                 }
+                                $_SESSION['reservation_id'] = array($resv_id . $r1);
                                 header('Location: confirmation_page.php');
                                 die();
                             }
@@ -211,6 +215,7 @@ if (isset($_POST['submit'])) {
                             if ($member_id == false) {
                                 $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
                             } else {
+                                $_SESSION['member'] = get_member($_POST['email']);
                                 // get reservation reference (id)
                                 $resv_id = random_reservation_id();
                                 $r1 = '/1';
@@ -316,6 +321,7 @@ if (isset($_POST['submit'])) {
                                         $repeat = strtotime("+1 day", strtotime($begin));
                                         $begin = date('Y-m-d', $repeat);
                                     }
+                                    $_SESSION['reservation_id'] = array($resv_id . $r1, $resv_id . $r2);
                                     header('Location: confirmation_page.php');
                                     die();
                                 }
@@ -427,6 +433,7 @@ if (isset($_POST['submit'])) {
                                     $repeat = strtotime("+1 day", strtotime($begin));
                                     $begin = date('Y-m-d', $repeat);
                                 }
+                                $_SESSION['reservation_id'] = array($resv_id . $r1, $resv_id . $r2);
                                 header('Location: confirmation_page.php');
                                 die();
                             }
@@ -446,6 +453,7 @@ if (isset($_POST['submit'])) {
                                 $error_room_selected = 'We cause some errors. Your Reservation is not accepted. Please try again letter';
                             } else {
                                 // get reservation reference (id)
+                                $_SESSION['member'] = get_member($_POST['email']);
                                 $resv_id = random_reservation_id();
                                 $r1 = '/1';
                                 $r2 = '/2';
@@ -595,6 +603,7 @@ if (isset($_POST['submit'])) {
                                                 $repeat = strtotime("+1 day", strtotime($begin));
                                                 $begin = date('Y-m-d', $repeat);
                                             }
+                                            $_SESSION['reservation_id'] = array($resv_id . $r1, $resv_id . $r2, $resv_id . $r3);
                                             header('Location: confirmation_page.php');
                                             die();
                                         }
@@ -752,6 +761,7 @@ if (isset($_POST['submit'])) {
                                             $repeat = strtotime("+1 day", strtotime($begin));
                                             $begin = date('Y-m-d', $repeat);
                                         }
+                                        $_SESSION['reservation_id'] = array($resv_id . $r1, $resv_id . $r2, $resv_id . $r3);
                                         header('Location: confirmation_page.php');
                                         die();
                                     }
@@ -796,7 +806,7 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
     <link rel="stylesheet" href="../CSS/validate_card.css">
-  
+
 
     <link rel="stylesheet" href="/CSS/style.css">
     <link rel="stylesheet" href="/CSS/booking_style.css">
@@ -826,7 +836,7 @@ if (isset($_POST['submit'])) {
     <div class="container-fluid">
 
         <!-- ADD TO THE FORM THE LOCATION OF THE CONFIRMATION -->
-        <form action="" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
             <div class="m-auto" style="width: 80%">
                 <div class="row ui text-white" style="background-color: rgba(29, 29, 92, 0.8);">
                     <div class="col-sm p-5">
@@ -1038,40 +1048,41 @@ if (isset($_POST['submit'])) {
                         $('.callback.example .checkbox')
                             .checkbox()
                             .first().checkbox({
-                                onChecked: function() {
-                                    $console.append('onChecked called<br>');
-                                },
-                                onUnchecked: function() {
-                                    $console.append('onUnchecked called<br>');
-                                },
-                                onEnable: function() {
-                                    $console.append('onEnable called<br>');
-                                },
-                                onDisable: function() {
-                                    $console.append('onDisable called<br>');
-                                },
-                                onDeterminate: function() {
-                                    $console.append('onDeterminate called<br>');
-                                },
-                                onIndeterminate: function() {
-                                    $console.append('onIndeterminate called<br>');
-                                },
-                                onChange: function() {
-                                    $console.append('onChange called<br>');
-                                }
+                                // onChecked: function() {
+                                //     $console.append('onChecked called<br>');
+                                // },
+                                // onUnchecked: function() {
+                                //     $console.append('onUnchecked called<br>');
+                                // },
+                                // onEnable: function() {
+                                //     $console.append('onEnable called<br>');
+                                // },
+                                // onDisable: function() {
+                                //     $console.append('onDisable called<br>');
+                                // },
+                                // onDeterminate: function() {
+                                //     $console.append('onDeterminate called<br>');
+                                // },
+                                // onIndeterminate: function() {
+                                //     $console.append('onIndeterminate called<br>');
+                                // },
+                                // onChange: function() {
+                                //     $console.append('onChange called<br>');
+                                // }
                             });
                         // bind events to buttons
                         $('.callback.example .button')
                             .on('click', function() {
                                 $('.callback .checkbox').checkbox($(this).data('method'));
                             });
-                            $('.first_room_active').click();
+                        $('.first_room_active').click();
                     </script>
 
                 </div>
             </div>
         </form>
     </div>
+    <script src="../script/script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../script/jquery.payform.min.js"></script>

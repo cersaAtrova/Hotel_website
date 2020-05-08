@@ -302,6 +302,20 @@ function update_member($id, $name, $last, $email, $country, $passwd, $tel)
     $prep->execute();
     $prep->closeCursor();
 }
+function update_member_password($id, $passwd)
+{
+    $hash = password_hash($passwd, PASSWORD_BCRYPT);
+    global $db;
+    $query = 'UPDATE LOW_PRIORITY Member
+            SET
+            member_password= :passwd
+            WHERE member_id =:id';
+    $prep = $db->prepare($query);
+    $prep->bindValue(":passwd", $hash);
+    $prep->bindValue(":id", $id);
+    $prep->execute();
+    $prep->closeCursor();
+}
 function get_reservation_by_member_id($id)
 {
     global $db;
@@ -713,7 +727,7 @@ function insert_room_availability($date, $rm_type)
     $prep->bindValue(':id', $rm_type);
     $prep->bindValue(':dates', $date);
     $prep->bindValue(':cdays', 0);
-    $prep->bindValue(':stats','Open');
+    $prep->bindValue(':stats', 'Open');
     if ($prep->execute()) {
         $prep->closeCursor();
         return true;
