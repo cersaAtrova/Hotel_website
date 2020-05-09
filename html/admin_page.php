@@ -3,8 +3,8 @@ require_once('insert_functions.php');
 require_once('functions.php');
 session_start();
 
-$today=new DateTime("100 days");
-$tommorow=new DateTime("101 days");
+$today=new DateTime("");
+$tommorow=new DateTime("+1 day");
 $resv_tommorow = get_reservation_by_check_in($tommorow);
 $resv_today = get_reservation_by_check_in($today);
 ?>
