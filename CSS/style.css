@@ -1,8 +1,9 @@
 * {
   box-sizing: border-box;
 }
+
 #error {
-  width:600px;
+  width: 600px;
   padding: 50px 30px;
   background-color: rgba(255, 0, 0, .1);
   color: red;
@@ -10,13 +11,57 @@
   font-family: helvetica;
   font-size: 16px;
   text-align: center;
-  margin: 100px auto;    
+  margin: 100px auto;
 }
+
 /* font-family: 'Roboto', sans-serif;
 
     font-family: 'Raleway', sans-serif;
 
     font-family: 'Open Sans Condensed', sans-serif */
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 2px;
+  width: 4px;
+  background: #000;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+  left: 2px;
+  animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+  left: 8px;
+  animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+  left: 14px;
+  animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+  0% {
+    top: 4px;
+    height: 16px;
+  }
+
+  50%,
+  100% {
+    top: 12px;
+    height: 8px;
+  }
+}
 
 body {
   font-family: 'Raleway', sans-serif;
@@ -62,10 +107,12 @@ body {
   background-color: rgb(10, 5, 53) !important;
 
 }
-.navbar-nav{
+
+.navbar-nav {
   align-items: center !important;
   font-size: 1.3em !important;
 }
+
 .btn-nav {
   display: inline-block;
   padding: 1rem 1.2rem;
@@ -161,7 +208,7 @@ body {
   border: 1px solid #ffffff;
 }
 
-.box-content{
+.box-content {
   z-index: 5;
   background-color: rgba(29, 29, 92, 1);
   box-sizing: border-box;
@@ -169,6 +216,7 @@ body {
   border: 1px solid #ffffff;
   margin: 5px 20px;
 }
+
 .pad-25 {
   padding: 1em;
 }
@@ -176,39 +224,44 @@ body {
 .pad-20 {
   padding: 0 1rem;
 }
-.rm_preferences label{
-color: white !important;
-font-size: 1.2rem !important;
-cursor: pointer !important;
+
+.rm_preferences label {
+  color: white !important;
+  font-size: 1.2rem !important;
+  cursor: pointer !important;
 }
-.rm_preferences .row{
+
+.rm_preferences .row {
   padding-top: 10px;
 }
 
 @media only screen and (max-width: 590px) {
-  #logo_img{
+  #logo_img {
     width: 20%;
     height: 15%;
   }
 
-  .overview>div{
-    width: 90%!important;
+  .overview>div {
+    width: 90% !important;
   }
 }
 
 @media only screen and (max-width: 890px) {
-  #logo_img{
+  #logo_img {
     width: 30%;
     height: 25%;
   }
- .btn-nav{
-   padding: .8em;
-   letter-spacing: 0;
-   text-indent: 0;
- }
-  .overview>div{
+
+  .btn-nav {
+    padding: .8em;
+    letter-spacing: 0;
+    text-indent: 0;
+  }
+
+  .overview>div {
     width: 80% !important;
   }
+
   .col-md-8 {
     width: 100vh !important;
     max-width: 100%;
@@ -232,7 +285,8 @@ cursor: pointer !important;
   .box-content-image-left {
     margin: 0;
   }
-  .overview>div{
+
+  .overview>div {
     width: 60%;
   }
 }
@@ -242,7 +296,8 @@ cursor: pointer !important;
     padding: 0.6em;
   }
 }
-.overview>div{
+
+.overview>div {
   width: 40%;
 }
 
@@ -281,7 +336,8 @@ cursor: pointer !important;
 /*===============*/
 /*Policy*/
 /*===============*/
-.policy-container,.container-term-of-use {
+.policy-container,
+.container-term-of-use {
   width: 70%;
   padding: 25px 0;
   margin: auto;
@@ -289,31 +345,39 @@ cursor: pointer !important;
   font-size: 1.2rem;
 }
 
-.box-policy,.box-term-of-use {
+.box-policy,
+.box-term-of-use {
   width: 100%;
   padding: 25px;
-  
+
 }
-.policy-container>h2,.container-term-of-use>h2{
+
+.policy-container>h2,
+.container-term-of-use>h2 {
   padding-bottom: 15px;
 }
-.box-policy >h1,.box-term-of-use>h1{
+
+.box-policy>h1,
+.box-term-of-use>h1 {
   text-align: center;
 }
+
 /*================*/
 /*Booking Calendar*/
 /*================*/
-.box-calendar{
+.box-calendar {
   width: 100%;
   height: 100%;
 }
-.content-calendar{
+
+.content-calendar {
   width: 50%;
   height: 50%;
 
   margin: auto auto;
 }
-.box_shadow{
+
+.box_shadow {
   box-shadow: 3px 5px 4px 3px grey;
 }
 
@@ -321,6 +385,7 @@ cursor: pointer !important;
 .admin_room_rate input:required {
   border: 1px solid #007bff;
 }
+
 .admin_room_rate input:invalid {
   border: 1px solid #dc3545;
 }
@@ -328,12 +393,15 @@ cursor: pointer !important;
 .admin_room_rate input:required:valid {
   border: 1px solid #007bff;
 }
+
 .admin_room_rate input:invalid {
   border: 1px solid #dc3545;
 }
+
 .admin_room_rate input:required:focus:valid {
   border: 1px solid #007bff;
 }
+
 .admin_room_rate input:focus:invalid {
   border: 1px solid #dc3545;
 }
