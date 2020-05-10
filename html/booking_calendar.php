@@ -3,7 +3,7 @@
 require_once 'functions.php';
 require_once '../connect_dbase.php';
 session_start();
-
+$_SESSION = array();
 
 if (isset($_GET['submit'])) {
     $check_in_date = new DateTime($_REQUEST['check_in']);
@@ -123,7 +123,7 @@ if (isset($_GET['submit'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    
+
     <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
@@ -150,7 +150,24 @@ if (isset($_GET['submit'])) {
     <?php navigation_bar();
     ?>
     <div style="height: 20vh"></div>
+    <div class="container text-center">
+        <div class="ui breadcrumb p-3">
+            <div class="active section">Calendar
+                <div class="lds-facebook">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <i class="right arrow icon divider"></i>
+            <div class=" section">Select Room Type</div>
+            <i class="right arrow icon divider"></i>
+            <div class=" section">Billing Information</div>
+            <i class="right arrow icon divider"></i>
+            <div class=" section">Booking Confirmation</div>
+        </div>
 
+    </div>
     <div class="ui placeholder segment">
         <form id="date-form" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
 
@@ -189,7 +206,7 @@ if (isset($_GET['submit'])) {
                         <div class="flex-box-form">
                             <div class="col-12">
                                 <hr style="background-color:black">
-                                <h3>Select Guest</h3>
+                                <h3>Select Guest Number</h3>
                             </div>
                         </div>
 
@@ -211,7 +228,7 @@ if (isset($_GET['submit'])) {
                                 </div>
                             </div>
                             <div class="col-4">
-                                <label for="kids"><span>&starf;</span> Kids (2-12)</label>
+                                <label for="kids"><span></span> Kids (2-12)</label>
                                 <div class="ui ">
                                     <div class="field">
                                         <select name="kids" id="kids" class="dropdown-select kids" required>
@@ -225,7 +242,7 @@ if (isset($_GET['submit'])) {
                                 </div>
                             </div>
                             <div class="col-4">
-                                <label for="last-name"><span>&starf;</span> Infants (0-2)</label>
+                                <label for="last-name"><span></span> Infants (0-2)</label>
 
                                 <div class="ui ">
                                     <div class="field">
@@ -245,7 +262,7 @@ if (isset($_GET['submit'])) {
                         <div class="flex-box-form" id="room3"></div>
                         <div class="flex-box-form">
                             <div class="col-12">
-                                <label for="room"><span>&starf;</span> Select Room</label>
+                                <label for="room"><span>&starf;</span> Select number of Rooms</label>
                                 <select name="room" id="room" class="dropdown-select room" required>
                                     <option selected value="1">Room 1</option>
                                     <option value="2">Room 2</option>
@@ -256,7 +273,7 @@ if (isset($_GET['submit'])) {
                         <div class="flex-box-form">
                             <div class="col-12">
                                 <hr style="background-color:black">
-                                <h3>Select Meal</h3>
+                                <h3>Select Meal option</h3>
                             </div>
                         </div>
                         <div class="flex-box-form">
@@ -278,7 +295,7 @@ if (isset($_GET['submit'])) {
                         $('#inline_calendar')
                             .calendar({
                                 type: 'date',
-                              
+
                                 eventClass: ' red',
                                 eventDates: [
                                     new Date(2020, 3, 20), //no message tooltip
