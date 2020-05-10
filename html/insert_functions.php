@@ -198,6 +198,25 @@ function insert_guest($people, $qnt, $resv_reference)
         return $e->getMessage();
     }
 }
+function update_total_guest_reservation($people, $qnt, $resv_reference)
+{
+    global $db;
+    $query = 'UPDATE Resv_total_guest
+              SET rtg_people=:people,
+                  rtg_qnt=:qnt
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':people', $people);
+        $prep->bindValue(':qnt', $qnt);
+        $prep->bindValue(':id', $resv_reference);
+        $prep->execute();
+        $prep->closeCursor();
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
 function insert_new_reservation($id, $resv_meal, $resv_type, $member_id, $rm_type)
 {
     if ($resv_meal == 'BB') {
@@ -238,6 +257,44 @@ function insert_new_reservation($id, $resv_meal, $resv_type, $member_id, $rm_typ
     }
 }
 
+function update_reservation($id, $resv_meal, $resv_type, $member_id, $rm_type)
+{
+    if ($resv_meal == 'BB') {
+        $resv_meal = 'Bed & Breakfast';
+    } elseif ($resv_meal == 'HB') {
+        $resv_meal = 'Half Board';
+    } elseif ($resv_meal == 'FB') {
+        $resv_meal = 'Full Board';
+    } elseif ($resv_meal == 'PAI') {
+        $resv_meal = 'Premium All Inclusive';
+    }
+    $check_in = date('Y-m-d', strtotime($_SESSION['room_info']['check_in']));
+    $check_out = date('Y-m-d', strtotime($_SESSION['room_info']['check_out']));
+    global $db;
+    $query = 'UPDATE Reservation
+                SET resv_check_in=:checkin,
+                    resv_check_out=:checkout,
+                    resv_meal_level=:meal,
+                    resv_type=:btype,
+                    resv_status=:stats,
+                    member_id=:member,
+                    rm_type=:rmtype
+                WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $id);
+        $prep->bindValue(':checkin', $check_in);
+        $prep->bindValue(':checkout', $check_out);
+        $prep->bindValue(':meal', $resv_meal);
+        $prep->bindValue(':btype', $resv_type);
+        $prep->bindValue(':stats', 'Confirm');
+        $prep->bindValue(':member', $member_id);
+        $prep->bindValue(':rmtype', $rm_type);
+        $prep->execute();
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
 
 function insert_into_daily_rate($resv_reference, $date, $price)
 {
@@ -249,12 +306,29 @@ function insert_into_daily_rate($resv_reference, $date, $price)
         $prep->bindValue(1, $resv_reference);
         $prep->bindValue(2, $date);
         $prep->bindValue(3, $price);
-
         if ($prep->execute()) {
             return true;
         } else {
             return false;
         }
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+function update_daily_rate($resv_reference, $date, $price)
+{
+    global $db;
+    $query = 'UPDATE Daily_rate
+                     dr_date=:cdate,
+                     dr_price=:price
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $resv_reference);
+        $prep->bindValue(':cdate', $date);
+        $prep->bindValue(':price', $price);
+        $prep->execute();
+        $prep->closeCursor();
     } catch (PDOException $e) {
         return $e->getMessage();
     }
@@ -569,6 +643,82 @@ function get_reservation_guest_profile($resv_id)
     $fa = $prep->fetch();
     $prep->closeCursor();
     return $fa;
+}
+function update_guest_profile_reservation($resv_id, $name, $last, $country, $tel)
+{
+    global $db;
+    $query = 'UPDATE Guest_reservation
+                     resv_name=:cname,
+                     resv_last=:clast,
+                     resv_country=:country,
+                     resv_tel=:tel
+              WHERE resv_reference=:resv_id';
+
+    $prep = $db->prepare($query);
+    $prep->bindValue(':id', $resv_id);
+    $prep->bindValue(':cname', $name);
+    $prep->bindValue(':clast', $last);
+    $prep->bindValue(':country', $country);
+    $prep->bindValue(':tel', $tel);
+    if ($prep->execute()) {
+        $prep->closeCursor();
+        return true;
+    }
+    $prep->closeCursor();
+    return false;
+}
+
+
+function update_allergies($resv_reference, $alergy)
+{
+    global $db;
+    $query = 'UPDATE Allergy
+                    allergy_name=:aname
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $resv_reference);
+        $prep->bindValue(':aname', $alergy);
+        $prep->execute();
+        $prep->closeCursor();
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+function update_preferences($resv_reference, $preferences)
+{
+    global $db;
+    $query = 'UPDATE Preferences
+                    pre_name=:aname
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $resv_reference);
+        $prep->bindValue(':aname', $preferences);
+        $prep->execute();
+        $prep->closeCursor();
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
+function update_facility($resv_reference, $name, $price)
+{
+    global $db;
+    $query = 'UPDATE Preferences
+                    fa_name=:aname
+                    fa_price=:price
+              WHERE resv_reference=:id';
+    $prep = $db->prepare($query);
+    try {
+        $prep->bindValue(':id', $resv_reference);
+        $prep->bindValue(':aname', $name);
+        $prep->bindValue(':price', $price);
+        $prep->execute();
+        $prep->closeCursor();
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
 }
 function update_status_reservation($resv_id, $status)
 {

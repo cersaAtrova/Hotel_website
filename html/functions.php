@@ -283,6 +283,7 @@ print;
 
 function room_billining_information($check_in, $check_out, $rm_name, $adults, $kids, $infants, $num_room, $room_rate_selected, $rate_plan_selected)
 {
+  $subtotal = 0;
   $begin = date('M-d-Y', strtotime($check_in));
   foreach ($room_rate_selected as $pr) {
 
@@ -815,9 +816,9 @@ send;
 }
 
 
-function display_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img ,$rm_type=null)
+function display_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img, $rm_type = null, $modify = 'NAN')
 {
-  $rm=explode(' ', $rm_type);
+  $rm = explode(' ', $rm_type);
   $str = '';
   foreach ($img as $e) {
     if (empty($str)) {
@@ -867,7 +868,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                                   <p>Per night</p>
                               </div>
                               <div class="col">
-                              
+                              <input type="hidden" name="$modify" value="true">
                                   <input type="submit" name="non_refandable" value="Reserve" class="btn-nav btn-xl my-md-2 btn-primary">
                               </div>
                           </div>
