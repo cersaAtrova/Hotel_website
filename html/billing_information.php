@@ -1,8 +1,9 @@
 <?php
+session_start();
 require_once 'functions.php';
 require_once 'insert_functions.php';
 require_once 'countries.php';
-session_start();
+
 if (isset($_REQUEST['total_room'])) {
     if ($_REQUEST['total_room'] > 3) {
         header('Location: booking_calendar.php');
@@ -25,7 +26,7 @@ if ($_REQUEST['total_room'] == 1) {
     $room_name_selected = 'Room 1 ' . $_SESSION['room_1_selected']['rm_name'] . ', Room 2 ' . $_SESSION['room_2_selected']['rm_name'] . ', Room 3' . $_SESSION['room_3_selected']['rm_name'];
 }
 $check_in = date('M-d-Y', strtotime($_SESSION['room_info']['check_in']));
-$check_ = date('M-d-Y', strtotime($_SESSION['room_info']['check_in']));
+$check_out = date('M-d-Y', strtotime($_SESSION['room_info']['check_out']));
 
 $total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest']['adults'] + $_SESSION['room_3_guest']['adults'];
 $total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
@@ -121,7 +122,8 @@ if (isset($_POST['submit'])) {
                                     $in = new DateTime($check_in);
                                     $out = new DateTime($check_out);
                                     // find the difference of the days
-                                    $diff = $in->diff($out)->format('%a');
+                                    $diff = $in->diff($out);
+                                    $diff = $diff->format('%a');
                                     $begin = date('Y-m-d', strtotime($check_in));
 
                                     for ($i = 0; $i < $diff; $i++) {
@@ -184,12 +186,11 @@ if (isset($_POST['submit'])) {
                                 $in = new DateTime($check_in);
                                 $out = new DateTime($check_out);
                                 // find the difference of the days
-                                $diff = $in->diff($out)->format('%a');
+                                $diff = $in->diff($out);
+                                $diff = $diff->format('%a');
                                 $begin = date('Y-m-d', strtotime($check_in));
-
                                 for ($i = 0; $i < $diff; $i++) {
                                     $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
-
                                     $day = $ave['ra_days'];
                                     $day--;
                                     $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
@@ -305,19 +306,21 @@ if (isset($_POST['submit'])) {
                                     $in = new DateTime($check_in);
                                     $out = new DateTime($check_out);
                                     // find the difference of the days
-                                    $diff = $in->diff($out)->format('%a');
+                                    $diff = $in->diff($out);
+                                    $diff = $diff->format('%a');
                                     $begin = date('Y-m-d', strtotime($check_in));
 
                                     for ($i = 0; $i < $diff; $i++) {
                                         $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
-                                        $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
-
                                         $day = $ave['ra_days'];
-                                        $day2 = $ave2['ra_days'];
                                         $day--;
-                                        $day2--;
                                         $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
-                                        $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+
+                                        $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                        $day2 = $ave2['ra_days'];
+                                        $day2--;
+                                        $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave2['ra_date'], $day2);
+
                                         $repeat = strtotime("+1 day", strtotime($begin));
                                         $begin = date('Y-m-d', $repeat);
                                     }
@@ -417,19 +420,22 @@ if (isset($_POST['submit'])) {
                                 $in = new DateTime($check_in);
                                 $out = new DateTime($check_out);
                                 // find the difference of the days
-                                $diff = $in->diff($out)->format('%a');
+                                $diff = $in->diff($out);
+                                $diff = $diff->format('%a');
                                 $begin = date('Y-m-d', strtotime($check_in));
 
                                 for ($i = 0; $i < $diff; $i++) {
                                     $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
-                                    $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
-
                                     $day = $ave['ra_days'];
-                                    $day2 = $ave2['ra_days'];
                                     $day--;
-                                    $day2--;
+
                                     $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
-                                    $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
+
+                                    $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                    $day2 = $ave2['ra_days'];
+                                    $day2--;
+
+                                    $availability1 = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave2['ra_date'], $day2);
                                     $repeat = strtotime("+1 day", strtotime($begin));
                                     $begin = date('Y-m-d', $repeat);
                                 }
@@ -583,23 +589,36 @@ if (isset($_POST['submit'])) {
                                             $in = new DateTime($check_in);
                                             $out = new DateTime($check_out);
                                             // find the difference of the days
-                                            $diff = $in->diff($out)->format('%a');
+                                            $diff = $in->diff($out);
+                                            $diff = $diff->format('%a');
                                             $begin = date('Y-m-d', strtotime($check_in));
 
                                             for ($i = 0; $i < $diff; $i++) {
                                                 $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
-                                                $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
-                                                $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
-
                                                 $day = $ave['ra_days'];
-                                                $day2 = $ave2['ra_days'];
-                                                $day3 = $ave3['ra_days'];
                                                 $day--;
-                                                $day2--;
-                                                $day3--;
                                                 $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
-                                                $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
-                                                $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave['ra_date'], $day);
+
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            $begin = date('Y-m-d', strtotime($check_in));
+                                            for ($i = 0; $i < $diff; $i++) {
+                                                $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                                $day2 = $ave2['ra_days'];
+                                                $day2--;
+                                                $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave2['ra_date'], $day2);
+
+                                                $repeat = strtotime("+1 day", strtotime($begin));
+                                                $begin = date('Y-m-d', $repeat);
+                                            }
+                                            $begin = date('Y-m-d', strtotime($check_in));
+                                            for ($i = 0; $i < $diff; $i++) {
+                                                $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
+                                                $day3 = $ave3['ra_days'];
+                                                $day3--;
+                                                $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave3['ra_date'], $day3);
+
                                                 $repeat = strtotime("+1 day", strtotime($begin));
                                                 $begin = date('Y-m-d', $repeat);
                                             }
@@ -741,23 +760,36 @@ if (isset($_POST['submit'])) {
                                         $in = new DateTime($check_in);
                                         $out = new DateTime($check_out);
                                         // find the difference of the days
-                                        $diff = $in->diff($out)->format('%a');
+                                        $diff = $in->diff($out);
+                                        $diff = $diff->format('%a');
                                         $begin = date('Y-m-d', strtotime($check_in));
 
                                         for ($i = 0; $i < $diff; $i++) {
                                             $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
-                                            $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
-                                            $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
-
                                             $day = $ave['ra_days'];
-                                            $day2 = $ave2['ra_days'];
-                                            $day3 = $ave3['ra_days'];
                                             $day--;
-                                            $day2--;
-                                            $day3--;
                                             $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
-                                            $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave['ra_date'], $day);
-                                            $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave['ra_date'], $day);
+
+                                            $repeat = strtotime("+1 day", strtotime($begin));
+                                            $begin = date('Y-m-d', $repeat);
+                                        }
+                                        $begin = date('Y-m-d', strtotime($check_in));
+                                        for ($i = 0; $i < $diff; $i++) {
+                                            $ave2 = get_availability($begin, $_SESSION['room_2_selected']['rm_type']);
+                                            $day2 = $ave2['ra_days'];
+                                            $day2--;
+                                            $availability = update_availability($_SESSION['room_2_selected']['rm_type'],   $ave2['ra_date'], $day2);
+
+                                            $repeat = strtotime("+1 day", strtotime($begin));
+                                            $begin = date('Y-m-d', $repeat);
+                                        }
+                                        $begin = date('Y-m-d', strtotime($check_in));
+                                        for ($i = 0; $i < $diff; $i++) {
+                                            $ave3 = get_availability($begin, $_SESSION['room_3_selected']['rm_type']);
+                                            $day3 = $ave3['ra_days'];
+                                            $day3--;
+                                            $availability = update_availability($_SESSION['room_3_selected']['rm_type'],   $ave3['ra_date'], $day3);
+
                                             $repeat = strtotime("+1 day", strtotime($begin));
                                             $begin = date('Y-m-d', $repeat);
                                         }
@@ -786,10 +818,6 @@ if (isset($_POST['submit'])) {
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
 
     <title>Vrissiana Beach Hotel | Reservation Result</title>
-    <!-- Bootstrap -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script> -->
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
@@ -824,9 +852,27 @@ if (isset($_POST['submit'])) {
     </section>
     <div class="overview">
         <div class="mx-auto text-center w-50">
-            <div class="ui horizontal inverted divider"><span class="h3 text-dark">Available Rooms</span></div>
+
+            <div class="ui breadcrumb p-3">
+                <a href="booking_calendar.php" class="section">Calendar</a>
+                <i class="right chevron icon divider"></i>
+                <a href="select_room.php?total_room=<?php echo $$total_room ?>" class="section">Select Room Type</a>
+                <i class="right chevron icon divider"></i>
+                <div class=" section">Billing Information
+                    <div class="lds-facebook">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <i class="right arrow icon divider"></i>
+                <div class=" section">Booking Confirmation</div>
+            </div>
+
+
+            <div class="ui horizontal inverted divider"><span class="h3 text-dark">Billing information</span></div>
             <p class="h1">Confirm Your Stay</p>
-            <p class="h3 text-dark"><?php echo "{$_SESSION['room_info']['check_in']} - {$_SESSION['room_info']['check_out']} "; ?></p>
+            <p class="h3 text-dark"><?php echo "{$_SESSION['room_info']['check_in']} - {$_SESSION['room_info']['check_out']}"; ?></p>
             <p class="h3 text-dark"><?php echo "Room $total_room, Adults $total_adults, Kids $total_kids, Infants $total_infants" ?></p>
             <p class="h3 text-dark">Rates are per selected number of rooms per night.</p>
             <p class="h3 text-dark">Room selected: <?php echo $room_name_selected ?></p>
@@ -834,7 +880,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     <div class="container-fluid">
-
         <!-- ADD TO THE FORM THE LOCATION OF THE CONFIRMATION -->
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
             <div class="m-auto" style="width: 80%">
@@ -951,6 +996,7 @@ if (isset($_POST['submit'])) {
                                         echo $year;
                                         ?>
                                     </select>
+                                    <div style="display: inline" class="spinner"></div>
                                 </div>
                                 <div class="form-group" id="credit_cards">
                                     <img src="../images/visa.jpg" id="visa">
@@ -1038,6 +1084,7 @@ if (isset($_POST['submit'])) {
                                     $('#cardNumber').addClass('border-danger');
                                     return false;
                                 }
+                                $('.spinner').append('<div class="ui active inline loader"></div>');
                             });
                         });
                     </script>
