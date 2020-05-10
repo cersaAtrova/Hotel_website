@@ -37,9 +37,8 @@ if (isset($_POST['submit'])) {
     $btn_login = 'Login';
     $submit = 'login';
 
-    // (password_verify($_POST['passwd'], $member['member_password']));
 
-    if ($_POST['passwd'] == $_SESSION['user']['member_password']) {
+    if (password_verify($_POST['passwd'], $_SESSION['user']['member_password'])) {
         $_SESSION['user_login'] = $_SESSION['user'];
         $_SESSION['user_passwd'] = $_POST['passwd'];
 
@@ -98,11 +97,11 @@ if (isset($_POST['submit'])) {
     <div class="container-fluid">
         <div class="container text-center">
             <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
-                <p class="display-3"> Account Information</p>
+                <p class="display-4"> Account Information</p>
                 <p class="h3">Login here using your email address to get access to your existing reservations or to update your account.</p>
 
                 <div class="container w-50 pt-5 mt-5">
-                    <input type="email" name="email" id="email" placeholder="Email.." value="<?php echo $user_email ?>" require_once class="text-form-control p-2 mb-3" pattern="[^@]+@[^\.]+\..+">
+                    <input type="email" name="email" id="email" placeholder="Email.." required value="<?php echo $user_email ?>" require_once class="text-form-control p-2 mb-3" pattern="[^@]+@[^\.]+\..+">
                     <?php if ($email_accepted == true) {
                         echo '<input type="password" class="text-form-control p-2 mb-3" placeholder="Enter your password" name="passwd" id="passwd" require> ';
                     }
@@ -110,7 +109,7 @@ if (isset($_POST['submit'])) {
                     <input type="submit" name="<?php echo $submit ?>" id="reserved" class="ui btn btn-nav btn-primary" value="<?php echo $btn_login ?>">
                     <p class="text-danger"><?php echo $error_email ?></p>
                     <?php if ($reset_passwd == true) {
-                        echo '<a href="#" class="ui btn btn-link btn-primary">Forgot Password?</a>';
+                        echo '<a href="forgot_passwd.php" class="ui btn btn-link btn-primary">Forgot Password?</a>';
                     } ?>
                 </div>
             </form>
