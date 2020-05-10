@@ -73,9 +73,6 @@ require_once('functions.php')
             $rm = get_room_by_rm_type($e[0]);
             print_room($rm[0], $rm[1], $rm[2], $rm[4], $img);
         }
-
-
-
         ?>
     </div>
 </body>
