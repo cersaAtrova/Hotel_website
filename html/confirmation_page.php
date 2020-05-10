@@ -131,22 +131,40 @@ print;
 }
 
 // }
-
 require_once('email.php');
+if (isset($_REQUEST['modify'])) {
+    foreach ($_SESSION['reservation_id'] as $e) {
+        $body =  guest_email($e);
+        if (smtpmailer($_SESSION['member']['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Modification', $body)) {
+            writeLog('Confirmation mail has send to guest ' . $_SESSION['member']['member_email']);
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Modification Mail Not Sent to guest->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
+        $body_admin = admin_email($e);
+        if (smtpmailer('soteris100@gmail.com', 'noreply.info.testing@gmail.com', 'MODIFICATION ', 'MODIFICATION', $body_admin)) {
+            writeLog('Modification  mail has send to admin');
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Modification Mail Not Receive to Reservation Department FROM->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
+    }
+}
+
 foreach ($_SESSION['reservation_id'] as $e) {
     $body =  guest_email($e);
     if (smtpmailer($_SESSION['member']['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Confirmation', $body)) {
         writeLog('Confirmation mail has send to guest ' . $_SESSION['member']['member_email']);
     } else {
         $confirm_message = "Fail - " . $mail->ErrorInfo;
-        writeLog('Fatal: Mail Not Sent to guest->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        writeLog('Fatal: Confirmation Mail NOT Sent to guest->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
     }
     $body_admin = admin_email($e);
     if (smtpmailer('soteris100@gmail.com', 'noreply.info.testing@gmail.com', 'New Reservation', 'New Reservation', $body_admin)) {
         writeLog('Confirmation mail has send to admin');
     } else {
         $confirm_message = "Fail - " . $mail->ErrorInfo;
-        writeLog('Fatal: Mail Not Receive to Reservation Department FROM->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        writeLog('Fatal: Confirmation Mail NOT Receive to Reservation Department FROM->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
     }
 }
 
@@ -193,12 +211,19 @@ foreach ($_SESSION['reservation_id'] as $e) {
     <div class="container text-center">
         <i class="check green massive icon"></i>
         <h1 class="display-3">Thank You!</h1>
-        <p class="lead">Your Reservation is confirmed.</p>
+        <?php if (isset($_REQUEST['modify'])) {
+            echo '<p class="lead">Your Reservation is Modified.</p>';
+        } else {
+            echo '<p class="lead">Your Reservation is confirmed.</p>';
+        } ?>
+
         <p class="lead"><strong>Please check your email</strong> for the voucher.</p>
         <?php include_once('update_password.php'); ?>
         <hr>
     </div>
-    <?php echo $print_resv ?>
+    <?php if (!isset($_REQUEST['modify'])) {
+        echo $print_resv;
+    } ?>
     <div style='height: 30vh'></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

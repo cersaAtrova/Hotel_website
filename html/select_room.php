@@ -1,6 +1,5 @@
 <?php
 require_once 'functions.php';
-// require_once '../connect_dbase.php';
 session_start();
 $check_in = new DateTime($_SESSION['room_info']['check_in']);
 $check_out = new DateTime($_SESSION['room_info']['check_out']);
@@ -46,6 +45,11 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                 }
             }
             //change the price of per room selected and meal selected
+            if(isset($_REQUEST['modify'])){
+                unset($_SESSION['rm_availability']);
+                header('Location: billing_information.php?total_room=1&modify=true');
+                die();
+            }
             unset($_SESSION['rm_availability']);
             header('Location: billing_information.php?total_room=1');
             die();
@@ -300,6 +304,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
     //remember to fix the availability.
     //================================= 
     $rm_type = get_room_type();
+    $count_room_availablie = 0;
     foreach ($rm_type as $e) {
         $rm_availability = get_all_available_rooms($check_in, $check_out, $e[0], 1);
         if ($rm_availability->rowCount() == $interval) {
@@ -417,6 +422,11 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
     <?php else : ?>
         <div class="container-fluid box-container" style="padding:10px; margin: auto ">
             <?php
+            if (isset($_REQUEST['modify'])) {
+                $mod = 'modify';
+            } else {
+                $mod = null;
+            }
             foreach ($_SESSION['rm_availability'] as $e) {
                 // retrive all images
                 if (!empty($e)) {
@@ -431,7 +441,8 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                             $e[0]['rm_size'],
                             $e[0]['rm_max_guest'],
                             $rm_img,
-                            'Max Guest ' . $e[0]['rm_max_guest'], $e[0]['rm_type']
+                            'Max Guest ' . $e[0]['rm_max_guest'],
+                            $e[0]['rm_type']
                         );
                     } else {
                         if ($e[0]['rc_days'] > $interval) {
@@ -443,7 +454,8 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                                 $e[0]['rm_size'],
                                 $e[0]['rm_max_guest'],
                                 $rm_img,
-                                'Min stay ' . $e[0]['rc_days'] . ' days',$e[0]['rm_type']
+                                'Min stay ' . $e[0]['rc_days'] . ' days',
+                                $e[0]['rm_type']
                             );
                         } else {
                             display_available_room(
@@ -453,7 +465,8 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                                 $price[1],
                                 $e[0]['rm_size'],
                                 $e[0]['rm_max_guest'],
-                                $rm_img,$e[0]['rm_type']
+                                $rm_img,
+                                $e[0]['rm_type'],$mod
                             );
                         }
                     }

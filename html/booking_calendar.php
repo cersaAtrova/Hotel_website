@@ -3,8 +3,6 @@
 require_once 'functions.php';
 require_once '../connect_dbase.php';
 session_start();
-$_SESSION = array();
-
 if (isset($_GET['submit'])) {
     $check_in_date = new DateTime($_REQUEST['check_in']);
     $check_out_date = new DateTime($_REQUEST['check_out']);
@@ -17,8 +15,7 @@ if (isset($_GET['submit'])) {
             if ($guest_select[0] + $guest_select[1] > 4) {
                 $error_details = 'Please provide correct information';
             } else {
-                if (!isset($_REQUEST['meal_plan'])) {
-                }
+
                 //room 1
                 $_SESSION['room_1_guest']['adults'] = $guest_select[0];
                 $_SESSION['room_1_guest']['kids'] = $guest_select[1];
@@ -27,8 +24,13 @@ if (isset($_GET['submit'])) {
                 $_SESSION['room_info']['meal_plan'] = $_REQUEST['meal_plan'];
                 $_SESSION['room_info']['check_in'] = $_REQUEST['check_in'];
                 $_SESSION['room_info']['check_out'] = $_REQUEST['check_out'];
-                header('Location: select_room.php?total_room=1');
-                die();
+                if (isset($_REQUEST['modify'])) {
+                    header('Location: select_room.php?total_room=1&modify=true');
+                    die();
+                } else {
+                    header('Location: select_room.php?total_room=1');
+                    die();
+                }
             }
         } else if ($room_select == 2) {
             $guest_select = array($_REQUEST['adults'], $_REQUEST['kids'], $_REQUEST['infants']);
@@ -94,8 +96,15 @@ if (isset($_GET['submit'])) {
     }
 } else {
     //start up the page
-    $check_in_date = (new DateTime())->add(new DateInterval("P1D"))->format("M/d/Y");
-    $check_out_date = (new DateTime())->add(new DateInterval("P2D"))->format("M/d/Y");
+    if (isset($_REQUEST['in'])) {
+        $check_in_date = new DateTime($_REQUEST['in']);
+        $check_out_date = new DateTime($_REQUEST['out']);
+        $check_in_date = $check_in_date->format('M/d/Y');
+        $check_out_date = $check_out_date->format('M/d/Y');
+    } else {
+        $check_in_date = (new DateTime())->add(new DateInterval("P1D"))->format("M/d/Y");
+        $check_out_date = (new DateTime())->add(new DateInterval("P2D"))->format("M/d/Y");
+    }
     $error_details = '';
 }
 ?>
@@ -247,7 +256,6 @@ if (isset($_GET['submit'])) {
                                 <div class="ui ">
                                     <div class="field">
                                         <select name="infants" class="dropdown-select infants" required id="infants" aria-placeholder="Infant">
-
                                             <option selected value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -255,21 +263,23 @@ if (isset($_GET['submit'])) {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="flex-box-form" id="room2"></div>
                         <div class="flex-box-form" id="room3"></div>
+
                         <div class="flex-box-form">
                             <div class="col-12">
                                 <label for="room"><span>&starf;</span> Select number of Rooms</label>
                                 <select name="room" id="room" class="dropdown-select room" required>
                                     <option selected value="1">Room 1</option>
-                                    <option value="2">Room 2</option>
-                                    <option value="3">Room 3</option>
+                                    <?php if (!isset($_REQUEST['modify'])) : ?>
+                                        <option value="2">Room 2</option>
+                                        <option value="3">Room 3</option>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                         </div>
+
                         <div class="flex-box-form">
                             <div class="col-12">
                                 <hr style="background-color:black">
@@ -295,22 +305,24 @@ if (isset($_GET['submit'])) {
                         $('#inline_calendar')
                             .calendar({
                                 type: 'date',
+                                today: true,
 
-                                eventClass: ' red',
-                                eventDates: [
-                                    new Date(2020, 3, 20), //no message tooltip
-                                    {
-                                        date: new Date(2020, 3, 21),
-                                        message: 'I got the default color (light red)'
-                                    }, {
-                                        date: new Date(2020, 3, 22),
-                                        message: 'Me too'
-                                    }
-                                ]
+                                // eventClass: 'red',
+                                // eventDates: [
+                                //     new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), //no message tooltip
+                                //     {
+                                //         date: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+                                //         message: 'I got the default color (light red)'
+                                //     },
+                                // ]
                             });
                     </script>
                     <div class="flex-box-form">
                         <div class=" w-75 " style="font-size: 1.2rem">
+                            <?php if (isset($_REQUEST['modify'])) {
+                                echo "<input type=\"hidden\" name=\"modify\" value=\"{$_REQUEST['modify']}\">";
+                            } ?>
+
                             <input type="submit" class="btn-nav btn-lg my-md-2 btn-primary h-100 mt-3 p-4 text-uppercase font-weight-bold " value="Check Availability" name="submit">
                         </div>
                     </div>

@@ -39,7 +39,6 @@ if (isset($_POST['submit'])) {
     $user_tel = $_POST['tel'];
 
     if (luhn_check($_POST['card_number']) == false) {
-
         //check the card if is valid
         $error_room_selected = 'Please enter a valid credit card';
     } else {
@@ -64,7 +63,6 @@ if (isset($_POST['submit'])) {
                         $_SESSION['member'] = get_member($user_email);
                         $existing_guest = true;
                     }
-
                     //====\\
                     //Room 1\\
                     //========\\
@@ -142,47 +140,41 @@ if (isset($_POST['submit'])) {
                             }
                         } else { //create reservation with existing customer
                             $ex_member = get_member($_POST['email']);
-                            $resv_id = random_reservation_id() . '/1';
-                            $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $ex_member['member_id'], $_SESSION['room_1_selected']['rm_type']);
+                            //modify reservation
+                            if (isset($_REQUEST['modify'])) {
+                                $resv_id = $_SESSION['modify'];
+                                $arr = update_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $ex_member['member_id'], $_SESSION['room_1_selected']['rm_type']);
+                                update_guest_profile_reservation($resv_id, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
 
-                            if ($resv == false) {
-                                $error_room_selected = 'We cause some errors Your Reservation is not accepted. Please try again letter';
-                            } else {
-                                insert_guest_reservation($resv_id, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
-                                // add all allergy into database
+
                                 if (isset($_POST['rm_alergies_Room_1'])) {
                                     foreach ($_POST['rm_alergies_Room_1'] as $e) {
-                                        insert_new_allergies($resv_id, $e);
+                                        update_allergies($resv_id, $e);
                                     }
                                 }
                                 if (isset($_POST['rm_preference_Room_1'])) {
                                     foreach ($_POST['rm_preference_Room_1'] as $e) {
-                                        insert_new_preference($resv_id, $e);
+                                        update_preferences($resv_id, $e);
                                     }
                                 }
                                 //add all extra facilities into Facility table
                                 if (isset($_POST['rm_extra_Room_1'])) {
                                     $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
                                     foreach ($arr as $e) {
-                                        insert_new_facilities($e['name'], $e['price'], $resv_id);
+                                        update_facility($resv_id, $e['name'], $e['price']);
                                     }
                                 }
-                                // insert into daily rate table- Add all Rates in of each date
                                 $begin = date('Y-m-d', strtotime($check_in));
                                 foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
-                                    insert_into_daily_rate($resv_id, $begin, $pr[0]);
+                                    update_daily_rate($resv_id, $begin, $pr[0]);
                                     $repeat = strtotime("+1 day", strtotime($begin));
                                     $begin = date('Y-m-d', $repeat);
                                 }
-                                //Save credit card into database(DANGEROUS)
-                                //save here temporary for testing. 
-                                //Will change this with STRIPE or JCC
-                                $cc =  insert_credit_card($resv_id, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
-                                insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
-                                insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
-                                insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
 
-                                //update availability
+                                update_credit_card($resv_id, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                update_total_guest_reservation('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
+                                update_total_guest_reservation('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
+                                update_total_guest_reservation('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
                                 $in = new DateTime($check_in);
                                 $out = new DateTime($check_out);
                                 // find the difference of the days
@@ -197,9 +189,69 @@ if (isset($_POST['submit'])) {
                                     $repeat = strtotime("+1 day", strtotime($begin));
                                     $begin = date('Y-m-d', $repeat);
                                 }
-                                $_SESSION['reservation_id'] = array($resv_id . $r1);
-                                header('Location: confirmation_page.php');
+                                $_SESSION['reservation_id'] = array($resv_id);
+                                header('Location: confirmation_page.php?modify=true');
                                 die();
+                            } else {
+                                //create new reservation
+                                $resv_id = random_reservation_id() . '/1';
+                                $resv = insert_new_reservation($resv_id, $_SESSION['room_info']['meal_plan'], $_SESSION['room_1_selected']['rate_plan_selected'], $ex_member['member_id'], $_SESSION['room_1_selected']['rm_type']);
+                                if ($resv == false) {
+                                    $error_room_selected = 'We cause some errors Your Reservation is not accepted. Please try again letter';
+                                } else {
+                                    insert_guest_reservation($resv_id, $_POST['first_name'], $_POST['last_name'], $_POST['country'], $_POST['tel']);
+                                    // add all allergy into database
+                                    if (isset($_POST['rm_alergies_Room_1'])) {
+                                        foreach ($_POST['rm_alergies_Room_1'] as $e) {
+                                            insert_new_allergies($resv_id, $e);
+                                        }
+                                    }
+                                    if (isset($_POST['rm_preference_Room_1'])) {
+                                        foreach ($_POST['rm_preference_Room_1'] as $e) {
+                                            insert_new_preference($resv_id, $e);
+                                        }
+                                    }
+                                    //add all extra facilities into Facility table
+                                    if (isset($_POST['rm_extra_Room_1'])) {
+                                        $arr = get_extra_price_and_name($_POST['rm_extra_Room_1']);
+                                        foreach ($arr as $e) {
+                                            insert_new_facilities($e['name'], $e['price'], $resv_id);
+                                        }
+                                    }
+                                    // insert into daily rate table- Add all Rates in of each date
+                                    $begin = date('Y-m-d', strtotime($check_in));
+                                    foreach ($_SESSION['room_1_selected']['room_daily_rate_selected'] as $pr) {
+                                        insert_into_daily_rate($resv_id, $begin, $pr[0]);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    //Save credit card into database(DANGEROUS)
+                                    //save here temporary for testing. 
+                                    //Will change this with STRIPE or JCC
+                                    $cc =  insert_credit_card($resv_id, $_POST['owner'], $_POST['card_number'], $_POST['moth_expired'], $_POST['year_expired'], $_POST['cvv']);
+                                    insert_guest('Adults', $_SESSION['room_1_guest']['adults'], $resv_id);
+                                    insert_guest('Kids', $_SESSION['room_1_guest']['kids'], $resv_id);
+                                    insert_guest('Infants', $_SESSION['room_1_guest']['infants'], $resv_id);
+
+                                    //update availability
+                                    $in = new DateTime($check_in);
+                                    $out = new DateTime($check_out);
+                                    // find the difference of the days
+                                    $diff = $in->diff($out);
+                                    $diff = $diff->format('%a');
+                                    $begin = date('Y-m-d', strtotime($check_in));
+                                    for ($i = 0; $i < $diff; $i++) {
+                                        $ave = get_availability($begin, $_SESSION['room_1_selected']['rm_type']);
+                                        $day = $ave['ra_days'];
+                                        $day--;
+                                        $availability = update_availability($_SESSION['room_1_selected']['rm_type'],   $ave['ra_date'], $day);
+                                        $repeat = strtotime("+1 day", strtotime($begin));
+                                        $begin = date('Y-m-d', $repeat);
+                                    }
+                                    $_SESSION['reservation_id'] = array($resv_id . $r1);
+                                    header('Location: confirmation_page.php');
+                                    die();
+                                }
                             }
                         }
                     }
@@ -880,7 +932,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     <div class="container-fluid">
-        <!-- ADD TO THE FORM THE LOCATION OF THE CONFIRMATION -->
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
             <div class="m-auto" style="width: 80%">
                 <div class="row ui text-white" style="background-color: rgba(29, 29, 92, 0.8);">
@@ -896,10 +947,14 @@ if (isset($_POST['submit'])) {
                                 <label for="last-name"><span>&starf;</span> Last Name</label>
                                 <input type="text" class="form-control text-form-control" name="last_name" required placeholder="Last name" maxlength="30" value="<?php echo $_COOKIE['surname']; ?>" aria-describedby="basic-addon1" pattern="^[A-Za-z]+$">
                             </div>
-                            <div class="col-12">
-                                <label for="email"><span>&starf;</span>Email</label>
-                                <input id="email" type="email" class="form-control text-form-control" name="email" maxlength="50" placeholder="Email" value="<?php echo  $_COOKIE['email']; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
-                            </div>
+                            <?php if (!isset($_REQUEST['modify'])) : ?>
+                                <div class="col-12">
+                                    <label for="email"><span>&starf;</span>Email</label>
+                                    <input id="email" type="email" class="form-control text-form-control" name="email" maxlength="50" placeholder="Email" value="<?php echo  $_COOKIE['email']; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
+                                </div>
+                            <?php else : ?>
+                                <input id="email" type="hidden" class="form-control text-form-control" name="email" maxlength="50" placeholder="Email" value="<?php echo  $_SESSION['user_login']['member_email']; ?>" required aria-describedby="emailHelp" pattern="[^@]+@[^\.]+\..+">
+                            <?php endif; ?>
 
                             <div class="col-12">
                                 <label for="tel"><span>&starf;</span>Telephone</label>
@@ -978,6 +1033,7 @@ if (isset($_POST['submit'])) {
                                     <label>Expiration Date</label>
                                     <select required name="moth_expired" class="moth_expired">
                                         <?php
+                                        $moth = '';
                                         for ($i = 1; $i <= 12; $i++) {
                                             $begin = str_pad($i, 2, '0', STR_PAD_LEFT);
                                             $moth .= "<option value='{$begin}'>{$begin}</option>";
@@ -1003,7 +1059,10 @@ if (isset($_POST['submit'])) {
                                     <img src="../images/mastercard.jpg" id="mastercard">
                                     <img src="../images/amex.jpg" id="amex">
                                 </div>
-
+                                        <?php if(isset($_REQUEST['modify'])){
+                                            echo '<input type="hidden" name="modify" value="true">';
+                                        } ?>
+                                        
                                 <input type="submit" name="submit" id="reserved" class="ui button btn btn-nav btn-primary" value="Reserved">
 
 

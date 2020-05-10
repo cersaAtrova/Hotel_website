@@ -1,47 +1,53 @@
 <?php
-      session_start();
-     
-      function guest_email($id)
-      {
-        $resv = get_reservation_by_resv_id($id);
-        $allergies = get_allergies($id);
-        $preferences = get_preferences($id);
-        $facilities = get_facilities($id);
-        $daily_rate = get_reservation_daily_rate($id);
+session_start();
 
-        $member = get_member_by_id($resv['member_id']);
-        $resv_guest_capacity = get_total_guest($id);
-        $resv_profile = get_reservation_guest_profile($id);
+function guest_email($id)
+{
+  $resv = get_reservation_by_resv_id($id);
+  $allergies = get_allergies($id);
+  $preferences = get_preferences($id);
+  $facilities = get_facilities($id);
+  $daily_rate = get_reservation_daily_rate($id);
 
-        $room = get_room_by_rm_type($resv['rm_type']);
+  $member = get_member_by_id($resv['member_id']);
+  $resv_guest_capacity = get_total_guest($id);
+  $resv_profile = get_reservation_guest_profile($id);
 
-        //get total price
-        $resv_facility = get_reservation_facilities_price($id);
-        $resv_total = get_reservation_price($id);
-        if ($resv_facility[0] != null) {
-          $resv_total[0] += $resv_facility[0];
-        }
-        if ($resv['resv_status'] == 'Cancelled') {
-          $status = 'red';
-        } else {
-          $status = 'white';
-        }
+  $room = get_room_by_rm_type($resv['rm_type']);
 
-        foreach ($allergies as $e) {
-          $ale .= " {$e['allergy_name']}<br/>";
-        }
-        foreach ($preferences as $e) {
-          $pre .= " {$e['pre_name']}<br/>";
-        }
-        foreach ($facilities as $e) {
-          $fa .= "{$e['fa_name']}  <i class='euro icon'></i>{$e['fa_price']}<br/>";
-        }
-        foreach ($resv_guest_capacity as $e) {
-          $person .= "{$e[0]},  {$e[1]}<br/>";
-        }
-        $date = date('d-M-Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d-M-Y', strtotime($resv['resv_check_out']));
+  //get total price
+  $resv_facility = get_reservation_facilities_price($id);
+  $resv_total = get_reservation_price($id);
+  if ($resv_facility[0] != null) {
+    $resv_total[0] += $resv_facility[0];
+  }
+  if (isset($_SESSION['modification'])) {
+    $status = 'yellow';
+    $status_booking = 'Modification';
+  } else {
+    if ($resv['resv_status'] == 'Cancelled') {
+      $status = 'red';
+      $status_booking = 'Cancelation';
+    } else {
+      $status = 'white';
+      $status_booking = 'Confirmation';
+    }
+  }
+  foreach ($allergies as $e) {
+    $ale .= " {$e['allergy_name']}<br/>";
+  }
+  foreach ($preferences as $e) {
+    $pre .= " {$e['pre_name']}<br/>";
+  }
+  foreach ($facilities as $e) {
+    $fa .= "{$e['fa_name']}  <i class='euro icon'></i>{$e['fa_price']}<br/>";
+  }
+  foreach ($resv_guest_capacity as $e) {
+    $person .= "{$e[0]},  {$e[1]}<br/>";
+  }
+  $date = date('d-M-Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d-M-Y', strtotime($resv['resv_check_out']));
 
-        $email = <<<print
+  $email = <<<print
 
   <!DOCTYPE html>
   <html>
@@ -152,7 +158,6 @@
       </td>
     </tr>
     <!-- end logo -->
-   
       <!-- start hero -->
       <tr>
         <td align="center" style=" background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586610225/Vrissiana/water_vteo2m.jpg'); background-repeat: repeat;" >
@@ -160,7 +165,7 @@
           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
             <tr>
               <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-                <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for your Booking!</h1>
+                <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for your Choosing our hotel for your reservation!</h1>
               </td>
             </tr>
           </table>
@@ -178,7 +183,7 @@
             <!-- start copy -->
             <tr>
               <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                <p style="margin: 0;">Here is a summary of your Confirmation Booking. If you have any questions or concerns about your booking, please <a href="#">contact us</a>.</p>
+                <p style="margin: 0;">Here is a summary of your $status_booking Booking. If you have any questions or concerns about your booking, please <a href="#">contact us</a>.</p>
               </td>
             </tr>
             <!-- end copy -->
@@ -311,56 +316,56 @@
   </html>
   
 print;
-        return $email;
-      }
+  return $email;
+}
 
 
-      function admin_email($id)
-      {
-        $resv = get_reservation_by_resv_id($id);
-        $allergies = get_allergies($id);
-        $preferences = get_preferences($id);
-        $facilities = get_facilities($id);
-        $daily_rate = get_reservation_daily_rate($id);
+function admin_email($id)
+{
+  $resv = get_reservation_by_resv_id($id);
+  $allergies = get_allergies($id);
+  $preferences = get_preferences($id);
+  $facilities = get_facilities($id);
+  $daily_rate = get_reservation_daily_rate($id);
 
-        $member = get_member_by_id($resv['member_id']);
-        $resv_guest_capacity = get_total_guest($id);
-        $resv_profile = get_reservation_guest_profile($id);
+  $member = get_member_by_id($resv['member_id']);
+  $resv_guest_capacity = get_total_guest($id);
+  $resv_profile = get_reservation_guest_profile($id);
 
-        $room = get_room_by_rm_type($resv['rm_type']);
+  $room = get_room_by_rm_type($resv['rm_type']);
 
-        //get total price
-        $resv_facility = get_reservation_facilities_price($id);
-        $resv_total = get_reservation_price($id);
-        if ($resv_facility[0] != null) {
-          $resv_total[0] += $resv_facility[0];
-        }
-        if ($resv['resv_status'] == 'Cancelled') {
-          $status = 'red';
-        } else {
-          $status = 'white';
-        }
+  //get total price
+  $resv_facility = get_reservation_facilities_price($id);
+  $resv_total = get_reservation_price($id);
+  if ($resv_facility[0] != null) {
+    $resv_total[0] += $resv_facility[0];
+  }
+  if ($resv['resv_status'] == 'Cancelled') {
+    $status = 'red';
+  } else {
+    $status = 'white';
+  }
 
-        foreach ($allergies as $e) {
-          $ale .= " {$e['allergy_name']}<br/>";
-        }
-        foreach ($preferences as $e) {
-          $pre .= " {$e['pre_name']}<br/>";
-        }
-        foreach ($facilities as $e) {
-          $fa .= "{$e['fa_name']}  <i class='euro icon'></i>{$e['fa_price']}<br/>";
-        }
-        foreach ($resv_guest_capacity as $e) {
-          $person .= "{$e[0]},  {$e[1]}<br/>";
-        }
-        foreach ($daily_rate as $pr) {
+  foreach ($allergies as $e) {
+    $ale .= " {$e['allergy_name']}<br/>";
+  }
+  foreach ($preferences as $e) {
+    $pre .= " {$e['pre_name']}<br/>";
+  }
+  foreach ($facilities as $e) {
+    $fa .= "{$e['fa_name']}  <i class='euro icon'></i>{$e['fa_price']}<br/>";
+  }
+  foreach ($resv_guest_capacity as $e) {
+    $person .= "{$e[0]},  {$e[1]}<br/>";
+  }
+  foreach ($daily_rate as $pr) {
 
-          $dt .= date('d-M-Y', strtotime($pr['dr_date'])) . '<br/>';
-          $price .= $pr['dr_price'] . '<br/>';
-        }
-        $date = date('d-M-Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d-M-Y', strtotime($resv['resv_check_out']));
+    $dt .= date('d-M-Y', strtotime($pr['dr_date'])) . '<br/>';
+    $price .= $pr['dr_price'] . '<br/>';
+  }
+  $date = date('d-M-Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d-M-Y', strtotime($resv['resv_check_out']));
 
-        $email = <<<print
+  $email = <<<print
 
   <!DOCTYPE html>
   <html>
@@ -458,9 +463,9 @@ print;
               <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
-                    <td align="left" bgcolor="##43437a"  style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color:#fff;"><strong>Reference <br/>{$resv['resv_reference']}</strong></td>
+                    <td align="left" bgcolor="##43437a"  style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color:#797169;"><strong>Reference <br/>{$resv['resv_reference']}</strong></td>
                     <td align="left" bgcolor="##43437a"  style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color:{$status};"><strong>Status<br/>{$resv['resv_status']}</strong></td>
-        <td align="center" bgcolor="##43437a"  style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color:#fff;"><strong>Price<br/>{$resv_total[0]}</strong></td>
+        <td align="center" bgcolor="##43437a"  style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color:#797169;"><strong>Price<br/>{$resv_total[0]}</strong></td>
                   </tr>
                 </table>
               </td>
@@ -599,7 +604,5 @@ print;
   </html>
   
 print;
-        return $email;
-      }
-      ?>
-  
+  return $email;
+}

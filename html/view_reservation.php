@@ -4,6 +4,13 @@ require_once 'insert_functions.php';
 require_once 'countries.php';
 session_start();
 
+if (isset($_REQUEST['modify'])) {
+    $resv = get_reservation_by_resv_id($_REQUEST['modify']);
+    $_SESSION['modify'] = $resv['resv_reference'];
+    header("Location: booking_calendar.php?modify=true&in={$resv['resv_check_in']}&out={$resv['resv_check_out']}");
+    die();
+}
+
 if (isset($_REQUEST['cancel'])) {
     $resv = get_reservation_by_resv_id($_REQUEST['cancel']);
     $cnx = update_status_reservation($_REQUEST['cancel'], 'Cancelled');
@@ -17,8 +24,7 @@ if (isset($_REQUEST['cancel'])) {
     $begin = date('Y-m-d', strtotime($resv['resv_check_in']));
 
     for ($i = 0; $i < $interval; $i++) {
-        $ave = get_availability($begin,$resv['rm_type']);
-
+        $ave = get_availability($begin, $resv['rm_type']);
         $day = $ave['ra_days'];
         $day++;
         $availability = update_availability($resv['rm_type'],   $ave['ra_date'], $day);
@@ -26,6 +32,21 @@ if (isset($_REQUEST['cancel'])) {
         $begin = date('Y-m-d', $repeat);
     }
     if ($cnx) {
+        require_once('email.php');
+        $body =  guest_email($resv['resv_reference']);
+        if (smtpmailer($_SESSION['user_login']['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Cancelation', $body)) {
+            writeLog('Cancelation mail has send to guest ' . $_SESSION['user_login']['member_email']);
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Mail Not Sent to guest->' . $_SESSION['user_login']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
+        $body_admin = admin_email($resv['resv_reference']);
+        if (smtpmailer('soteris100@gmail.com', $_SESSION['user_login']['member_email'], 'CANCELATION', 'CANCELATION', $body_admin)) {
+            writeLog('Cancelation mail has send to admin');
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Cancelation Mail Not Receive to Reservation Department FROM->' . $_SESSION['user_login']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
         header('Location: user_account.php');
         die();
     }
@@ -45,6 +66,7 @@ $resv_total = get_reservation_price($_REQUEST['id']);
 if ($resv_facility[0] != null) {
     $resv_total[0] += $resv_facility[0];
 }
+
 
 
 ?>
@@ -134,7 +156,11 @@ if ($resv_facility[0] != null) {
                                 <p class="mb-1"><?php echo $resv_profile['resv_country'] ?></p>
                                 <p class="w-50 border-bottom"></p>
                             </div>
-                            <div class="col"></div>
+                            <div class="col">
+                                <label>Check in - Check out</label>
+                                <p class="mb-1"><?php echo $resv['resv_check_in'] . ' - ' . $resv['resv_check_out']  ?></p>
+                                <p class="w-50 border-bottom"></p>
+                            </div>
                         </div>
                         <hr>
                         <div class="row p-2">
@@ -219,7 +245,7 @@ if ($resv_facility[0] != null) {
             <div class="col-xs">
                 <div class="btn-group-vertical  mt-5 pt-5 text-white">
                     <a href="user_account.php" class="btn-group btn-group-lg p-3 btn-nav btn-primary btn-go-back" role="group" aria-label="Button">Go back to My account</a>
-                    <a class="btn-group p-3 btn-group-lg btn-nav btn-warning btn-modify" role="group" aria-label="Modify Reservation">Modify Reservation</a>
+                    <a href="view_reservation.php?modify=<?php echo $resv['resv_reference'] ?>" class="btn-group p-3 btn-group-lg btn-nav btn-warning btn-modify" role="group" aria-label="Modify Reservation">Modify Reservation</a>
                     <a href="modify_credit_card.php?id=<?php echo $resv['resv_reference'] ?>" class="btn-group p-3 btn-group-lg btn-nav btn-warning btn-credit-card" role="group " aria-label="Modify Reservation">Update Credit Card</a>
                     <a href="view_reservation.php?cancel=<?php echo $resv['resv_reference']  ?>" class="btn-group btn-group-lg p-3 btn-nav btn-danger btn-cancel" role="group" aria-label="Cancel Reservation"> Cancel Reservation</a>
                 </div>
