@@ -590,7 +590,7 @@ function update_status_reservation($resv_id, $status)
 function update_availability($rm_type, $date, $days)
 {
     global $db;
-    $query = 'UPDATE LOW_PRIORITY Room_availability 
+    $query = 'UPDATE Room_availability 
               SET ra_days= :cdays
               WHERE rm_type =:id 
               AND ra_date=:dates';

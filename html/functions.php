@@ -17,7 +17,7 @@ function navigation_bar($str = 'HOME')
       $arr[0] = 'active';
       $arr[10] = '<span class="sr-only">(current)</span>';
       break;
-    case 'ACCOMODATION':
+    case 'ROOMS':
       $arr[1] = 'active';
       $arr[11] = '<span class="sr-only">(current)</span>';
       break;
@@ -67,7 +67,7 @@ function navigation_bar($str = 'HOME')
             <a class="nav-link" href="/html/homepage.php">HOME {$arr[10]}</a>
         </li>
         <li class="nav-item {$arr[1]}">
-            <a class="nav-link" href="#">ACCOMODATION{$arr[11]}</a>
+            <a class="nav-link" href="accomodation_rooms.php">ROOMS{$arr[11]}</a>
         </li>
         <li class="nav-item {$arr[2]}">
             <a class="nav-link" href="/html/dine.php">DINING{$arr[12]}</a>
@@ -76,14 +76,14 @@ function navigation_bar($str = 'HOME')
             <a class="nav-link" href="/html/spa.php">SPA{$arr[13]}</a>
         </li>
         <li class="nav-item {$arr[4]}">
-            <a class="nav-link" href="/html/wedding.php">WEDDING{$arr[14]}</a>
+            <a class="nav-link" href="/html/wedding.php">WEDDINGS{$arr[14]}</a>
         </li>
         <li class="nav-item {$arr[6]}">
             <a class="nav-link" href="/html/gallery.php">GALLERY{$arr[16]}</a>
         </li>
-        <li class="nav-item {$arr[7]}">
+        <!--<li class="nav-item {$arr[7]}">
             <a class="nav-link" href="#">OFFER{$arr[17]}</a>
-        </li>
+        </li>-->
     </ul>
 </div>
 <form class="form-inline my-2 my-lg-0" action="booking_calendar.php" method="GET">
@@ -602,10 +602,6 @@ function generateFormToken($form)
 }
 
 
-
-
-
-
 //validation
 function test_input($data)
 {
@@ -819,8 +815,9 @@ send;
 }
 
 
-function display_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img)
+function display_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img ,$rm_type=null)
 {
+  $rm=explode(' ', $rm_type);
   $str = '';
   foreach ($img as $e) {
     if (empty($str)) {
@@ -853,7 +850,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
           <div class="col box-content-image-right pad-25 text-white">
               <form class="ui" action="select_room.php" method="GET">
 
-                  <p class="pad-25 h4">Room  $count_room </p>
+                  <p class="pad-25 h4">Select Room  $count_room </p>
                   <p class="pad-20 h2 text-uppercase"> $room_name</p>
                   <input type="hidden" name="room_name" value="$room_name">
                   <div class="ui inverted segment">
@@ -861,8 +858,8 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                       <div class="container">
                           <div class="row row-col-3">
                               <div class="col">
-                                  <P class="h5 pb-2">Non-refuntable</P>
-                                  <a href="" class="text-white"><u>View terms</u></a>
+                                  <P class="h5 pb-2">Non-refundable</P>
+                                 <a href="" class="text-white" data-toggle="modal" data-target="#{$rm[0]}"><u>View terms</u></a>
                               </div>
                               <div class="col text-center">
                                   <h3><i class="euro sign icon"></i> $daily_price_nfr</h3>
@@ -871,7 +868,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                               </div>
                               <div class="col">
                               
-                                  <input type="submit" name="non_refandable" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
+                                  <input type="submit" name="non_refandable" value="Reserve" class="btn-nav btn-xl my-md-2 btn-primary">
                               </div>
                           </div>
                       </div>
@@ -880,7 +877,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                           <div class="row row-col-3">
                               <div class="col">
                                   <h3>Refuntable</h3>
-                                  <a href="" class="text-white"><u>View terms</u></a>
+                                  <a href="#" class="text-white" data-toggle="modal" data-target="#{$rm[0]}1"><u>View terms</u></a>
                               </div>
                               <div class="col text-center">
                                   <h3><i class="euro sign icon"></i>$daily_price_fr</h3>
@@ -888,7 +885,7 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
                                   <p>Per night</p>
                               </div>
                               <div class="col">
-                                  <input type="submit" name="flexible" value="Reserved" class="btn-nav btn-xl my-md-2 btn-primary">
+                                  <input type="submit" name="flexible" value="Reserve" class="btn-nav btn-xl my-md-2 btn-primary">
                               </div>
                           </div>
                       </div>
@@ -903,15 +900,177 @@ function display_available_room($count_room, $room_name, $daily_price_nfr, $dail
 
   </div>
 
+  <div class="modal fade" id="{$rm[0]}" tabindex="-1" role="dialog" aria-labelledby="room_name"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content   text-white" style="background-color: #424278;">
+          <div class="modal-header">
+              <h5 class="modal-title" id="room_name">$room_name</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span class="text-white" aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+          Policy
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+  </div>
 
+  <div class="modal fade" id="{$rm[0]}1" tabindex="-1" role="dialog" aria-labelledby="room_name"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content   text-white" style="background-color: #424278;">
+          <div class="modal-header">
+              <h5 class="modal-title" id="room_name">$room_name</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span class="text-white" aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+          Policy
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+  </div>
 
 rooms;
   echo $msg;
 }
 
-
-function display_not_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img, $min_stay)
+function print_room($rm_type, $room_name, $room_size, $max_guest, $img)
 {
+  $rm = explode(' ', $rm_type);
+  if ($rm_type == 'Princess Suite') {
+    $p = "<p class=\"pl-2\">Living room area</p><p class=\"pl-2\">40' Satelite TV</p>
+    <p class=\"pl-2\">Direct Dial Telephone</p>
+    <p class=\"pl-2\">Digital Safety box</p>
+    <p class=\"pl-2\">Mini Fridge</p>
+    <p class=\"pl-2\">Wifi</p>
+    <p class=\"pl-2\">Air Conditioning - Individual</p>
+    <p class=\"pl-2\">Hairdryer</p>
+    <p class=\"pl-2\">Shaver Point</p>
+    <p class=\"pl-2\">Electric Current 220/240 Volts</p>
+    <p class=\"pl-2\">International Electric Sockets</p>
+    <p class=\"pl-2\">Toiletries</p>
+    <p class=\"pl-2\">Bathroom with Shower or Bathtub</p>";
+  } elseif ($rm_type == 'Presidential Suite') {
+    $p = "<p class=\"pl-2\">Satelite Flat Screen TV</p>
+    <p class=\"pl-2\">Direct Dial Telephone</p>
+    <p class=\"pl-2\">Digital Safety box</p>
+    <p class=\"pl-2\">Mini Fridge</p>
+    <p class=\"pl-2\">Wifi</p>
+    <p class=\"pl-2\">Air Conditioning - Individual</p>
+    <p class=\"pl-2\">Hairdryer</p>
+    <p class=\"pl-2\">Shaver Point</p>
+    <p class=\"pl-2\">Electric Current 220/240 Volts</p>
+    <p class=\"pl-2\">International Electric Sockets</p>
+    <p class=\"pl-2\">Toiletries</p>
+    <p class=\"pl-2\">Bathroom with Shower or Bathtub</p>
+    <p class=\"pl-2\">Outdoor Jacuzzi</p>";
+  } else {
+    $p = "<p class=\"pl-2\">Satelite Flat Screen TV</p>
+    <p class=\"pl-2\">Direct Dial Telephone</p>
+    <p class=\"pl-2\">Digital Safety box</p>
+    <p class=\"pl-2\">Mini Fridge</p>
+    <p class=\"pl-2\">Wifi</p>
+    <p class=\"pl-2\">Air Conditioning - Individual</p>
+    <p class=\"pl-2\">Hairdryer</p>
+    <p class=\"pl-2\">Shaver Point</p>
+    <p class=\"pl-2\">Electric Current 220/240 Volts</p>
+    <p class=\"pl-2\">International Electric Sockets</p>
+    <p class=\"pl-2\">Toiletries</p>
+    <p class=\"pl-2\">Bathroom with Shower or Bathtub</p>";
+  }
+  $str = '';
+  foreach ($img as $e) {
+    if (empty($str)) {
+      $str .= '<div class="carousel-item active "> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    } else {
+      $str .= '<div class="carousel-item"> <img class="d-block w-100" src="' . $e[0] . '" width="100%" height="100%" alt="First slide"> </div>';
+    }
+  }
+
+  $msg = <<<rooms
+  <div class="row mb-3">
+  <div class="col-md-8" style="max-height: 60%">
+      <div id="$room_name" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+              $str
+          </div>
+          <a class="carousel-control-prev" href="#$room_name" role="button" data-slide="prev">
+              <span aria-hidden="true"><i class="angle huge black left icon"></i></span>
+              <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next pr-5" href="#$room_name" role="button" data-slide="next">
+              <span aria-hidden="true"><i class="angle huge black right icon"></i></span>
+              <span class="sr-only ">Next</span>
+          </a>
+      </div>
+
+  </div>
+
+  <div class="col align-self-center">
+      <div class="col box-content-image-right pad-25 text-white">
+          <p class="pad-20 h3"><i>Room</i></p>
+          <p class="pad-20 h2 text-uppercase"> {$room_name}</p>
+          <input type="hidden" name="room_name" value="$room_name">
+          <div class="ui inverted segment">
+              <div class="ui inverted divider"></div>
+              <div class="container">
+                  <div class="row">
+                      <div class="col">
+                          <p class="pl-2 pd-5 pt-2">Room size: {$room_size} m<sup>2</sup></p>
+                          <p class="pl-2 pd-5 pt-2">Sleep up to {$max_guest}</p>
+                          <p class="pl-2 pd-5 pt-2">Suitable for: Couples, Family, Single travellers </p>
+                      </div>
+                  </div>
+              </div>
+              <div class="ui inverted divider"> </div>
+              <a href="#" class="text-white" data-toggle="modal" data-target="#{$rm[0]}"><u>Room Facilities</u></a>
+              <div class="ui inverted divider"> </div>
+              <a href="booking_calendar.php" class="ui btn-nav btn-xl my-md-2 btn-primary w-100">Check Availabiity</a>
+
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+<div class="modal fade" id="{$rm[0]}" tabindex="-1" role="dialog" aria-labelledby="room_name"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content   text-white" style="background-color: #424278;">
+        <div class="modal-header">
+            <h5 class="modal-title" id="room_name">$room_name</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span class="text-white" aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+          {$p}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+
+rooms;
+  echo $msg;
+}
+
+function display_not_available_room($count_room, $room_name, $daily_price_nfr, $daily_price_fr, $room_size, $max_guest, $img, $min_stay, $rm_type = null)
+{
+  $rm = explode(' ', $rm_type);
   $str = '';
   foreach ($img as $e) {
     if (empty($str)) {
@@ -942,7 +1101,7 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
     </div>
     <div class="col align-self-center">
         <div class="col box-content-image-right pad-25 text-white">
-                <p class="pad-25 h4">Room  $count_room </p>
+                <p class="pad-25 h4">Select Room  $count_room </p>
                 <p class="pad-20 h2 text-uppercase"> $room_name</p>
           
                 <div class="ui inverted segment">
@@ -950,8 +1109,8 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
                     <div class="container">
                         <div class="row row-col-3">
                             <div class="col">
-                                <P class="h5 pb-2">Non-refuntable</P>
-                                <a href="" class="text-white"><u>View terms</u></a>
+                                <P class="h5 pb-2">Non-refundable</P>
+                               
                             </div>
                             <div class="col text-center">
                                 <h3><i class="euro sign icon"></i> $daily_price_nfr</h3>
@@ -983,6 +1142,7 @@ function display_not_available_room($count_room, $room_name, $daily_price_nfr, $
                     <div class="ui inverted divider"> </div>
                     <p class="pl-2 pd-5 pt-2">Room size: $room_size m<sup>2</sup></p>
                     <p class="pl-2 pd-5 pt-2">Sleep up to $max_guest</p>
+                    <a href="#" class="text-white" data-toggle="modal" data-target="#{$rm[0]}"><u>View terms</u></a> 
                 </div>
           </div>
        </div>
@@ -995,7 +1155,7 @@ rooms;
 
 function valid_rate($rate)
 {
- 
+
   if (is_numeric($rate)) {
     return true;
   }
@@ -1041,7 +1201,7 @@ function prepare_all_rooms()
              From Room_availability
              JOIN Room_rate ON ra_date=  rr_date 
              JOIN Room_constraint   ON Room_availability.rm_type = Room_constraint.rm_type 
-             AND Room_availability.ra_date = Room_constraint.rc_date
+                                    AND Room_availability.ra_date = Room_constraint.rc_date
              JOIN Room ON Room.rm_type=Room_availability.rm_type
              WHERE ra_date >= ? AND ra_date < ?
              AND Room_availability.rm_type=? AND ra_status=\'Open\'AND Room_availability.ra_days >=? ';
