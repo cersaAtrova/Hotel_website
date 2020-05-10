@@ -2,8 +2,12 @@
 session_start();
 require_once('functions.php');
 require_once('insert_functions.php');
-if (isset($_POST['submit'])) {
+if (isset($_POST['update_passwd'])) {
     update_member_password($_SESSION['member']['member_id'], $_POST['passwd']);
+    $_SESSION = array();
+    session_destroy();
+    header('Location: user_acount.php');
+    die();
 }
 $print_resv = '';
 // if (verifyFormToken('new_reservation')) {
@@ -128,21 +132,21 @@ print;
 
 // }
 
-require_once('email_confirmation.php');
+require_once('email.php');
 foreach ($_SESSION['reservation_id'] as $e) {
-    $body = email_preview($e);
-    if (smtpmailer($_SESSION['member']['member_email'], 'noreply.info.testing@gmail.com', '', 'New Reservation', $body)) {
+    $body =  guest_email($e);
+    if (smtpmailer($_SESSION['member']['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Confirmation', $body)) {
         writeLog('Confirmation mail has send to guest ' . $_SESSION['member']['member_email']);
     } else {
         $confirm_message = "Fail - " . $mail->ErrorInfo;
-        writeLog('Fatal: Mail Not Sent');
+        writeLog('Fatal: Mail Not Sent to guest->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
     }
-
-    if (smtpmailer('soteris100@gmail.com', 'noreply.info.testing@gmail.com', 'New Reservation', 'New Reservation', $body)) {
+    $body_admin = admin_email($e);
+    if (smtpmailer('soteris100@gmail.com', 'noreply.info.testing@gmail.com', 'New Reservation', 'New Reservation', $body_admin)) {
         writeLog('Confirmation mail has send to admin');
     } else {
         $confirm_message = "Fail - " . $mail->ErrorInfo;
-        writeLog('Fatal: Mail Not Sent');
+        writeLog('Fatal: Mail Not Receive to Reservation Department FROM->' . $_SESSION['member']['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
     }
 }
 
@@ -185,22 +189,13 @@ foreach ($_SESSION['reservation_id'] as $e) {
 
 <body>
     <?php navigation_bar(); ?>
+    <div style="height: 25vh"></div>
     <div class="container text-center">
         <i class="check green massive icon"></i>
         <h1 class="display-3">Thank You!</h1>
         <p class="lead">Your Reservation is confirmed.</p>
         <p class="lead"><strong>Please check your email</strong> for the voucher.</p>
-        <?php if (!isset($_REQUEST['submit'])) : ?>
-            <div class="container text-center">
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
-                    <p class="display-3">Enter Your Password</p>
-                    <div class="container w-50">
-                        <input type="password" class="text-form-control p-2 mb-3" placeholder="Enter your password" name="passwd" id="passwd" minlength="6" require>
-                        <input type="submit" name="submit" id="reserved" class="ui btn btn-nav btn-primary" value="Update">
-                    </div>
-                </form>
-            </div>
-        <?php endif; ?>
+        <?php include_once('update_password.php'); ?>
         <hr>
     </div>
     <?php echo $print_resv ?>
@@ -209,13 +204,7 @@ foreach ($_SESSION['reservation_id'] as $e) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../script/jquery.payform.min.js"></script>
-    <?php
-    if (isset($_POST['submit'])) {
-        // Unset all of the session variables.
-        $_SESSION = array();
-        session_destroy();
-    }
-    ?>
+
 </body>
 
 </html>
