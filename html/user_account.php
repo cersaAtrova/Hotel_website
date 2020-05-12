@@ -6,29 +6,26 @@ session_start();
 if (isset($_REQUEST['logout'])) {
     $_SESSION = array();
 }
-
-
 if (!isset($_SESSION['user_login'])) {
     header('Location: login.php');
     die();
 }
 if (isset($_POST['update'])) {
-
     if (is_valid_name($_POST['first_name']) == false || is_valid_name($_POST['last_name']) == false || is_valid_email($_POST['email']) == false || !is_numeric($_POST['tel'])) {
         $error_update = 'Please enter correct information';
     } else {
-        if (isset($_POST['current_passwd'])) {
-            if (strlen($_POST['new_passwd']) < 6) {
-                $error_update = 'Your Password is to short';
+        if (isset($_POST['new_passwd'])) {
+            if ($_POST['new_passwd'] < 6) {
+                $error_update = 'Update failed. Password to short';
             } else {
                 update_member($_SESSION['user_login']['member_id'], $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['new_passwd'], $_POST['tel']);
             }
         } else {
-            update_member($_SESSION['user_login']['member_id'], $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_SESSION['user_passwd'], $_POST['tel']);
+            update_member($_SESSION['user_login']['member_id'], $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_SESSION['user_login']['member_password'], $_POST['tel']);
         }
+        $_SESSION['user_login'] = get_member($_SESSION['user_login']['member_email']);
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,12 +34,10 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
-
     <title>Vrissiana Beach Hotel | Account</title>
     <!-- Bootstrap -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script> -->
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
@@ -71,14 +66,7 @@ if (isset($_POST['update'])) {
     <div style="height: 20vh"></div>
     <?php
     navigation_bar();
-
     ?>
-
-    <!-- <div class="btn-group-vertical">
-            <button type="button" class="btn btn-secondary">Left</button>
-            <button type="button" class="btn btn-secondary">Middle</button>
-            <button type="button" class="btn btn-secondary">Right</button>
-        </div> -->
     <div class="container-fluid w-75">
         <div class="row">
             <div class="col-xs">
@@ -86,11 +74,9 @@ if (isset($_POST['update'])) {
                     <a class="item active bg-white welcome border-bottom text-form-control" data-tab="tab-name">
                         Welcome
                     </a>
-
                     <a class="item bg-white border-bottom text-form-control" data-tab="tab-name2">
                         Profile
                     </a>
-
                     <a class="item  bg-white border-bottom text-form-control" data-tab="tab-name3">
                         Reservation
                     </a>
@@ -98,10 +84,10 @@ if (isset($_POST['update'])) {
                         Logout
                     </a>
                 </div>
-
             </div>
             <div class="col">
                 <div class="ui tab p-4 bg-white" data-tab="tab-name">
+                    <p class="text-danger"> <?php echo $error_update ?></p>
                     <p class="h2 pb-4"> Dear Mr./Mrs. <?php echo $_SESSION['user_login']['member_name'] ?> </p>
                     <p class="h5 pb-3">Welcome to your personal Vrissiana account.</p>
 
@@ -168,7 +154,7 @@ if (isset($_POST['update'])) {
                                         <input type="submit" name="update" class="ui red btn-nav btn-primary w-100 p-3" value="Update">
                                     </div>
                                 </div>
-                                <p> <?php echo $error_update ?></p>
+
                             </form>
                         </div>
                     </div>
@@ -193,6 +179,14 @@ if (isset($_POST['update'])) {
                             //dispaly all reservation on a screen
                             //===================================
                             $resv = get_reservation_by_member_id($_SESSION['user_login']['member_id']);
+
+                            foreach ($resv as $r) {
+                                $date = date($r['resv_check_in']);
+                                $today = date('Y-m-d');
+                                if ($today > $date) {
+                                    update_status_reservation($r['resv_reference'], 'OK');
+                                }
+                            }
                             foreach ($resv as $r) {
                                 if ($r['resv_status'] == 'Confirm') {
                                     $color = 'text-success';
@@ -202,14 +196,15 @@ if (isset($_POST['update'])) {
                                     $btn = '<td><div class="content h5"><a class="ui button disabled">N/A</a></div></td>';
                                 } elseif ($r['resv_status'] == 'No show') {
                                     $color = 'text-warning';
-                                }elseif ($r['resv_status'] == 'Ok') {
+                                } elseif ($r['resv_status'] == 'OK') {
                                     $color = 'text-primary';
+                                    $btn = '<td><div class="content h5"><a class="ui button disabled">N/A</a></div></td>';
                                 }
                                 //get the total price
-                                $resv_facility=get_reservation_facilities_price($r['resv_reference']);
+                                $resv_facility = get_reservation_facilities_price($r['resv_reference']);
                                 $resv_total = get_reservation_price($r['resv_reference']);
-                                if($resv_facility[0]!=null){
-                                    $resv_total[0]+=$resv_facility[0];
+                                if ($resv_facility[0] != null) {
+                                    $resv_total[0] += $resv_facility[0];
                                 }
                                 $tb = <<<print
                                 <tr class="text-center"><td><div class="content h5">{$r['resv_reference']}</div></td>
@@ -254,11 +249,15 @@ print;
                 y.type = "password";
             }
         }
+    </script>
+    <script>
         $('#reset_passwd').click(function() {
-            $('.passwd').append('<div class="flex-box-form"><div class="col passwd"><label><span>&starf;</span>Current password</label><div class="ui icon input form-control"><input id="c_passwd" type="password" minlength="6" name="current_passwd" placeholder="Current password" required><i class="eye big link icon" onclick="show_old_password()"></i></div></div></div><div class="flex-box-form"><div class="col passwd"><label><span>&starf;</span>New _password</label><div class="ui icon input form-control"><input id="n_passwd" type="password" name="new_passwd" minlength="6" placeholder="Current password" value="" required><i class="eye  big link icon" onclick="show_new_password()"></i></div></div></div>');
+            $('.passwd').append('<div class="flex-box-form"><div class="col passwd"><label><span>&starf;</span>New _password</label><div class="ui icon input form-control"><input id="n_passwd" type="password" name="new_passwd" minlength="6" placeholder="Current password" value="" required><i class="eye  big link icon" onclick="show_new_password()"></i></div></div></div>');
+
+        });
+        $('#reset_passwd').click(function() {
             $('.passwd').removeClass('passwd');
         });
-    
     </script>
 </body>
 
