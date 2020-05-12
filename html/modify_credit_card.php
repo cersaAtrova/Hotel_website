@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" name="cvv" required id="cvv" title="Please enter the cvv">
                     </div>
                     <div class="form-group" id="card-number-field">
-                        <label for="cardNumber">Card Number</label>
+                        <label for="cardNumber">Card Digit Number</label>
                         <input type="text" name="card_number" required class="form-control" id="cardNumber" title="Please enter the card number">
                     </div>
                     <div class="form-group" id="expiration-date">
