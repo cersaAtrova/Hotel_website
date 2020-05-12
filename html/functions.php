@@ -47,8 +47,6 @@ function navigation_bar($str = 'HOME')
 <a class="nav-link" href="user_account.php">MY ACCOUNT</a>
 </div>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top-30">
-
-
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -59,7 +57,7 @@ function navigation_bar($str = 'HOME')
     <ul class="navbar-nav mr-auto  " style="line-height: 1.5rem; font-size: 1em; font-weight=500">
         <li class="nav-item">
           <a class="navbar-brand text-center logo_link" href="/html/homepage.php">
-           <img id="logo_img" src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="logo" width="60%" height="50%">
+           <img id="logo_img" src="https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/logo-white_vkyh9m.png" alt="logo" width="40%" height="30%">
           </a>
         </li>
     

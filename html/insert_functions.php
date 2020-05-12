@@ -380,10 +380,10 @@ function update_member_password($id, $passwd)
 {
     $hash = password_hash($passwd, PASSWORD_BCRYPT);
     global $db;
-    $query = 'UPDATE LOW_PRIORITY Member
-            SET
-            member_password= :passwd
+    $query = 'UPDATE Member
+            SET member_password= :passwd
             WHERE member_id =:id';
+
     $prep = $db->prepare($query);
     $prep->bindValue(":passwd", $hash);
     $prep->bindValue(":id", $id);
@@ -394,7 +394,8 @@ function get_reservation_by_member_id($id)
 {
     global $db;
     $query = ' SELECT * FROM Reservation
-               WHERE member_id=?';
+               WHERE member_id=?
+               ORDER BY resv_check_in DESC';
     $prep = $db->prepare($query);
     $prep->bindValue(1, $id);
     $prep->execute();
@@ -652,7 +653,7 @@ function update_guest_profile_reservation($resv_id, $name, $last, $country, $tel
                      resv_last=:clast,
                      resv_country=:country,
                      resv_tel=:tel
-              WHERE resv_reference=:resv_id';
+              WHERE resv_reference=:id';
 
     $prep = $db->prepare($query);
     $prep->bindValue(':id', $resv_id);
@@ -660,12 +661,9 @@ function update_guest_profile_reservation($resv_id, $name, $last, $country, $tel
     $prep->bindValue(':clast', $last);
     $prep->bindValue(':country', $country);
     $prep->bindValue(':tel', $tel);
-    if ($prep->execute()) {
-        $prep->closeCursor();
-        return true;
-    }
+    $prep->execute();
     $prep->closeCursor();
-    return false;
+    
 }
 
 
