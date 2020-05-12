@@ -90,8 +90,6 @@ if (isset($_REQUEST['search_top'])) {
                         </div>
                     </div>
                     <div class="col">
-
-
                         <div class="ui calendar " id="date_calendar_to">
                             <span>Date to</span>
                             <div class="ui input left icon border border-primary">
