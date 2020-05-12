@@ -3,14 +3,13 @@ session_start();
 require_once('functions.php');
 require_once('insert_functions.php');
 if (isset($_POST['update_passwd'])) {
-    update_member_password($_SESSION['member']['member_id'], $_POST['passwd']);
+    update_member_password($_SESSION['member']['member_id'], $_POST['new_passwd']);
     $_SESSION = array();
     session_destroy();
     header('Location: user_acount.php');
     die();
 }
 $print_resv = '';
-// if (verifyFormToken('new_reservation')) {
 foreach ($_SESSION['reservation_id'] as $e) {
     $resv = get_reservation_by_resv_id($e);
     $allergies = get_allergies($e);
@@ -27,12 +26,11 @@ foreach ($_SESSION['reservation_id'] as $e) {
     if ($resv_facility[0] != null) {
         $resv_total[0] += $resv_facility[0];
     }
-    // writeLog($resv['resv_name'].' '.$resv['resv_last'].' '.$_SESSION['member']['member_email']);
     $check_in = date('M-d-Y', strtotime($_SESSION['room_info']['check_in']));
     $check_out = date('M-d-Y', strtotime($_SESSION['room_info']['check_out']));
     $print_resv .= <<<print
-<div class="containeri-fluid">
-<div class="row m-auto w-75">
+    <div class="containeri-fluid">
+    <div class="row m-auto w-75">
     <div class="col">
         <div class="container  mb-5">
             <P class="h2 mt-5">Accomodation Summary</P>

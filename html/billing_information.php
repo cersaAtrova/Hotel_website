@@ -63,6 +63,7 @@ if (isset($_POST['submit'])) {
                         $_SESSION['member'] = get_member($user_email);
                         $existing_guest = true;
                     }
+                   
                     //====\\
                     //Room 1\\
                     //========\\
@@ -1018,16 +1019,16 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="payment">
                                 <div class="form-group owner">
-                                    <label for="owner">Owner</label>
-                                    <input type="text" class="form-control" name="owner" id="owner" required title="Please enter the card owner">
+                                    <label for="owner">Full Name</label>
+                                    <input type="text" class="form-control" name="owner" id="owner" placeholder="Name Surname" required title="Please enter the card owner">
                                 </div>
                                 <div class="form-group CVV">
                                     <label for="cvv">CVV</label>
-                                    <input type="text" class="form-control" name="cvv" required id="cvv" title="Please enter the cvv">
+                                    <input type="text" class="form-control" name="cvv" placeholder="CVV" required id="cvv" title="Please enter the cvv">
                                 </div>
                                 <div class="form-group" id="card-number-field">
-                                    <label for="cardNumber">Card Number</label>
-                                    <input type="text" name="card_number" required class="form-control" id="cardNumber" title="Please enter the card number">
+                                    <label for="cardNumber">Card Digit Number</label>
+                                    <input type="text" name="card_number" required class="form-control" placeholder="1234 **** **** 1234" id="cardNumber" title="Please enter the card number">
                                 </div>
                                 <div class="form-group" id="expiration-date">
                                     <label>Expiration Date</label>
@@ -1059,10 +1060,10 @@ if (isset($_POST['submit'])) {
                                     <img src="../images/mastercard.jpg" id="mastercard">
                                     <img src="../images/amex.jpg" id="amex">
                                 </div>
-                                        <?php if(isset($_REQUEST['modify'])){
-                                            echo '<input type="hidden" name="modify" value="true">';
-                                        } ?>
-                                        
+                                <?php if (isset($_REQUEST['modify'])) {
+                                    echo '<input type="hidden" name="modify" value="true">';
+                                } ?>
+
                                 <input type="submit" name="submit" id="reserved" class="ui button btn btn-nav btn-primary" value="Reserved">
 
 
