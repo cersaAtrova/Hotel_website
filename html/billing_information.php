@@ -58,18 +58,18 @@ if (isset($_POST['submit'])) {
                 } else {
 
                     $member = is_email_exist($user_email);
-                    $existing_guest = false;
+                    $_SESSION['existing_guest'] = false;
                     if ($member != false) {
                         $_SESSION['member'] = get_member($user_email);
-                        $existing_guest = true;
+                        $_SESSION['existing_guest'] = true;
                     }
-                   
+
                     //====\\
                     //Room 1\\
                     //========\\
                     if ($_SESSION['total_room'] == 1) {
                         //create new reservation for new Member
-                        if ($existing_guest == false) {
+                        if ($_SESSION['existing_guest'] == false) {
                             //insert new member and guest the id
                             $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
                             if ($member_id == false) {
@@ -263,7 +263,7 @@ if (isset($_POST['submit'])) {
                     //==================//
                     if ($_SESSION['total_room'] == 2) {
                         //create new reservation for new Member
-                        if ($existing_guest == false) {
+                        if ($_SESSION['existing_guest']== false) {
                             //insert new member and guest the id
                             $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
                             if ($member_id == false) {
@@ -505,7 +505,7 @@ if (isset($_POST['submit'])) {
                     //==================//
                     if ($_SESSION['total_room'] == 3) {
                         //create new reservation for new Member
-                        if ($existing_guest == false) {
+                        if ($_SESSION['existing_guest'] == false) {
                             //insert new member and guest the id
                             $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
                             if ($member_id == false) {

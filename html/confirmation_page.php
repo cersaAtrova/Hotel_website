@@ -216,7 +216,15 @@ foreach ($_SESSION['reservation_id'] as $e) {
         } ?>
 
         <p class="lead"><strong>Please check your email</strong> for the voucher.</p>
-        <?php include_once('update_password.php'); ?>
+
+        <?php
+        if ($_SESSION['existing_guest'] == false) {
+            include_once('update_password.php');
+        } else {
+            $_SESSION = array();
+            session_destroy();
+        }
+        ?>
         <hr>
     </div>
     <?php if (!isset($_REQUEST['modify'])) {
