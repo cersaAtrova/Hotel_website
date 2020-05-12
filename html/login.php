@@ -90,17 +90,17 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <div style="height: 20vh"></div>
+    <div style="height: 25vh"></div>
     <?php
     navigation_bar();
     ?>
     <div class="container-fluid">
-        <div class="container text-center">
+        <div class="container  text-center">
             <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
                 <p class="display-4"> Account Information</p>
-                <p class="h3">Login here using your email address to get access to your existing reservations or to update your account.</p>
+                <p class="h4">Login here using your email address to get access to your existing reservations or to update your account.</p>
 
-                <div class="container w-50 pt-5 mt-5">
+                <div class="container login-width pt-5 mt-5">
                     <input type="email" name="email" id="email" placeholder="Email.." required value="<?php echo $user_email ?>" require_once class="text-form-control p-2 mb-3" pattern="[^@]+@[^\.]+\..+">
                     <?php if ($email_accepted == true) {
                         echo '<input type="password" class="text-form-control p-2 mb-3" placeholder="Enter your password" name="passwd" id="passwd" require> ';
