@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 #error {
@@ -89,14 +90,6 @@ body {
 .font-roboto {
   font-family: 'Roboto', sans-serif !important;
 }
-
-/* Set the border color */
-
-
-/* change the size of the slideshow */
-/* .carousel-inner>.carousel-item {
-  height: 100vh;
-} */
 
 .fixed-top-30 {
   position: fixed;
@@ -234,11 +227,16 @@ body {
 .rm_preferences .row {
   padding-top: 10px;
 }
-
+.login-width{
+  width: 50%;
+}
 @media only screen and (max-width: 590px) {
   #logo_img {
     width: 20%;
     height: 15%;
+  }
+  .login-width{
+    width: 100%;
   }
 
   .overview>div {
@@ -251,7 +249,9 @@ body {
     width: 30%;
     height: 25%;
   }
-
+  .login-width{
+    width: 80%;
+  }
   .btn-nav {
     padding: .8em;
     letter-spacing: 0;
@@ -281,7 +281,9 @@ body {
   .box-content-image-right {
     margin: 0;
   }
-
+  .login-width{
+    width: 75%;
+  }
   .box-content-image-left {
     margin: 0;
   }
