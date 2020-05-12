@@ -48,13 +48,205 @@ if (isset($_GET['card'])) {
     if ($card != 'Not available') {
         if (update_credit_card($resv['resv_reference'], $card['cc_full_name'], $card['cc_card_number'], $card['cc_exp_moth'], $card['cc_exp_year'], $card['cc_card_cvv'], 'Invalid')) {
             $card = get_credit_card_by_resv_id($resv['resv_reference']);
-        }
+            require_once('email.php');
+            $body = <<<print
+            <!DOCTYPE html>
+            <html>
+            <head>
+            
+              <meta charset="utf-8">
+              <meta http-equiv="x-ua-compatible" content="ie=edge">
+              <title>Password Reset</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <style type="text/css">
+              /**
+               * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
+               */
+              @media screen {
+                @font-face {
+                  font-family: 'Source Sans Pro';
+                  font-style: normal;
+                  font-weight: 400;
+                  src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+                }
+            
+                @font-face {
+                  font-family: 'Source Sans Pro';
+                  font-style: normal;
+                  font-weight: 700;
+                  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
+                }
+              }
+            
+              /**
+               * Avoid browser level font resizing.
+               * 1. Windows Mobile
+               * 2. iOS / OSX
+               */
+              body,
+              table,
+              td,
+              a {
+                -ms-text-size-adjust: 100%; /* 1 */
+                -webkit-text-size-adjust: 100%; /* 2 */
+              }
+            
+              /**
+               * Remove extra space added to tables and cells in Outlook.
+               */
+              table,
+              td {
+                mso-table-rspace: 0pt;
+                mso-table-lspace: 0pt;
+              }
+            
+              /**
+               * Better fluid images in Internet Explorer.
+               */
+              img {
+                -ms-interpolation-mode: bicubic;
+              }
+            
+              /**
+               * Remove blue links for iOS devices.
+               */
+              a[x-apple-data-detectors] {
+                font-family: inherit !important;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                color: inherit !important;
+                text-decoration: none !important;
+              }
+            
+              /**
+               * Fix centering issues in Android 4.4.
+               */
+              div[style*="margin: 16px 0;"] {
+                margin: 0 !important;
+              }
+            
+              body {
+                width: 100% !important;
+                height: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+              }
+            
+              /**
+               * Collapse table borders to avoid space between cells.
+               */
+              table {
+                border-collapse: collapse !important;
+              }
+            
+              a {
+                color: #1a82e2;
+              }
+            
+              img {
+                height: auto;
+                line-height: 100%;
+                text-decoration: none;
+                border: 0;
+                outline: none;
+              }
+              </style>
+            
+            </head>
+            <body style="background-color: #e9ecef;">
+              <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
+               Ivalid Credid Card Details
+              </div>
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center" bgcolor="#e9ecef">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                    <!-- start logo -->
+                    <tr>
+                      <td align="center"  style=" background-image: url('https://res.cloudinary.com/sotiris/image/upload/v1586610225/Vrissiana/water_vteo2m.jpg'); background-repeat: repeat;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                            <td align="center" valign="top" style="padding: 36px 24px;">
+                              <a href="#" target="_blank" style="display: inline-block;">
+                                <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,w_400/v1586610212/Vrissiana/logo_v8xjho.png" alt="Logo" border="0" width="100" style="display: block; width: 200px; max-width: 300px; min-width: 48px;">
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <!-- end logo -->
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" bgcolor="#e9ecef">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                      <tr>
+                        <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
+                          <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Update your Credit Card Details</h1>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" bgcolor="#e9ecef">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                      <tr>
+                        <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                          <p style="margin: 0;">Payment was not succesful. Please arrange the payment through our website. In case payment is not made within 24hours, your booking will be cancelled.</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" bgcolor="#ffffff">
+                          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td align="center" bgcolor="#ffffff" style="padding: 12px;">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tr>
+                                    <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
+                                      <a style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;" href="#">Click here to update</a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" bgcolor="#e9ecef" style="padding: 24px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                      <tr>
+                        <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+                          <p style="margin: 0;">You received this email because we do not accept your payment.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
+print;
 
-        //=============================
-        //----------NOTE---------------
-        //ADD TO SEND EMAIL TO CUSTOMER
-        //-----------------------------
-        //=============================
+            //=============================
+            //-----------------------------
+            //SEND EMAIL TO CUSTOMER
+            //-----------------------------
+            //=============================
+            if (smtpmailer($member['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Cancelation', $body)) {
+                writeLog('Cancelation mail has send to guest ' . $member['member_email']);
+            } else {
+                $confirm_message = "Fail - " . $mail->ErrorInfo;
+                writeLog('Fatal: Mail Not Sent to guest->' . $member['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+            }
+        }
     }
 }
 
@@ -78,18 +270,38 @@ if (isset($_REQUEST['cancel'])) {
         $availability = update_availability($resv['rm_type'],   $ave['ra_date'], $day);
         $repeat = strtotime("+1 day", strtotime($begin));
         $begin = date('Y-m-d', $repeat);
+
+
+        //=============================
+        //-----------------------------
+        //ADD TO SEND EMAIL TO CUSTOMER
+        //AND TO Reservation DEPartment
+        //-----------------------------
+        //=============================
     }
     if ($cnx) {
+        require_once('email.php');
+        $body =  guest_email($resv['resv_reference']);
+        if (smtpmailer($member['member_email'], 'noreply.info.testing@gmail.com', '', 'Vrissiana - Booking Cancelation', $body)) {
+            writeLog('Cancelation mail has send to guest ' . $member['member_email']);
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Mail Not Sent to guest->' . $member['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
+        $body_admin = admin_email($resv['resv_reference']);
+        if (smtpmailer('soteris100@gmail.com', $member['member_email'], 'CANCELATION', 'CANCELATION', $body_admin)) {
+            writeLog('Cancelation mail has send to admin');
+        } else {
+            $confirm_message = "Fail - " . $mail->ErrorInfo;
+            writeLog('Fatal: Cancelation Mail Not Receive to Reservation Department FROM->' . $member['member_email'] . ' REFERENCE->' . $resv['resv_reference']);
+        }
         header("Location: admin_view_reservation.php?id={$resv['resv_reference']}");
         die();
     }
-
-    //=============================
-    //----------NOTE---------------
-    //ADD TO SEND EMAIL TO CUSTOMER
-    //AND TO Reservation DEPartment
-    //-----------------------------
-    //=============================
+    // display no show
+    if (isset($_REQUEST['noshow'])) {
+        update_status_reservation($resv['resv_reference'], 'No Show');
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -300,7 +512,7 @@ if (isset($_REQUEST['cancel'])) {
             <div class="col-xs">
                 <div class="btn-group-vertical  mt-5 pt-5 text-white">
                     <a href="admin_reservation.php" class="btn-group btn-group-lg p-3 btn-nav btn-primary btn-go-back" role="group" aria-label="Button">Go back to My account</a>
-
+                    <a href="admin_view_reservation.php?id=<?php echo $resv['resv_reference'] ?>&noshow=true" class="btn-group p-3 btn-group-lg btn-nav btn-warning btn-credit-card" role="group " aria-label="no-show">No Show</a>
                     <a href="admin_view_reservation.php?id=<?php echo $resv['resv_reference'] ?>&card=invalid" class="btn-group p-3 btn-group-lg btn-nav btn-warning btn-credit-card" role="group " aria-label="Invalid Card">Invalid Credit Card</a>
                     <a href="admin_view_reservation.php?id=<?php echo $resv['resv_reference'] ?>&cancel=cancelled" class="btn-group btn-group-lg p-3 btn-nav btn-danger btn-cancel" role="group" aria-label="Cancel Reservation"> Cancel Reservation</a>
                 </div>
