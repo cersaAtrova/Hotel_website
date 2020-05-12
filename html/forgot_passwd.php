@@ -267,11 +267,10 @@ print;
       <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
         <p class="display-4">Enter Your Email</p>
         <div class="container w-50">
-          <input type="email" class="text-form-control p-2 mb-3" placeholder="Enter Your Email    " name="email" required>
+          <input type="email" class="text-form-control p-2 mb-3" placeholder="Enter Your Email..." name="email" required>
           <input type="submit" name="submit_email" class="ui btn btn-nav btn-primary" value="Submit">
         </div>
       </form>
-      <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?resend=true" class="m-3 ui link btn-link h5 ">Resend Code</a>
     </div>
   <?php elseif (!empty($_SESSION['veryfing'])) : ?>
     <div class="container text-center">
