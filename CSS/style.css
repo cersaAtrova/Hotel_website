@@ -164,7 +164,7 @@ body {
 }
 
 .overview {
-  padding: 50px;
+  padding: 10px;
   width: 100%;
 
 }
@@ -240,14 +240,17 @@ body {
   }
 
   .overview>div {
-    width: 90% !important;
+    width: 95% !important;
+    font-size: 0.7rem !important;
   }
 }
-
+.sp-car-h{
+  height: 10vh
+}
 @media only screen and (max-width: 890px) {
   #logo_img {
-    width: 30%;
-    height: 25%;
+    width: 50%;
+    height: 40%;
   }
   .login-width{
     width: 80%;
@@ -257,9 +260,19 @@ body {
     letter-spacing: 0;
     text-indent: 0;
   }
-
+  .sp-car-h{
+    height: 15vh !important;
+  }
   .overview>div {
-    width: 80% !important;
+    width: 95% !important;
+    font-size: 0.7rem !important;
+    
+  }
+  p.display-4 {
+   font-size: 2.5rem;
+  }
+  p.h4{
+    font-size: 1rem;
   }
 
   .col-md-8 {
@@ -290,6 +303,7 @@ body {
 
   .overview>div {
     width: 60%;
+    font-size: 1rem;
   }
 }
 
@@ -300,7 +314,7 @@ body {
 }
 
 .overview>div {
-  width: 40%;
+  width: 50%;
 }
 
 .header {

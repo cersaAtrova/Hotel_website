@@ -22,10 +22,10 @@ $('#rangeend').calendar({
     },
 });
 $(document).ready(function () {
-
-    $('.admin_logout').click(function(){
-        var href='admin_login.php';
-        window.location=href;
+    
+    $('.admin_logout').click(function () {
+        var href = 'admin_login.php';
+        window.location = href;
     });
 
     $('.flex-box-form').on('change', '#adults', function () {
@@ -149,7 +149,7 @@ $(document).ready(function () {
         }
     });
 
-    
+   
 
 
 });

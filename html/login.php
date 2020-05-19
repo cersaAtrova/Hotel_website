@@ -97,7 +97,7 @@ if (isset($_POST['submit'])) {
     <div class="container-fluid">
         <div class="container  text-center">
             <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
-                <p class="display-4"> Account Information</p>
+                <p class="display-4 "> Account Information</p>
                 <p class="h4">Login here using your email address to get access to your existing reservations or to update your account.</p>
 
                 <div class="container login-width pt-5 mt-5">

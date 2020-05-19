@@ -6,7 +6,7 @@ if (isset($_POST['update_passwd'])) {
     update_member_password($_SESSION['member']['member_id'], $_POST['new_passwd']);
     $_SESSION = array();
     session_destroy();
-    header('Location: user_acount.php');
+    header('Location: user_account.php');
     die();
 }
 $print_resv = '';
@@ -38,6 +38,19 @@ foreach ($_SESSION['reservation_id'] as $e) {
                 <div style="height: 30vh ">
                     <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" alt="Rocks and the sea" class="back-img" style="opacity: 0.6">
                 </div>
+                <div class="row p-2">
+                <div class="col border-right">
+                    <label> Booking Reference</label>
+                    <p class="mb-1 font-weight-bold">{$resv['resv_reference']}</p>
+                    <p class="w-50 border-bottom"></p>
+                </div>
+                <div class="col border-right">
+                <label> Total Price</label>
+                <p class="mb-1 font-weight-bold"> <i class=\"euro icon\"></i>{$resv_total[0]}</p>
+                <p class="w-50 border-bottom"></p>
+            </div>
+               
+            </div>
                 <div class="row p-2">
                     <div class="col border-right">
                         <label> Name</label>
@@ -124,8 +137,6 @@ print;
     foreach ($facilities as $e) {
         $print_resv .= ++$f . " {$e['fa_name']}<br/>";
     }
-    $print_resv .= '</p><p class="w-50 border-bottom"></p></div></div><hr><div class="row p-2"><div class="col"></div><div class="col"></div><div class="col"><label>Price</label>';
-    $print_resv .= " <p class=\"w-50 h5 border-bottom mb-3\"><i class=\"euro icon\"></i>{$resv_total[0]}</p></div></div></div></div></div></div>";
 }
 
 // }
@@ -205,7 +216,7 @@ foreach ($_SESSION['reservation_id'] as $e) {
 
 <body>
     <?php navigation_bar(); ?>
-    <div style="height: 25vh"></div>
+    <div style="height: 15vh"></div>
     <div class="container text-center">
         <i class="check green massive icon"></i>
         <h1 class="display-3">Thank You!</h1>
@@ -214,15 +225,19 @@ foreach ($_SESSION['reservation_id'] as $e) {
         } else {
             echo '<p class="lead">Your Reservation is confirmed.</p>';
         } ?>
-
         <p class="lead"><strong>Please check your email</strong> for the voucher.</p>
-
         <?php
         if ($_SESSION['existing_guest'] == false) {
+            echo ('<p class="h4">In order to create your account succesfully and to have access to your booking Please Create your password below</p>');
             include_once('update_password.php');
         } else {
+            if (isset($_SESSION['user_login'])) {
+                $user = $_SESSION['user_login'];
+            }
             $_SESSION = array();
-            session_destroy();
+            if (isset($user)) {
+                $_SESSION['user_login'] = $user;
+            }
         }
         ?>
         <hr>
@@ -230,7 +245,7 @@ foreach ($_SESSION['reservation_id'] as $e) {
     <?php if (!isset($_REQUEST['modify'])) {
         echo $print_resv;
     } ?>
-    <div style='height: 30vh'></div>
+    <div style='height: 10vh'></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

@@ -41,6 +41,10 @@ function navigation_bar($str = 'HOME')
       $arr[7] = 'active';
       $arr[17] = '<span class="sr-only">(current)</span>';
       break;
+    case 'LOCATION':
+      $arr[8] = 'active';
+      $arr[18] = '<span class="sr-only">(current)</span>';
+      break;
   }
   $nav = <<<print
 <div class="font-roboto bg-light fixed-top">
@@ -82,6 +86,9 @@ function navigation_bar($str = 'HOME')
         <!--<li class="nav-item {$arr[7]}">
             <a class="nav-link" href="#">OFFER{$arr[17]}</a>
         </li>-->
+        <li class="nav-item {$arr[8]}">
+            <a class="nav-link" href="/html/location.php">LOCATION{$arr[18]}</a>
+        </li>
     </ul>
 </div>
 <form class="form-inline my-2 my-lg-0" action="booking_calendar.php" method="GET">
@@ -113,16 +120,12 @@ function footer()
           <div class="col-md-6 col-lg-7 text-center text-lg-right">
     
             <!-- Facebook -->
-            <a class="link social_link" href="#">
+            <a class="link social_link" href="https://www.facebook.com/vrissiana/">
               <i class="fab fa-facebook-f white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Twitter -->
-            <a class="link social_link" href="#">
+            <a class="link social_link" href="https://twitter.com/hashtag/VrissianaBeachHotel?src=hash">
               <i class="fab fa-twitter white-text mr-4" style="font-size: 1.5rem"> </i>
-            </a>
-            <!-- Google +-->
-            <a class="link social_link">
-              <i class="fab fa-google-plus-g white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!--Instagram-->
             <a class="link social_link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
@@ -167,9 +170,6 @@ function footer()
           <p>
             <a href="/html/terms_and_condition.php">Term &amp; Condition</a>
           </p>
-          <p>
-            <a href="/html/sitemap.php">Sitemap</a>
-          </p>
           
         </div>
         <!-- Grid column -->
@@ -181,7 +181,7 @@ function footer()
           <h6 class="text-uppercase font-weight-bold">Useful links</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="/html/guest_acount.php">Your Account</a>
+            <a href="/html/user_acount.php">Your Account</a>
           </p>
           <p>
             <a href="/html/contact_us.php">Contact Us</a>
@@ -279,7 +279,7 @@ print;
   echo $image;
 }
 
-function room_billining_information($check_in, $check_out, $rm_name, $adults, $kids, $infants, $num_room, $room_rate_selected, $rate_plan_selected)
+function room_billining_information($check_in, $check_out, $rm_name, $adults, $kids, $infants, $num_room, $room_rate_selected, $rate_plan_selected, $meal_plan)
 {
   $subtotal = 0;
   $begin = date('M-d-Y', strtotime($check_in));
@@ -307,14 +307,17 @@ pr;
                   <div class="ui two column very relaxed grid">
                       <div class="column">
                           <p class="h4 p-2 font-weight-bold">Room type selected: </p>
-                          <p class="h4 p-2 font-weight-bold">Dates: </p>
+                          <p class="h4 p-2 font-weight-bold">Dates: </p></br>
                           <p class="h4 p-2 font-weight-bold">Rate plan selected: </p>
+                          <p class="h4 p-2 font-weight-bold">Meal plan selected: </p>
                           <p class="h4 p-2 font-weight-bold">Terms and Condition</p>
                       </div>
                       <div class="column">
                           <p class="h4 p-2"> {$rm_name}</p>
                           <p class="h4 p-2"> {$check_in} - {$check_out}</p>
                           <p class="h4 p-2"> {$rate_plan_selected}</p>
+                          <p class="h4 p-2"> {$meal_plan}</p>
+                          
                           <p class="h4 p-2"></p>
                       </div>
                   </div>

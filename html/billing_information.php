@@ -4,6 +4,11 @@ require_once 'functions.php';
 require_once 'insert_functions.php';
 require_once 'countries.php';
 
+
+if (empty($_SESSION)) {
+    header('Location: booking_calendar.php');
+    die();  
+}
 if (isset($_REQUEST['total_room'])) {
     if ($_REQUEST['total_room'] > 3) {
         header('Location: booking_calendar.php');
@@ -12,11 +17,9 @@ if (isset($_REQUEST['total_room'])) {
         header('Location: booking_calendar.php');
         die();
     } else {
-
         $total_room = $_SESSION['total_room'] = $_REQUEST['total_room'];
     }
 }
-
 
 if ($_REQUEST['total_room'] == 1) {
     $room_name_selected = 'Room 1 ' . $_SESSION['room_1_selected']['rm_name'];
@@ -27,6 +30,15 @@ if ($_REQUEST['total_room'] == 1) {
 }
 $check_in = date('M-d-Y', strtotime($_SESSION['room_info']['check_in']));
 $check_out = date('M-d-Y', strtotime($_SESSION['room_info']['check_out']));
+if ($_SESSION['room_info']['meal_plan'] == 'PAI') {
+    $meal_plan = 'Premium All Inclusive';
+} elseif ($_SESSION['room_info']['meal_plan'] == 'FB') {
+    $meal_plan = 'Full Board';
+} elseif ($_SESSION['room_info']['meal_plan'] == 'HB') {
+    $meal_plan = 'Half Board';
+} elseif ($_SESSION['room_info']['meal_plan'] == 'BB') {
+    $meal_plan = 'Bed and Breakfast';
+}
 
 $total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest']['adults'] + $_SESSION['room_3_guest']['adults'];
 $total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
@@ -263,7 +275,7 @@ if (isset($_POST['submit'])) {
                     //==================//
                     if ($_SESSION['total_room'] == 2) {
                         //create new reservation for new Member
-                        if ($_SESSION['existing_guest']== false) {
+                        if ($_SESSION['existing_guest'] == false) {
                             //insert new member and guest the id
                             $member_id = insert_new_member($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['country'], $_POST['tel']);
                             if ($member_id == false) {
@@ -985,7 +997,7 @@ if (isset($_POST['submit'])) {
                                 <p class="h1"> <i class="dropdown icon"></i>Room 1</p>
                             </div>
                             <div class="content">
-                                <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_1_selected']['rm_name'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids'], $_SESSION['room_1_guest']['infants'], 'Room_1', $_SESSION['room_1_selected']['room_daily_rate_selected'],    $_SESSION['room_1_selected']['rate_plan_selected'])
+                                <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_1_selected']['rm_name'], $_SESSION['room_1_guest']['adults'], $_SESSION['room_1_guest']['kids'], $_SESSION['room_1_guest']['infants'], 'Room_1', $_SESSION['room_1_selected']['room_daily_rate_selected'],    $_SESSION['room_1_selected']['rate_plan_selected'], $meal_plan)
                                 ?>
                             </div>
                             <?php if ($total_room == 2) : ?>
@@ -993,7 +1005,7 @@ if (isset($_POST['submit'])) {
                                     <p class="h1"> <i class="dropdown icon"></i>Room 2</p>
                                 </div>
                                 <div class="content">
-                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_2_selected']['rm_name'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids'], $_SESSION['room_2_guest']['infants'], 'Room_2', $_SESSION['room_2_selected']['room_daily_rate_selected'],   $_SESSION['room_2_selected']['rate_plan_selected']) ?>
+                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_2_selected']['rm_name'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids'], $_SESSION['room_2_guest']['infants'], 'Room_2', $_SESSION['room_2_selected']['room_daily_rate_selected'],   $_SESSION['room_2_selected']['rate_plan_selected'], $meal_plan) ?>
                                 </div>
                             <?php endif;
                             if ($total_room == 3) : ?>
@@ -1001,14 +1013,14 @@ if (isset($_POST['submit'])) {
                                     <p class="h1"> <i class="dropdown icon"></i>Room 2</p>
                                 </div>
                                 <div class="content">
-                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_2_selected']['rm_name'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids'], $_SESSION['room_2_guest']['infants'], 'Room_2', $_SESSION['room_2_selected']['room_daily_rate_selected'],   $_SESSION['room_2_selected']['rate_plan_selected']) ?>
+                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_2_selected']['rm_name'], $_SESSION['room_2_guest']['adults'], $_SESSION['room_2_guest']['kids'], $_SESSION['room_2_guest']['infants'], 'Room_2', $_SESSION['room_2_selected']['room_daily_rate_selected'],   $_SESSION['room_2_selected']['rate_plan_selected'], $meal_plan) ?>
                                 </div>
                                 <div class="title text-white ">
                                     <p class="h1"> <i class="dropdown icon"></i>Room 3</p>
                                 </div>
                                 <div class="content">
 
-                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_3_selected']['rm_name'], $_SESSION['room_3_guest']['adults'], $_SESSION['room_3_guest']['kids'], $_SESSION['room_3_guest']['infants'], 'Room_3', $_SESSION['room_3_selected']['room_daily_rate_selected'],    $_SESSION['room_3_selected']['rate_plan_selected']) ?>
+                                    <?php room_billining_information($_SESSION['room_info']['check_in'], $_SESSION['room_info']['check_out'],  $_SESSION['room_3_selected']['rm_name'], $_SESSION['room_3_guest']['adults'], $_SESSION['room_3_guest']['kids'], $_SESSION['room_3_guest']['infants'], 'Room_3', $_SESSION['room_3_selected']['room_daily_rate_selected'],    $_SESSION['room_3_selected']['rate_plan_selected'], $meal_plan) ?>
                                 </div>
                             <?php endif; ?>
                         </div>

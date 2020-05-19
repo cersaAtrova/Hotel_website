@@ -1,14 +1,13 @@
 <?php
 require_once 'functions.php';
-session_start();
-$_SESSION = array();
-session_destroy();
+
 ?>
 <!DOCTYPE html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
     <title>Vrissiana Beach Hotel Protaras, Cyprus | Official Website </title>
     <meta name="description" content="Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus.
          It combines modern aesthetics, chic style and comfort for your beach holidays. 
@@ -30,12 +29,24 @@ session_destroy();
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/slideShowStyle.css">
     <link rel="stylesheet" href="/CSS/style.css">
+
+
+
+
+
+
+
+
 </head>
 
 <body>
-    <?php navigation_bar('HOME') ?>
-    <!-- carusell slideshow -->
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <?php
+    // include_once('splash_screen.php');
+    navigation_bar('HOME');
+    ?>
+    <!-- carousel slideshow -->
+    <div class="sp-car-h"></div>
+    <div id="carouselExampleIndicators" class="carousel slide h-100" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -63,10 +74,10 @@ session_destroy();
         </a>
     </div>
 
-    <div class="overview">
-        <div class="mx-auto text-center w-50">
-            <h1 class="display-4 text-center">Welcome</h1>
-            <p style="font-size: 1.2rem">Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus.
+    <div class="overview mt-5">
+        <div class="mx-auto text-center">
+            <p class="display-4 text-center title">Welcome</p>
+            <p>Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus.
                 It combines modern aesthetics, chic style and comfort for your beach holidays. Enviably located on the golden
                 sandy beach in the center of Protaras, makes it ideal for beach holidays in Cyprus.
                 The 136 modern and spacious rooms and suites are equipped with the latest technology, facilities and amenities.
@@ -102,8 +113,8 @@ session_destroy();
                 </div>
                 <div class="col align-self-center ">
                     <div class="col box-content-image-left pad-25 text-white">
-                        <h5 class="pad-25">Gourmet's Delight</h5>
-                        <h2 class="pad-20 text-uppercase">Offering unique dining experiences</h2>
+                        <p class="pad-25 h5">Gourmet's Delight</p>
+                        <p class="pad-20 h2 text-uppercase">Offering unique dining experiences</p>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">Our team knows what five-star guests require and they always look for new ways to fulfill expectations in our five restaurants. </p>
                         </div>
@@ -115,9 +126,9 @@ session_destroy();
     </div>
     <section class="overview">
         <div class="mx-auto text-center" style="width: 30%">
-            <h3 class="text-center">MORE TO EXPLORE</h3>
-            <h1>RELAX REVITALIZE YOUR BODY AND MIND</h1>
-            <H3>Welcome to our exclusive The Spa</H3>
+            <p class="text-center h4">MORE TO EXPLORE</p>
+            <p class="h2">RELAX REVITALIZE YOUR BODY AND MIND</p>
+            <p class="h4">Welcome to our exclusive The Spa</p>
         </div>
     </section>
     <div class="box-container">
@@ -155,7 +166,7 @@ session_destroy();
             </div>
         </div>
     </div>
-    <section class="overview">
+    <section class="overview mb-5">
         <div class="mx-auto text-center" style="width: 30%">
             <h3 class="text-center">SOCIAL</h3>
             <h1>IMERSE INTO LUXURY</h1>
@@ -163,6 +174,7 @@ session_destroy();
             <a style="font-size: 1.5rem" href="https://www.instagram.com/explore/locations/1032562090/vrissiana-beach-hotel/">@vrissiana beach hotel</a>
         </div>
     </section>
+
     <!-- Footer -->
     <?php footer(); ?>
     <!-- Footer -->

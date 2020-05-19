@@ -20,12 +20,16 @@ if (isset($_REQUEST['update_availability'])) {
     $date_to =  new DateTime($_REQUEST['date_to']);
     $status = $_REQUEST['status'];
     $days = $_REQUEST['days'];
+    if($_REQUEST['days']==null){
+        $day=0;
+    }
     $interval = $date_from->diff($date_to)->format('%a');
 
     if ($rm_type != null) {
         $begin = date('Y-m-d', strtotime($_REQUEST['date_from']));
         for ($i = 0; $i <= $interval; $i++) {
-            update_availability($rm_type, $begin, $days);
+
+            $r=update_availability($rm_type, $begin, $days, $status);
             $repeat = strtotime("+1 day", strtotime($begin));
             $begin = date('Y-m-d', $repeat);
         }
@@ -182,19 +186,28 @@ if (isset($_REQUEST['update_meal_price'])) {
                         <div class="col">
                             <p>Selected Status</p>
                             <div class="ui selection dropdown  border border-primary ">
-                                <input type="hidden" name="status" required value="Open">
+                                <input type="hidden" class="stop_sales" name="status" required value="Open">
                                 <i class="dropdown icon big"></i>
                                 <div class="default text">Select Status</div>
                                 <div class="menu">
                                     <div class="item" data-value="Open">Open</div>
-                                    <div class="item" data-value="Stop Sales">Stop Sales</div>
+                                    <div class="item " data-value="Stop Sales">Stop Sales</div>
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            $('.stop_sales').change(function(){
+                                stop=$('.stop_sales').val();
+                                if(stop=='Stop Sales'){
+                                    $('.add_days').val(0);
+                                }
+
+                            });
+                        </script>
                         <div class="col">
                             <p>Add days</p>
                             <div class="ui input focus">
-                                <input type="text" placeholder="Add Days" required name="days" pattern="[0-9]+">
+                                <input type="text" class="add_days"  placeholder="Add Days" required name="days" pattern="[0-9]+">
                             </div>
                         </div>
                         <div class="col">

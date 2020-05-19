@@ -1,8 +1,14 @@
 <?php
 
 require_once 'functions.php';
-require_once '../connect_dbase.php';
 session_start();
+if (isset($_SESSION['user_login'])) {
+    $user = $_SESSION['user_login'];
+}
+$_SESSION = array();
+if (isset($user)) {
+    $_SESSION['user_login'] = $user;
+}
 if (isset($_GET['submit'])) {
     $check_in_date = new DateTime($_REQUEST['check_in']);
     $check_out_date = new DateTime($_REQUEST['check_out']);
@@ -117,10 +123,6 @@ if (isset($_GET['submit'])) {
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
 
     <title>Availability</title>
-    <!-- Bootstrap -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script> -->
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>

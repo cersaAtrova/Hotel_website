@@ -5,14 +5,19 @@ require_once 'functions.php';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+    <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding - Vrissiana Beach Hotel Protaras, Cyprus</title>
+    <title>Vrissiana Beach Hotel | Wedding</title>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
 
     <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
@@ -20,9 +25,12 @@ require_once 'functions.php';
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-    <!-- partial -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto&display=swap" rel="stylesheet">
+
+
     <link rel="stylesheet" href="/CSS/style.css">
 </head>
 
@@ -30,17 +38,17 @@ require_once 'functions.php';
     <!-- navigation bar -->
     <?php navigation_bar('WEDDING'); ?>
     <!-- /BACKROUND IMAGE -->
-    <section class="header">
+    <section class="box-header mb-5">
         <div class="box-header">
             <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610233/Vrissiana/weddings_img_3_ftikpl.jpg" alt="groom and bride at the sea" class="back-img">
         </div>
     </section>
 
    
-        <div class="overview">
+        <div class="overview mb-5" style="font-family: 'Raleway', sans-serif !important;">
             <div class="mx-auto text-center w-50">
                 <h5>An unforgettable day</h5>
-                <h1 class="display-4 text-center">Experience Legendary Romance</h1>
+                <p class="display-4 text-center">Experience Legendary Romance</p>
                 <p style="font-size: 1.2rem">A doorway to a unique wedding experience...
                     For the perfect environment to suit this special occasion, put your trust in our experienced hands.
                     Whether you are in search of extravagance or romance, something delightfully unusual or comfortably

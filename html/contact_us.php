@@ -111,7 +111,7 @@ $_SESSION=array();
 			</div>
 		</section>
 		<div class="container-contact-form">
-			<form action="<? htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="contact_form">
+			<form action="<? echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="contact_form">
 				<?php
 				// generate a new token for the $_SESSION superglobal and put them in a hidden field
 				$newToken = generateFormToken('form1');

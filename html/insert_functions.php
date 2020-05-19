@@ -735,11 +735,13 @@ function update_status_reservation($resv_id, $status)
     $prep->closeCursor();
     return false;
 }
-function update_availability($rm_type, $date, $days)
+function update_availability($rm_type, $date, $days,$status='Open')
 {
+    var_dump($status);
     global $db;
     $query = 'UPDATE Room_availability 
-              SET ra_days= :cdays
+              SET ra_days= :cdays,
+                  ra_status=:cstatus
               WHERE rm_type =:id 
               AND ra_date=:dates';
 
@@ -747,6 +749,7 @@ function update_availability($rm_type, $date, $days)
     $prep->bindValue(':id', $rm_type);
     $prep->bindValue(':dates', $date);
     $prep->bindValue(':cdays', $days);
+    $prep->bindValue(':cstatus', $status);
     if ($prep->execute()) {
         $prep->closeCursor();
         return true;

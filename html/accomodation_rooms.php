@@ -9,7 +9,7 @@ require_once('functions.php')
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vrissiana Beach Hotel | Select Room</title>
+    <title>Vrissiana Beach Hotel | Accomodation Rooms</title>
 
     <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
@@ -44,15 +44,15 @@ require_once('functions.php')
 <body>
     <?php navigation_bar('ROOMS'); ?>
     <section class="">
-        <div class="box-header">
+        <div class="box-header mb-5">
             <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610230/Vrissiana/VRIS27A_-_Front_Sea_View_Room_xzvnud.jpg" alt="" class="back-img">
         </div>
     </section>
 
-    <div class="overview" style="font-family: 'Raleway', sans-serif !important;">
+    <div class="overview mb-5" style="font-family: 'Raleway', sans-serif !important;">
         <div class="mx-auto text-center w-50 " style="font-family: 'Raleway', sans-serif !important;">
-            <h5>Accomodation at Vrissiana Beach Hotel</h5>
-            <h1 class="display-4 text-center" style="font-family: 'Raleway', sans-serif !important;">GUESTROOM</h1>
+            <p class="h5">Accomodation at Vrissiana Beach Hotel</p>
+            <p class="display-4 text-center" style="font-family: 'Raleway', sans-serif !important;">GUESTROOM</p>
             <p style="font-size: 1.2rem" style="font-family: 'Raleway', sans-serif !important;">
                 The elegant and spacious rooms offer stunning panoramic views of the crystal clear Mediterranean Sea,
                 tempting you to enjoy a relaxing morning or an afternoon on the room's balcony.

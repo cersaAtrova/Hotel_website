@@ -2,15 +2,21 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="https://res.cloudinary.com/sotiris/image/upload/v1586712186/Vrissiana/vrissiana_lwdd9y.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinning - Vrissiana Beach Hotel Protaras, Cyprus</title>
+    <title>Vrissiana Beach Hotel | Dining</title>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
 
     <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
@@ -18,26 +24,35 @@
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-    <!-- partial -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto&display=swap" rel="stylesheet">
+
+
     <link rel="stylesheet" href="/CSS/style.css">
+    <style>
+        .segment {
+            background: transparent !important;
+        }
+    </style>
+
 </head>
 
 <body>
     <!-- navigation bar -->
     <?php navigation_bar('DINING'); ?>
     <!-- /BACKROUND IMAGE -->
-    <section class="header">
-        <div class="box-header">
+    <section class="">
+        <div class="box-header mb-5">
             <img src="https://res.cloudinary.com/sotiris/image/upload/v1586610220/Vrissiana/thalassa-restaurant--v4619901_tlfcdt.jpg" alt="" class="back-img">
         </div>
     </section>
 
-    <div class="overview">
+    <div class="overview mb-5" style="font-family: 'Raleway', sans-serif !important;">
         <div class="mx-auto text-center w-50">
-            <h5>Dining at Vrissiana Beach Hotel</h5>
-            <h1 class="display-4 text-center">EXCEPTIONAL CUSINE FOR ALL THE FAMILY</h1>
+            <p class="h5">Dining at Vrissiana Beach Hotel</p>
+            <p class="display-4 text-center">EXCEPTIONAL CUSINE FOR ALL THE FAMILY</p>
             <p style="font-size: 1.2rem">A treat for all foodies, there's no shortage of dining options at Vrissiana Beach Hotel.
                 Whether you fancy indulging range from our magnificent buffet breakfast to the amazing evening buffets
                 or treating yourself to a celebration of the finest Mexican cuisine at Los Amigos Mexican A La Carte Restaurant.
@@ -80,7 +95,7 @@
         <?php
         $img = array();
         $img[0]['h2'] = 'Bars';
-        $img[0]['h5'] = 'C-View Bars '. htmlspecialchars('&') .' Teracce';
+        $img[0]['h5'] = 'C-View Bars ' . htmlspecialchars('&') . ' Teracce';
         $img[0]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/v1586610212/Vrissiana/bar_w2jjjf.jpg';
         $img[0]['desc'] = 'A casual place to relax and admire the panoramic view of the blue Mediterranean Sea whilst enjoying a long cool drink and conversation with friends. ';
         image_left_content_right($img[0]['h2'], $img[0]['h5'], $img[0]['img'], $img[0]['desc']);
