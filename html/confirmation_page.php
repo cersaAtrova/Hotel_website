@@ -127,15 +127,15 @@ print;
 print;
 
     foreach ($allergies as $e) {
-        $print_resv .= ++$a . " {$e['allergy_name']}<br/>";
+        $print_resv .= " {$e['allergy_name']}<br/>";
     }
     $print_resv .= '</p><p class="w-50 border-bottom"></p></div><div class="col border-right"><label>Preferences</label><p class="mb-1">';
     foreach ($preferences as $e) {
-        $print_resv .= ++$i . " {$e['pre_name']}<br/>";
+        $print_resv .=  " {$e['pre_name']}<br/>";
     }
     $print_resv .= ' <p class="w-50 border-bottom"></p></div><div class="col border-right"><label>Facility</label><p class="mb-1">';
     foreach ($facilities as $e) {
-        $print_resv .= ++$f . " {$e['fa_name']}<br/>";
+        $print_resv .= " {$e['fa_name']}<br/>";
     }
 }
 

@@ -120,16 +120,16 @@ function footer()
           <div class="col-md-6 col-lg-7 text-center text-lg-right">
     
             <!-- Facebook -->
-            <a class="link social_link" href="https://www.facebook.com/vrissiana/">
+            <a class="link social_link" target="_blank" href="https://www.facebook.com/vrissiana/">
               <i class="fab fa-facebook-f white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!-- Twitter -->
-            <a class="link social_link" href="https://twitter.com/hashtag/VrissianaBeachHotel?src=hash">
+            <a class="link social_link" target="_blank" href="https://twitter.com/hashtag/VrissianaBeachHotel?src=hash">
               <i class="fab fa-twitter white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
             <!--Instagram-->
-            <a class="link social_link" herf="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
-              <i class="fab fa-instagram white-text" style="font-size: 1.5rem"> </i>
+            <a class="link social_link" target="_blank" href="https://www.instagram.com/explore/tags/vrissianabeachhotel/">
+              <i class="fab fa-instagram white-text mr-4" style="font-size: 1.5rem"> </i>
             </a>
     
           </div>
@@ -181,7 +181,7 @@ function footer()
           <h6 class="text-uppercase font-weight-bold">Useful links</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="/html/user_acount.php">Your Account</a>
+            <a href="/html/user_account.php">My Account</a>
           </p>
           <p>
             <a href="/html/contact_us.php">Contact Us</a>
@@ -355,8 +355,8 @@ pr;
                       </div>
                       <div class="col">
                           <div class="ui checkbox">
-                              <input id="concerning_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Concerning Room">
-                              <label for="concerning_{$num_room}">Concerning Room</label>
+                              <input id="Connecting_{$num_room}" type="checkbox" name="rm_preference_{$num_room}[]" value="Connecting Room">
+                              <label for="Connecting_{$num_room}">Connecting Room</label>
                           </div>
                       </div>
                   </div>

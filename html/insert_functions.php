@@ -737,7 +737,6 @@ function update_status_reservation($resv_id, $status)
 }
 function update_availability($rm_type, $date, $days,$status='Open')
 {
-    var_dump($status);
     global $db;
     $query = 'UPDATE Room_availability 
               SET ra_days= :cdays,

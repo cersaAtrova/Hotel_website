@@ -7,8 +7,8 @@ require_once 'countries.php';
 session_start();
 
 //get the country from user
-$xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . getRealIp());
-echo $xml->geoplugin_countryName;
+// $xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . getRealIp());
+// echo $xml->geoplugin_countryName;
 $country_name_by_ip;
 foreach ($xml as $key => $value) {
 	if ($key == 'geoplugin_countryName') {
@@ -24,7 +24,7 @@ if (isset($_COOKIE['user'])) {
 }
 
 if (isset($_POST['submit'])) {
-	if (verifyFormToken('Contact_form')) {
+	// if (verifyFormToken('Contact_form')) {
 		$confirm_message = "";
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 					$body = send_guest_message(($_POST['first_name'] . ' ' . $_POST['last_name']), $_POST['email'], $_POST['country'], $_POST['subject'], $_POST['guest_message']);
 
 					if (smtpmailer('soteris100@gmail.com',  $_POST['email'], 'New Message', $_POST['subject'], $body) == true) {
-						$confirm_message = 'Message has send succesfully';
+						$confirm_message = 'Message has been send succesfully';
 						writeLog('Mail Sent');
 					} else {
 						$confirm_message = "Fail - " . $mail->ErrorInfo;
@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
 					}
 				}
 			}
-		}
+		//}
 	} else {
 
 		$confirm_message = "Fail - " . $mail->ErrorInfo;
@@ -111,10 +111,10 @@ $_SESSION=array();
 			</div>
 		</section>
 		<div class="container-contact-form">
-			<form action="<? echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="contact_form">
+			<form  method="post"  name="contact_form" action="contact_us.php">
 				<?php
 				// generate a new token for the $_SESSION superglobal and put them in a hidden field
-				$newToken = generateFormToken('form1');
+			//	$newToken = generateFormToken('form1');
 				?>
 				<input type="hidden" name="token" value="<?php echo $newToken; ?>">
 				<div class="flex-box-form">

@@ -405,7 +405,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                     <div class="ui inverted segment">
                         <div class="ui inverted divider"></div>
                         <div class="container">
-                            <p class="pad-20 h1 text-uppercase text-center"> There is no available Room for this dates</p>
+                            <p class="pad-20 h1 text-uppercase text-center"> There is no available Room for these dates</p>
                         </div>
                     </div>
                     <div class="ui inverted divider"></div>

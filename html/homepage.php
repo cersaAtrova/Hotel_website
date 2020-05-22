@@ -101,7 +101,7 @@ require_once 'functions.php';
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">When designing Vrissiana Beach Hotel, we kept one thing in mind; the need to create an exquisite accommodation proposal by the sand beach, an experience that puts the comfort and indulgence of each guest first</p>
                         </div>
-                        <a href="#" class="link btn-nav btn-primary">Discover more</a>
+                        <a href="accomodation_rooms.php" class="link btn-nav btn-primary">Discover more</a>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@ require_once 'functions.php';
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">Our team knows what five-star guests require and they always look for new ways to fulfill expectations in our five restaurants. </p>
                         </div>
-                        <a href="#" class="link btn-nav btn-primary float-right">Discover more</a>
+                        <a href="dine.php" class="link btn-nav btn-primary float-right">Discover more</a>
                     </div>
                 </div>
             </div>
@@ -144,6 +144,7 @@ require_once 'functions.php';
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">We would like to introduce you to one of the best ways of safe and natural treatments the nature ever gave to the making – Sauna therapy. Also known as Halotherapy, is a Natural & Alternative treatment for people with a lot of discomforts</p>
                         </div>
+                        <a href="spa.php" class="link btn-nav btn-primary float-left">Discover more</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +161,7 @@ require_once 'functions.php';
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
                             <p class="pad-20">We complement our spa menu with a wide range of wellness treatments, including face and body care and massage therapies, relaxing room etc. </p>
                         </div>
-                        <a href="#" class="link btn-nav btn-primary float-right">Discover more</a>
+                        <a href="spa.php" class="link btn-nav btn-primary float-right">Discover more</a>
                     </div>
                 </div>
             </div>

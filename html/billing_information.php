@@ -7,7 +7,7 @@ require_once 'countries.php';
 
 if (empty($_SESSION)) {
     header('Location: booking_calendar.php');
-    die();  
+    die();
 }
 if (isset($_REQUEST['total_room'])) {
     if ($_REQUEST['total_room'] > 3) {
@@ -1082,6 +1082,7 @@ if (isset($_POST['submit'])) {
 
                             </div>
                         </div>
+
                     </div>
                     <script>
                         $(function() {

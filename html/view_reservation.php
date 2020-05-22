@@ -128,6 +128,18 @@ if ($resv_facility[0] != null) {
                         </div>
                         <div class="row p-2">
                             <div class="col border-right">
+                                <label> Booking Reference</label>
+                                <p class="mb-1 font-weight-bold"><?php echo ("{$resv['resv_reference']}") ?></p>
+                                <p class="w-50 border-bottom"></p>
+                            </div>
+                            <div class="col border-right">
+                                <label> Total Price</label>
+                                <p class="mb-1 font-weight-bold"> <i class="euro icon"></i><?php echo ("{$resv_total[0]}") ?></p>
+                                <p class="w-50 border-bottom"></p>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="col border-right">
                                 <label> Name</label>
                                 <p class="mb-1"><?php echo $resv_profile['resv_name'] ?></p>
                                 <p class="w-50 border-bottom"></p>
@@ -200,7 +212,7 @@ if ($resv_facility[0] != null) {
                                 <p class="mb-1">
                                     <?php
                                     foreach ($allergies as $e) {
-                                        echo ++$a . " {$e['allergy_name']}<br/>";
+                                        echo  " {$e['allergy_name']}<br/>";
                                     }
                                     ?>
                                 </p>
@@ -211,7 +223,7 @@ if ($resv_facility[0] != null) {
                                 <p class="mb-1">
                                     <?php
                                     foreach ($preferences as $e) {
-                                        echo ++$i . " {$e['pre_name']}<br/>";
+                                        echo " {$e['pre_name']}<br/>";
                                     }
                                     ?>
                                 </p>
@@ -222,7 +234,7 @@ if ($resv_facility[0] != null) {
                                 <p class="mb-1">
                                     <?php
                                     foreach ($facilities as $e) {
-                                        echo ++$f . " {$e['fa_name']}<br/>";
+                                        echo " {$e['fa_name']}<br/>";
                                     }
                                     ?>
                                 </p>
@@ -230,14 +242,7 @@ if ($resv_facility[0] != null) {
                             </div>
                         </div>
                         <hr>
-                        <div class="row p-2">
-                            <div class="col"></div>
-                            <div class="col"></div>
-                            <div class="col ">
-                                <label>Price</label>
-                                <p class="w-50 h5 border-bottom mb-3"><i class="euro icon"></i><?php echo $resv_total[0] ?></p>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
