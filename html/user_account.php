@@ -88,7 +88,7 @@ if (isset($_POST['update'])) {
             <div class="col">
                 <div class="ui tab p-4 bg-white" data-tab="tab-name">
                     <p class="text-danger"> <?php echo $error_update ?></p>
-                    <p class="h2 pb-4"> Dear Mr./Mrs. <?php echo $_SESSION['user_login']['member_name'] ?> </p>
+                    <p class="h2 pb-4"> Dear Mr./Mrs. <?php echo $_SESSION['user_login']['member_name'] .' '.$_SESSION['user_login']['member_last'] ?> </p>
                     <p class="h5 pb-3">Welcome to your personal Vrissiana account.</p>
 
                     <p class="h5 pb-3">We are honoured that you have chosen to book a stay with us, entrusting us with your priceless holiday time.

@@ -10,6 +10,12 @@ $interval = $check_in->diff($check_out)->format('%a');
 $adults = $_SESSION['room_1_guest']['adults'];
 $kids = $_SESSION['room_1_guest']['kids'];
 
+if(isset($_REQUEST['modify'])){
+    $modify='modify';
+}else{
+    $modify='';
+}
+
 $total_adults = $_SESSION['room_1_guest']['adults'] + $_SESSION['room_2_guest']['adults'] + $_SESSION['room_3_guest']['adults'];
 $total_kids = $_SESSION['room_1_guest']['kids'] + $_SESSION['room_2_guest']['kids'] + $_SESSION['room_3_guest']['kids'];
 $total_infants = $_SESSION['room_1_guest']['infants'] + $_SESSION['room_2_guest']['infants'] + $_SESSION['room_3_guest']['infants'];
@@ -374,7 +380,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
     <div class="overview">
         <div class="mx-auto text-center w-50">
             <div class="ui breadcrumb p-3">
-                <a href="booking_calendar.php" class="section">Calendar</a>
+                <a href="booking_calendar.php?<?php echo $modify?>=true" class="section">Calendar</a>
                 <i class="right chevron icon divider"></i>
                 <div class="active section">Select Room Type
                     <div class="lds-facebook">
@@ -414,7 +420,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                     </div>
                     <div class="ui inverted divider "> </div>
                     <div class="container text-center">
-                        <a href="booking_calendar.php" class="my-md-2 btn-primary btn-nav w-50  ">Modify</a>
+                        <a href="booking_calendar.php?<?php echo $modify ?>=true</php>" class="my-md-2 btn-primary btn-nav w-50  ">Modify</a>
                     </div>
                 </div>
             </div>
@@ -422,11 +428,6 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
     <?php else : ?>
         <div class="container-fluid box-container" style="padding:10px; margin: auto ">
             <?php
-            if (isset($_REQUEST['modify'])) {
-                $mod = 'modify';
-            } else {
-                $mod = null;
-            }
             foreach ($_SESSION['rm_availability'] as $e) {
                 // retrive all images
                 if (!empty($e)) {
@@ -466,7 +467,7 @@ if (isset($_GET['non_refandable']) || isset($_GET['flexible'])) {
                                 $e[0]['rm_size'],
                                 $e[0]['rm_max_guest'],
                                 $rm_img,
-                                $e[0]['rm_type'],$mod
+                                $e[0]['rm_type'],$modify
                             );
                         }
                     }

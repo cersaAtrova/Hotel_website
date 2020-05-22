@@ -13,6 +13,12 @@ require_once 'functions.php';
          It combines modern aesthetics, chic style and comfort for your beach holidays. 
          Enviably located on the golden sandy beach in the center of Protaras, makes it ideal for beach holidays in ...">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+
+
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -54,14 +60,14 @@ require_once 'functions.php';
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610236/Vrissiana/VRIS07B_-_Pool_Area_vmiqgt.jpg" alt="First slide">
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610236/Vrissiana/VRIS07B_-_Pool_Area_vmiqgt.jpg" alt="First slide">
 
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610235/Vrissiana/vrissiana-boutique-beach-hotel-185606_nwkauw.jpg" alt="Second slide">
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610235/Vrissiana/vrissiana-boutique-beach-hotel-185606_nwkauw.jpg" alt="Second slide">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/v1586610228/Vrissiana/vrissiana_yh99oc.jpg" alt="Third slide">
+                <img class="d-block w-100" src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610228/Vrissiana/vrissiana_yh99oc.jpg" alt="Third slide">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -74,7 +80,7 @@ require_once 'functions.php';
         </a>
     </div>
 
-    <div class="overview mt-5">
+    <div class="overview mt-5 mb-5">
         <div class="mx-auto text-center">
             <p class="display-4 text-center title">Welcome</p>
             <p>Vrissiana Beach Hotel is a very popular recently renovated beach hotel in Protaras, Cyprus.
@@ -92,10 +98,10 @@ require_once 'functions.php';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8" style="max-height: 60%">
-                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610213/Vrissiana/housekeping_ay5ul4.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610213/Vrissiana/housekeping_ay5ul4.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
-                <div class="col align-self-center">
-                    <div class="col box-content-image-right pad-25 text-white">
+                <div class="col align-self-center" >
+                    <div class="col box-content-image-right pad-25 text-white" style="max-height: 400px; height: 100vh">
                         <h5 class="pad-25">4&star; Beach Hotel Protaras</h5>
                         <h2 class="pad-20">EXQUISITE ACCOMMODATION PROPOSAL</h2>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
@@ -109,10 +115,10 @@ require_once 'functions.php';
         <div class="container-fluid" style="padding-top:20px; ">
             <div class="row" style="flex-direction: row-reverse;">
                 <div class="col-md-8" style="max-height: 60%; ">
-                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610215/Vrissiana/RESTAURANT_tc4rsz.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610215/Vrissiana/RESTAURANT_tc4rsz.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center ">
-                    <div class="col box-content-image-left pad-25 text-white">
+                    <div class="col box-content-image-left pad-25 text-white" style="max-height: 400px; height: 100vh">
                         <p class="pad-25 h5">Gourmet's Delight</p>
                         <p class="pad-20 h2 text-uppercase">Offering unique dining experiences</p>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
@@ -124,21 +130,21 @@ require_once 'functions.php';
             </div>
         </div>
     </div>
-    <section class="overview">
+    <section class="overview mb-5 mt-5">
         <div class="mx-auto text-center" style="width: 30%">
-            <p class="text-center h4">MORE TO EXPLORE</p>
-            <p class="h2">RELAX REVITALIZE YOUR BODY AND MIND</p>
-            <p class="h4">Welcome to our exclusive The Spa</p>
+        <div class="ui horizontal inverted divider"><span class="h5 text-dark">MORE TO EXPLORE</span></div>
+            <p class="h2">Relax Revitalize Your Body &AMP; Mind</p>
+            <p class="h5">at Vrissiana Beach Hotel</p>
         </div>
     </section>
     <div class="box-container">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8" style="max-height: 60%">
-                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610224/Vrissiana/VRIS19_-_Sauna_tlo2z1.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610224/Vrissiana/VRIS19_-_Sauna_tlo2z1.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center">
-                    <div class="col box-content-image-right pad-25 text-white">
+                    <div class="col box-content-image-right pad-25 text-white" style="max-height: 400px; height: 100vh">
                         <h5 class="pad-25">Spa &amp; Wellness</h5>
                         <h2 class="pad-20">SAFE AND NATURAL TREATMENT OF THE NATURE</h2>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
@@ -149,28 +155,28 @@ require_once 'functions.php';
                 </div>
             </div>
         </div>
-        <div class="container-fluid" style="padding-top:20px; ">
+        <div class="container-fluid" style="padding-top:20px;">
             <div class="row" style="flex-direction: row-reverse;">
                 <div class="col-md-8" style="max-height: 60%; ">
-                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_440,w_800/v1586610221/Vrissiana/VRIS13_-_Spa_yolfwf.jpg" width="100%" height="100%" alt="" srcset="">
+                    <img src="https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610233/Vrissiana/weddings_img_3_ftikpl.jpg" width="100%" height="100%" alt="" srcset="">
                 </div>
                 <div class="col align-self-center ">
-                    <div class="col box-content-image-left pad-25 text-white">
-                        <h5 class="pad-25">Relaxing Room</h5>
-                        <h2 class="pad-20 text-uppercase">A WIDE RANGE OF WELLNESS TREATMENT</h2>
+                    <div class="col box-content-image-left pad-25 text-white" style="max-height: 400px; height: 100vh">
+                        <h5 class="pad-25">A doorway to a unique wedding experience.</h5>
+                        <h2 class="pad-20 text-uppercase">WEDDINGS AT VRISSIANA</h2>
                         <div class="text-justify pad-25" style="font-size: 1.2rem">
-                            <p class="pad-20">We complement our spa menu with a wide range of wellness treatments, including face and body care and massage therapies, relaxing room etc. </p>
+                            <p class="pad-20">For the perfect environment to suit this special occasion, put your trust in our experienced hands. Whether you are in search of extravagance or romance, something delightfully unusual or comfortably spacious for your wedding in Limassol, the variety and high standard of our food, service and accommodation is bound to impress.</p>
                         </div>
-                        <a href="spa.php" class="link btn-nav btn-primary float-right">Discover more</a>
+                        <a href="wedding.php" class="link btn-nav btn-primary float-right">Discover more</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <section class="overview mb-5">
+    <section class="overview mb-5 mt-5">
         <div class="mx-auto text-center" style="width: 30%">
-            <h3 class="text-center">SOCIAL</h3>
-            <h1>IMERSE INTO LUXURY</h1>
+            <div class="ui horizontal inverted divider"><span class="h5 text-dark">social</span></div>
+            <h1>IMMERSE INTO LUXURY</h1>
             <H3>See more on Instagram</H3>
             <a style="font-size: 1.5rem" href="https://www.instagram.com/explore/locations/1032562090/vrissiana-beach-hotel/">@vrissiana beach hotel</a>
         </div>

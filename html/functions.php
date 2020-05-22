@@ -168,7 +168,7 @@ function footer()
             <a href="/html/policy.php">Policy</a>
           </p>
           <p>
-            <a href="/html/terms_and_condition.php">Term &amp; Condition</a>
+            <a href="/html/terms_and_condition.php">Terms &amp; Condition</a>
           </p>
           
         </div>
@@ -237,7 +237,7 @@ function image_left_content_right(&$h2_title, &$h5_subtitle, &$img, &$desc)
           <img src="$img"  width="100%" height="100%" alt="background image">
       </div>
       <div class="col align-self-center">
-          <div class="col box-content-image-right pad-25 text-white">
+          <div class="col box-content-image-right pad-25 text-white" style="max-height: 400px; height: 100vh">
               <h5 class="pad-25">$h5_subtitle</h5>
               <h2 class="pad-20 text-uppercase">$h2_title</h2>
               <div class="text-justify pad-25" style="font-size: 1.2rem">
@@ -261,7 +261,7 @@ function image_right_content_left(&$h2_title, &$h5_subtitle, &$img, &$desc)
           <img src="$img" width="100%" height="100%" alt="background image">
       </div>
       <div class="col align-self-center ">
-        <div class="col box-content-image-left pad-25 text-white">
+        <div class="col box-content-image-left pad-25 text-white" style="max-height: 400px; height: 100vh">
             <h5 class="pad-25">$h5_subtitle</h5>
             <h2 class="pad-20 text-uppercase">$h2_title</h2>
             <div class="text-justify pad-25" style="font-size: 1.2rem">
@@ -310,11 +310,11 @@ pr;
                           <p class="h4 p-2 font-weight-bold">Dates: </p></br>
                           <p class="h4 p-2 font-weight-bold">Rate plan selected: </p>
                           <p class="h4 p-2 font-weight-bold">Meal plan selected: </p>
-                          <p class="h4 p-2 font-weight-bold">Terms and Condition</p>
+                          <p class="h4 p-2 font-weight-bold">Terms and Condition:</p>
                       </div>
                       <div class="column">
                           <p class="h4 p-2"> {$rm_name}</p>
-                          <p class="h4 p-2"> {$check_in} - {$check_out}</p>
+                          <p class="h4 p-2"> {$check_in} -</br> {$check_out}</p>
                           <p class="h4 p-2"> {$rate_plan_selected}</p>
                           <p class="h4 p-2"> {$meal_plan}</p>
                           

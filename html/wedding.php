@@ -47,7 +47,7 @@ require_once 'functions.php';
    
         <div class="overview mb-5" style="font-family: 'Raleway', sans-serif !important;">
             <div class="mx-auto text-center w-50">
-                <h5>An unforgettable day</h5>
+                <div class="ui horizontal inverted divider"><span class="h5 text-dark">An unforgettable day</span></div>
                 <p class="display-4 text-center">Experience Legendary Romance</p>
                 <p style="font-size: 1.2rem">A doorway to a unique wedding experience...
                     For the perfect environment to suit this special occasion, put your trust in our experienced hands.
@@ -63,19 +63,19 @@ require_once 'functions.php';
         $img = array();
         $img[0]['h2'] = 'WEDDING CEREMONY';
         $img[0]['h5'] = 'Crystal Palm Veranda';
-        $img[0]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_400,w_800/v1586610232/Vrissiana/wedding_fyyylw.jpg';
+        $img[0]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610232/Vrissiana/wedding_fyyylw.jpg';
         $img[0]['desc'] = 'Wedding Blessings or Ceremonies may be held at our Crystal Palm veranda located by the Onyx Lobby bar with stunning panoramic view of the palm trees combined with the Mediterranean azure sea.';
         image_left_content_right($img[0]['h2'], $img[0]['h5'], $img[0]['img'], $img[0]['desc']);
 
         $img[1]['h2'] = 'Wedding Venues';
         $img[1]['h5'] = 'Reception & Dinner';
-        $img[1]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_400,w_800/v1586610231/Vrissiana/wed_l7wokw.jpg';
+        $img[1]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610231/Vrissiana/wed_l7wokw.jpg';
         $img[1]['desc'] = 'The civil wedding venue looks out across the clear Mediterranean Sea, bringing the inside and outside together. You will have breathtaking views while you exchange your vows, yet the coolness of the air conditioning within the hotel.';
         image_right_content_left($img[1]['h2'], $img[1]['h5'], $img[1]['img'], $img[1]['desc']);
 
         $img[2]['h2'] = 'RELAXING ATMOSPERE';
         $img[2]['h5'] = 'C-View cocktail';
-        $img[2]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_400,w_800/v1586610225/Vrissiana/VRIS37_-_Weddings_qxfd2y.jpg';
+        $img[2]['img'] = 'https://res.cloudinary.com/sotiris/image/upload/c_scale,h_380,w_800/v1586610225/Vrissiana/VRIS37_-_Weddings_qxfd2y.jpg';
         $img[2]['desc'] = 'The hotel has a C-View cocktail bar where the wedding party can enjoy cocktails before their wedding reception meal. With a relaxed atmosphere, the C-View bar is the perfect place for your wedding guests to relax, while the Bride & Groom have their personal photographs taken.';
         image_left_content_right($img[2]['h2'], $img[2]['h5'], $img[2]['img'], $img[2]['desc']);
 
@@ -83,9 +83,9 @@ require_once 'functions.php';
 
     </div>
   
-        <div class="overview">
+        <div class="overview mb-5 mt-5">
             <div class="mx-auto text-center w-50">
-                <h5>Wedding Enquiry</h5>
+            <div class="ui horizontal inverted divider"><span class="h5 text-dark">Wedding Enquiry</span></div>
                 <h1 class="display-4 text-center">Request a quote</h1>
                 <a href="contact_us.php" class="btn-nav btn-lg my-lg-3 btn-primary">Contact Us</a>
             </div>

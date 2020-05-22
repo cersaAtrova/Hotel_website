@@ -205,9 +205,9 @@ if (isset($_REQUEST['update_meal_price'])) {
                             });
                         </script>
                         <div class="col">
-                            <p>Add days</p>
+                            <p>Add number of rooms</p>
                             <div class="ui input focus">
-                                <input type="text" class="add_days"  placeholder="Add Days" required name="days" pattern="[0-9]+">
+                                <input type="text" class="add_days"  placeholder="Add number of rooms" required name="days" pattern="[0-9]+">
                             </div>
                         </div>
                         <div class="col">

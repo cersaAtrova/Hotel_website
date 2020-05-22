@@ -43,8 +43,9 @@
     </section>
     <section class="overview mb-5"  style="font-family: 'Raleway', sans-serif !important;">
         <div class="mx-auto text-center" style="width: 30%">
-            <h1>Take a Look</h1>
-            <H3>Photo Gallery</H3>
+        <div class="ui horizontal inverted divider"><span class="h5 text-dark">Take a Look</span></div>
+            
+            <h1>Photo Gallery</h1>
         </div>
     </section>
 

@@ -7,6 +7,7 @@ session_start();
 if (isset($_REQUEST['modify'])) {
     $resv = get_reservation_by_resv_id($_REQUEST['modify']);
     $_SESSION['modify'] = $resv['resv_reference'];
+    
     header("Location: booking_calendar.php?modify=true&in={$resv['resv_check_in']}&out={$resv['resv_check_out']}");
     die();
 }
@@ -170,8 +171,8 @@ if ($resv_facility[0] != null) {
                             </div>
                             <div class="col">
                                 <label>Check in - Check out</label>
-                                <p class="mb-1"><?php echo $resv['resv_check_in'] . ' - ' . $resv['resv_check_out']  ?></p>
-                                <p class="w-50 border-bottom"></p>
+                                <p class="mb-1"><?php echo date('Y/m/d', strtotime($resv['resv_check_in'])) . ' - ' . date('Y/m/d', strtotime($resv['resv_check_out']))  ?></p>
+                                <p class="w-50 border-bottom"></p>    
                             </div>
                         </div>
                         <hr>

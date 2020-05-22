@@ -1,14 +1,18 @@
 <?php
-
 require_once 'functions.php';
 session_start();
 if (isset($_SESSION['user_login'])) {
     $user = $_SESSION['user_login'];
+    $modify=$_SESSION['modify'];
+    
 }
 $_SESSION = array();
 if (isset($user)) {
     $_SESSION['user_login'] = $user;
+    $_SESSION['modify']=$modify;
 }
+unset($modify);
+unset($user);
 if (isset($_GET['submit'])) {
     $check_in_date = new DateTime($_REQUEST['check_in']);
     $check_out_date = new DateTime($_REQUEST['check_out']);

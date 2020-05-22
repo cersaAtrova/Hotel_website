@@ -404,7 +404,7 @@ if (isset($_REQUEST['cancel'])) {
                         <div class="row p-2">
                             <div class="col border-right">
                                 <label class="font-weight-bold"> Check in - Check out</label>
-                                <p class="mb-1 h4"><?php echo date('d-M-Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d-M-Y', strtotime($resv['resv_check_out'])) ?></p>
+                                <p class="mb-1 h4"><?php echo date('d/M/Y', strtotime($resv['resv_check_in'])) . ' - ' . date('d/M/Y', strtotime($resv['resv_check_out'])) ?></p>
                                 <p class="w-50 border-bottom"></p>
                             </div>
                             <div class="col border-right">

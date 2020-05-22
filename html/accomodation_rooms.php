@@ -51,8 +51,8 @@ require_once('functions.php')
 
     <div class="overview mb-5" style="font-family: 'Raleway', sans-serif !important;">
         <div class="mx-auto text-center w-50 " style="font-family: 'Raleway', sans-serif !important;">
-            <p class="h5">Accomodation at Vrissiana Beach Hotel</p>
-            <p class="display-4 text-center" style="font-family: 'Raleway', sans-serif !important;">GUESTROOM</p>
+            <div class="ui horizontal inverted divider"><span class="h5 text-dark">Accomodation at Vrissiana Beach Hotel</span></div>
+            <p class="display-4 text-center" style="font-family: 'Raleway', sans-serif !important;">Guestroom</p>
             <p style="font-size: 1.2rem" style="font-family: 'Raleway', sans-serif !important;">
                 The elegant and spacious rooms offer stunning panoramic views of the crystal clear Mediterranean Sea,
                 tempting you to enjoy a relaxing morning or an afternoon on the room's balcony.
