@@ -6,8 +6,8 @@ require_once '../PHPMailer/src/Exception.php';
 require_once '../PHPMailer/src/SMTP.php';
 require_once '../PHPMailer/src/PHPMailer.php';
 require_once '../connect_dbase.php';
-define('GUSER', 'noreply.info.testing@gmail.com'); // GMail username
-define('GPWD', 'G^$&/v.6/no-reply'); // GMail password
+define('GUSER', 'username'); // GMail username
+define('GPWD', 'password'); // GMail password
 function navigation_bar($str = 'HOME')
 {
   $arr = array();
